@@ -1,0 +1,62 @@
+Proceso GenerarYMostrarReportes;
+    // Variables para almacenar los datos
+    Definir produccion, ingresos, costos, utilidad Como Real;
+    Definir opcion Como Caracter;
+
+    // Archivo donde se guardarán los reportes
+    Definir archivo Como Texto;
+    archivo <- "reportes.txt";
+
+    Repetir
+        // Mostrar menú al usuario
+        Escribir "Seleccione una opción:";
+        Escribir "1. Guardar un nuevo reporte";
+        Escribir "2. Mostrar reportes";
+        Escribir "3. Salir";
+        Leer opcion;
+
+        Segun opcion Hacer
+            Caso "1":
+                // Guardar un nuevo reporte
+                Escribir "Ingrese la producción:";
+                Leer produccion;
+                Escribir "Ingrese los ingresos:";
+                Leer ingresos;
+                Escribir "Ingrese los costos:";
+                Leer costos;
+                utilidad <- ingresos - costos;
+
+                // Guardar los datos en el archivo
+                Abrir archivo Como Ap "reportes.txt";
+                Escribir archivo, "Producción: ", produccion;
+                Escribir archivo, "Ingresos: ", ingresos;
+                Escribir archivo, "Costos: ", costos;
+                Escribir archivo, "Utilidad: ", utilidad;
+                Escribir archivo, "---------------------";
+                Cerrar archivo;
+
+                Escribir "Reporte guardado exitosamente.";
+            FinCaso;
+
+            Caso "2":
+                // Mostrar reportes
+                Escribir "Reportes guardados:";
+                Abrir archivo Como Lectura;
+                Mientras No FinDeArchivo(archivo)
+                    Leer archivo, linea;
+                    Escribir linea;
+                FinMientras;
+                Cerrar archivo;
+            FinCaso;
+
+            Caso "3":
+                // Salir del programa
+                Escribir "Saliendo del programa.";
+                FinAlgoritmo;
+            FinCaso;
+
+            De Otro Modo:
+                Escribir "Opción no válida, intente de nuevo.";
+        FinSegun;
+    Hasta Que opcion = "3";
+FinProceso;
