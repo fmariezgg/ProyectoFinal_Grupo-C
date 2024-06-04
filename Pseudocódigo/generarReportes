@@ -1,62 +1,49 @@
-Proceso GenerarYMostrarReportes;
-    // Variables para almacenar los datos
-    Definir produccion, ingresos, costos, utilidad Como Real;
-    Definir opcion Como Caracter;
+Estructura Reporte
+    Entero produccion
+    Real ingresos, costos, utilidad
+FinEstructura
 
-    // Archivo donde se guardarán los reportes
-    Definir archivo Como Texto;
-    archivo <- "reportes.txt";
+Definir reporte Como Nuevo Reporte
+Definir nombreArchivo Como Cadena "reportes.txt"
+Definir opcion Como Entero
+Definir archivo Como Texto
 
-    Repetir
-        // Mostrar menú al usuario
-        Escribir "Seleccione una opción:";
-        Escribir "1. Guardar un nuevo reporte";
-        Escribir "2. Mostrar reportes";
-        Escribir "3. Salir";
-        Leer opcion;
+Repetir
+    Escribir "1. Guardar Reporte"
+    Escribir "2. Mostrar Reportes"
+    Escribir "3. Salir"
+    Escribir "Seleccione una opción: "
+    Leer opcion
 
-        Segun opcion Hacer
-            Caso "1":
-                // Guardar un nuevo reporte
-                Escribir "Ingrese la producción:";
-                Leer produccion;
-                Escribir "Ingrese los ingresos:";
-                Leer ingresos;
-                Escribir "Ingrese los costos:";
-                Leer costos;
-                utilidad <- ingresos - costos;
-
-                // Guardar los datos en el archivo
-                Abrir archivo Como Ap "reportes.txt";
-                Escribir archivo, "Producción: ", produccion;
-                Escribir archivo, "Ingresos: ", ingresos;
-                Escribir archivo, "Costos: ", costos;
-                Escribir archivo, "Utilidad: ", utilidad;
-                Escribir archivo, "---------------------";
-                Cerrar archivo;
-
-                Escribir "Reporte guardado exitosamente.";
-            FinCaso;
-
-            Caso "2":
-                // Mostrar reportes
-                Escribir "Reportes guardados:";
-                Abrir archivo Como Lectura;
-                Mientras No FinDeArchivo(archivo)
-                    Leer archivo, linea;
-                    Escribir linea;
-                FinMientras;
-                Cerrar archivo;
-            FinCaso;
-
-            Caso "3":
-                // Salir del programa
-                Escribir "Saliendo del programa.";
-                FinAlgoritmo;
-            FinCaso;
-
-            De Otro Modo:
-                Escribir "Opción no válida, intente de nuevo.";
-        FinSegun;
-    Hasta Que opcion = "3";
-FinProceso;
+    Segun opcion Hacer
+        1:
+            Escribir "Ingrese la producción: "
+            Leer reporte.produccion
+            Escribir "Ingrese los ingresos: "
+            Leer reporte.ingresos
+            Escribir "Ingrese los costos: "
+            Leer reporte.costos
+            reporte.utilidad <- reporte.ingresos - reporte.costos
+            AbrirArchivo(archivo, nombreArchivo, append)
+            Escribir archivo, reporte.produccion, " ", reporte.ingresos, " ", reporte.costos, " ", reporte.utilidad, "\n"
+            CerrarArchivo(archivo)
+            Escribir "Reporte guardado correctamente."
+        2:
+            AbrirArchivo(archivo, nombreArchivo)
+            Si archivo Abierto Entonces
+                Repetir
+                    Leer linea De archivo
+                    Si NoEof(archivo) Entonces
+                        Imprimir linea
+                    FinSi
+                Hasta Eof(archivo)
+                CerrarArchivo(archivo)
+            SiNo
+                Escribir "No se pudo abrir el archivo para mostrar los reportes."
+            FinSi
+        3:
+            Escribir "Saliendo..."
+        Otro:
+            Escribir "Opción no válida."
+    FinSegun
+Hasta Que opcion = 3
