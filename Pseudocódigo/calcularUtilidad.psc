@@ -8,5 +8,5 @@ Proceso utilidad
 	FinPara
 	
 	utilidad_mensual <- ingreso_mensual - TOTALcostos_mensuales;
-	utilidad_mensual <- utilidad_mensual - (utilidad_mensual*0.3); // on impuestos
+	utilidad_mensual <- utilidad_mensual - (utilidad_mensual*0.3); //con impuestos
 FinProceso
