@@ -1,4 +1,4 @@
-Proceso produccion
+Proceso calcularProduccion
 	definir vaca_produccion, produccion_semanal, produccion_mensual como real;
 	dimensionar vaca_produccion[100];
 	

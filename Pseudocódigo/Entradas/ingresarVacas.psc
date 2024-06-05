@@ -1,4 +1,4 @@
-Proceso vacas
+Proceso ingresarVacas
 	Definir i, x, id, edad, produccion Como Entero;
 	Definir estado_salud Como Cadena;
 	Dimensionar id(300);

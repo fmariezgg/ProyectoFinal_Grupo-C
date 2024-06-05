@@ -1,4 +1,4 @@
-Proceso clientes
+Proceso ingresarClientes
 	Definir i, x Como Entero;
 	Definir nombre, direccion, contacto Como Cadena;
 	Definir compras Como Entero;

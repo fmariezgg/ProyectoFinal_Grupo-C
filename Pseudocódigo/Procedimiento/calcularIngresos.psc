@@ -1,4 +1,4 @@
-Proceso ingresos
+Proceso calcularIngresos
 	definir precio, clientes_compras, ingreso_semanal, ingreso_mensual como real;
 	dimensionar clientes_compras[100];
 	

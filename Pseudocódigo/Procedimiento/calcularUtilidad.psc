@@ -1,4 +1,4 @@
-Proceso utilidad
+Proceso calcularUtilidad
 	definir ingreso_mensual, utilidad_mensual, TOTALcostos_mensuales, costos_fijos_mensuales, costos_variables_mensuales como real;
 	dimensionar costos_fijos_mensuales[100];
 	dimensionar costos_variables_mensuales[100];
