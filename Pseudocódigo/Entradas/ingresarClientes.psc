@@ -7,7 +7,7 @@ Proceso ingresarClientes
     Dimensionar direccion(100);
     Dimensionar contacto(100);
     Dimensionar compras(100);
-    Dimensionar pagos_pendientes(100, 2);  // Corregido: solo 2 columnas necesarias
+    Dimensionar pagos_pendientes(100, 2);  // solo 2 columnas necesarias
     Escribir 'cuantos clientes quiere ingresar al sistema?';
     Leer x;
     Para i<-0 Hasta x-1 Con Paso +1 Hacer
