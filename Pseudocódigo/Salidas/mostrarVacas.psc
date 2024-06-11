@@ -5,6 +5,7 @@ Proceso mostrarVacas
 	Dimensionar edad(300);
 	Dimensionar produccion(300);
 	Dimensionar estado_salud(300);
+	
 	Para i<-0 Hasta cantidad_vacas Con Paso +1 Hacer
 		Escribir 'Vaca #', i+1, ': ';
 		Escribir 'ID: ', id[i];
