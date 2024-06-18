@@ -8,7 +8,7 @@ int main() {
     int start = 0;
 
     do {
-        system("cls");
+        system("cls || clear");
         start = start_screen();
 
         if (start == 1) {
@@ -16,7 +16,7 @@ int main() {
             cout << "Abriendo menú...";
             Sleep(1000);
 
-            while (acceder != 6) acceder = principal();
+            while (acceder != 7) acceder = principal();
 
         } else if (start == 2) {
             cout << "Cerrando programa...";

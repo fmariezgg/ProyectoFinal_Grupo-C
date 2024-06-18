@@ -1,5 +1,6 @@
 #include <iostream>
 #include <windows.h>
+#include "funciones.cpp"
 using namespace std;
 
 //menus y submenus:
@@ -9,8 +10,8 @@ int produccion();
 int clientes();
 int finanzas();
 int costos();
-int costos_fijos();
-int costos_variables();
+int costos_Fijos();
+int costos_Variables();
 int ventas();
 int utilidad();
 int facturas();
@@ -40,11 +41,11 @@ int start_screen() {
 }
 
 int principal() {
-    int option = 0;
-    int submenu = 0;
+    int option = 0, submenu = 0;
+    bool check = false;
     
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tMenú Principal:\n";
         cout << "---------------------------------------------------------------\n";
         cout << "\n1. Acceder a Gestión de Producción\n";
@@ -52,7 +53,8 @@ int principal() {
         cout << "3. Acceder a Gestión de Finanzas\n";
         cout << "4. Acceder a Gestión de Facturación\n";
         cout << "5. Acceder a Gestión de Reportes\n";
-        cout << "6. Regresar a pantalla principal\n";
+        cout << "\n6. Cambiar precio por galón de leche\n";
+        cout << "7. Regresar a pantalla principal\n";
         cout << "\nIngrese su opción: ";
         cin >> option;
 
@@ -88,6 +90,13 @@ int principal() {
                 if (submenu == 4) continue; //^^
                 break;
             case 6:
+                check = cambiar_Precio();
+                if (check) cout << "Precio actualizado a: " << precio_galon << "\n\n";
+                else cout << "\nERROR DE ARCHIVO: no se pudo escribir el precio ingresado al archivo 'precio_galon.txt'...\n\n";
+
+                system("pause");
+                break;
+            case 7:
                 cout << "Regresando a pantalla principal...";
                 Sleep(1000);
                 break;
@@ -96,7 +105,7 @@ int principal() {
                 Sleep(1000);
                 break;
         }
-    } while (option != 6);
+    } while (option != 7);
 
     return option;
 }
@@ -104,10 +113,11 @@ int principal() {
 //***************************************************************************************************
 
 int produccion() {
-    int option = 0;
+    int option = 0, num = 0;
+    bool check = false;
 
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tGestión de Producción:\n";
         cout << "---------------------------------------------------------------\n";
         cout << "\n1. Registrar vacas\n";
@@ -120,7 +130,14 @@ int produccion() {
 
         switch (option) {
             case 1:
-                //coso de registrar
+                cout << "\n¿Cuántas vacas desea registrar? ";
+                cin >> num;
+                check = registrar_Vacas(num);
+
+                if (!check) cout << "\nERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir al archivo 'registro_Vacas.txt'...\n\n";
+                else cout << "\nVacas registradas...\n\n";
+
+                system("pause");
                 break;
             case 2:
                 //coso de mostrar todo
@@ -146,10 +163,11 @@ int produccion() {
 }
 
 int clientes() {
-    int option = 0;
+    int option = 0, num = 0;
+    bool check = false;
 
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tGestión de Clientes:\n";
         cout << "---------------------------------------------------------------\n";
         cout << "\n1. Registrar clientes\n";
@@ -163,7 +181,14 @@ int clientes() {
 
         switch (option) {
             case 1:
-                //coso de registrar
+                cout << "\n¿Cuántos clientes desea registrar? ";
+                cin >> num;
+                check = registrar_Clientes(num);
+
+                if (!check) cout << "\nERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir al archivo 'registro_Clientes.txt'...\n\n";
+                else cout << "\nClientes registrados...\n\n";
+
+                system("pause");
                 break;
             case 2:
                 //coso de mostrar todo
@@ -198,7 +223,7 @@ int finanzas() {
     int submenu = 0;
 
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tGestión de Finanzas:\n";
         cout << "---------------------------------------------------------------\n";
         cout << "\n1. Acceder a menú de ventas\n";
@@ -213,15 +238,15 @@ int finanzas() {
                 cout << "Accediendo a menú de ventas...";
                 Sleep(1000);
                 submenu = ventas();
-                if (submenu == 6) continue; //si el submenu retorna la opcion de regresar al menu de finanzas, ir a la proxima iteracion
-                else if (submenu == 7) return 4; //retorna la opcion que hace que se regrese al menu principal
+                if (submenu == 7) continue; //si el submenu retorna la opcion de regresar al menu de finanzas, ir a la proxima iteracion
+                else if (submenu == 8) return 4; //retorna la opcion que hace que se regrese al menu principal
                 else break;
             case 2:
                 cout << "Accediendo a menú de costos...";
                 Sleep(1000);
                 submenu = costos();
-                if (submenu == 3) continue; //^^ lo mismo pero con los valores que retorna esta funcion
-                else if (submenu == 4) return 4;
+                if (submenu == 4) continue; //^^ lo mismo pero con los valores que retorna esta funcion
+                else if (submenu == 5) return 4;
                 else break;
             case 3:
                 cout << "Accediendo a menú de utilidad...";
@@ -245,43 +270,54 @@ int finanzas() {
 }
 
 int ventas() {
-    int option = 0;
+    int option = 0, num = 0;
+    bool check = false;
 
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tGestión de Ventas:\n";
         cout << "---------------------------------------------------------------\n";
-        cout << "\n1. Registrar venta\n";
-        cout << "2. Mostrar ventas\n";
-        cout << "3. Buscar venta específica\n";
-        cout << "4. Modificar ventas\n";
-        cout << "5. Eliminar ventas\n";
-        cout << "6. Regresar a menú de finanzas\n";
-        cout << "7. Regresar a menú principal\n";
+        cout << "1. Mostrar ingresos\n";
+        cout << "\n2. Registrar venta\n";
+        cout << "3. Mostrar ventas\n";
+        cout << "4. Buscar venta específica\n";
+        cout << "5. Modificar ventas\n";
+        cout << "6. Eliminar ventas\n";
+        cout << "\n7. Regresar a menú de finanzas\n";
+        cout << "8. Regresar a menú principal\n";
         cout << "\nIngrese su opción: ";
         cin >> option;
         
         switch (option) {
             case 1:
-                //coso de registrar
-                break;
+                //coso de mostrar ingresos
             case 2:
-                //coso de mostrar todo
+                cout << "\n¿Cuántas ventas desea registrar? ";
+                cin >> num;
+                check = registrar_Ventas(num);
+
+                if (!check) cout << "\nERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir al archivo 'registro_Ventas.txt'...\n\n";
+                else cout << "\nVentas registradas...\n\n";
+
+                system("pause");
                 break;
             case 3:
-                //coso de buscar
+                //coso de mostrar todo
                 break;
             case 4:
-                //coso de modificar
+                //coso de buscar
                 break;
             case 5:
+                //coso de modificar
+                break;
+            case 6:
                 //coso de eliminar
                 break;\
-            case 6:
+            case 7:
                 cout << "Regresando a menú de finanzas...";
                 Sleep(1000);
                 break;
-            case 7:
+            case 8:
                 cout << "Regresando a menú principal...";
                 Sleep(1000);
                 break;
@@ -290,7 +326,7 @@ int ventas() {
                 Sleep(1000);
                 break;
         }
-    } while ((option != 6) && (option != 7)); //mientras no se quiera regresar a otro menu, permanecer en el bucle
+    } while ((option != 7) && (option != 8)); //mientras no se quiera regresar a otro menu, permanecer en el bucle
 
     return option; //retornar la opcion del menu al que se quiere regresar
 }
@@ -300,13 +336,14 @@ int costos() {
     int submenu = 0;
 
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tGestión de Costos:\n";
         cout << "---------------------------------------------------------------\n";
         cout << "\n1. Menú de costos fijos\n";
         cout << "2. Menú de costos variables\n";
-        cout << "3. Regresar a menú de finanzas\n";
-        cout << "4. Regresar a menú principal\n";
+        cout << "3. Calcular costos totales\n";
+        cout << "\n4. Regresar a menú de finanzas\n";
+        cout << "5. Regresar a menú principal\n";
         cout << "\nIngrese su opción: ";
         cin >> option;
 
@@ -316,31 +353,33 @@ int costos() {
             if (option == 1) {
                 cout << "Accediendo a submenú de costos fijos...";
                 Sleep(1000);
-                submenu = costos_fijos();
+                submenu = costos_Fijos();
                 if (submenu == 5) option = 2; //ir al menu de costos variables
             } else if (option == 2) {
                 cout << "Accediendo a submenú de costos variables...";
                 Sleep(1000);
-                submenu = costos_variables();
+                submenu = costos_Variables();
                 if (submenu == 5) option = 1; //ir al menu de costos fijos
             }
 
             /*si se escogio regresar al menu de finanzas directamente desde
             los menus de costos fijos/variables, asignar option al valor de este menu
             que nos regresa a al menu de finanzas y nos saca de este while*/
-            if (submenu == 6) option = 3;
+            if (submenu == 6) option = 4;
 
             //^^ lo mismo pero con el menu principal
-            else if (submenu == 7) option = 4;
+            else if (submenu == 7) option = 5;
         }
 
         //si no se entro a los de costos, resolver los otros casos de option
         switch (option) {
             case 3:
-                //el mensaje se llama en costos_fijos() y costos_variables()
+                //coso de costos totales
+            case 4:
+                //el mensaje se llama en costos_Fijos() y costos_Variables()
                 Sleep(1000);
                 break;
-            case 4:
+            case 5:
                 //^^
                 Sleep(1000);
                 break;
@@ -349,16 +388,17 @@ int costos() {
                 Sleep(1000);
                 break;
         }
-    } while ((option != 3) && (option != 4));
+    } while ((option != 4) && (option != 5));
 
     return option;
 }
 
-int costos_fijos() {
-    int option = 0;
+int costos_Fijos() {
+    int option = 0, num = 0;
+    bool check = false;
 
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tSubmenú de Costos Fijos:\n";
         cout << "---------------------------------------------------------------\n";
         cout << "\n1. Registrar costo\n";
@@ -373,7 +413,14 @@ int costos_fijos() {
 
         switch (option) {
             case 1:
-                //coso de registrar
+                cout << "\n¿Cuántos costos fijos desea registrar? ";
+                cin >> num;
+                check = registrar_costos_Fijos(num);
+
+                if (!check) cout << "\nERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir al archivo 'registro_costos_Fijos.txt'...\n\n";
+                else cout << "\nCostos registrados...\n\n";
+
+                system("pause");
                 break;
             case 2:
                 //coso de mostrar todo
@@ -403,11 +450,12 @@ int costos_fijos() {
     return option; //cuando se quiera salir, terminar el bucle y retornar option
 }
 
-int costos_variables() {
-    int option = 0;
+int costos_Variables() {
+    int option = 0, num = 0;
+    bool check = false;
 
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tSubmenú de Costos Variables:\n";
         cout << "---------------------------------------------------------------\n"; 
         cout << "\n1. Registrar costo\n";
@@ -422,7 +470,14 @@ int costos_variables() {
 
         switch (option) {
             case 1:
-                //coso de registrar
+                cout << "\n¿Cuántos costos variables desea registrar? ";
+                cin >> num;
+                check = registrar_costos_Variables(num);
+
+                if (!check) cout << "\nERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir al archivo 'registro_costos_Variables.txt'...\n\n";
+                else cout << "\nCostos registrados...\n\n";
+
+                system("pause");
                 break;
             case 2:
                 //coso de mostrar todo
@@ -456,7 +511,7 @@ int utilidad() {
     int option = 0;
 
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tGestión de Utilidad:\n";
         cout << "---------------------------------------------------------------\n";
         cout << "1. Calcular utilidad bruta\n";
@@ -497,7 +552,7 @@ int facturas() {
     int option = 0;
 
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tGestión de Facturación:\n";
         cout << "---------------------------------------------------------------\n";
         cout << "\n1. Generar nueva factura\n";
@@ -543,7 +598,7 @@ int reportes() {
     int option = 0;
 
     do {
-        system("cls");
+        system("cls || clear");
         cout << "\n\t\t\tGestión de Reportes:\n";
         cout << "---------------------------------------------------------------\n";
         cout << "\n1. Reporte de producción\n";
