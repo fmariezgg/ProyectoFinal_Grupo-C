@@ -91,7 +91,7 @@ int principal() {
                 break;
             case 6:
                 check = cambiar_Precio();
-                if (check) cout << "Precio actualizado a: " << precio_galon << "\n\n";
+                if (check) cout << "Precio actualizado a: " << precio_galon << "...\n\n";
                 else cout << "\nERROR DE ARCHIVO: no se pudo escribir el precio ingresado al archivo 'precio_galon.txt'...\n\n";
 
                 system("pause");
@@ -296,7 +296,7 @@ int ventas() {
                 cin >> num;
                 check = registrar_Ventas(num);
 
-                if (!check) cout << "\nERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir al archivo 'registro_Ventas.txt'...\n\n";
+                if (!check) cout << "\nERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir a los archivos: 'registro_Ventas.txt', 'registro_Pendientes', 'precio_galon.txt'...\n\n";
                 else cout << "\nVentas registradas...\n\n";
 
                 system("pause");

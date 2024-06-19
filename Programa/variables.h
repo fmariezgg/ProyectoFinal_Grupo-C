@@ -1,12 +1,10 @@
+#include <chrono>
+#include <ctime>
+using namespace std;
+
 #define ID 10
 #define MAX_INPUT 100
 #define MAX_REGISTER 1000
-
-/*typedef struct FECHA {
-    char mes[ID] = "";
-    int dia = 0;
-    int year = 0;
-} FECHA;*/
 
 typedef struct VACA {
     char id[ID] = "";
@@ -21,10 +19,16 @@ typedef struct CLIENTE {
     char contacto[MAX_INPUT] = "";
 } CLIENTE;
 
+typedef struct FECHA {
+    int dia = 0;
+    char mes[ID] = "";
+    int year = 0;
+} FECHA;
+
 typedef struct VENTA {
     char id[ID] = "";
+    FECHA fecha;
     char nombre_cliente[MAX_INPUT] = "";
-    //FECHA fecha = {"", 0, 0};
     int cantidad_leche = 0;
     float monto = 0.00;
     bool pagada = false;
@@ -32,7 +36,9 @@ typedef struct VENTA {
 
 typedef struct PENDIENTE {
     char id_venta[ID] = "";
+    FECHA fecha;
     char nombre_cliente[MAX_INPUT] = "";
+    float monto = 0.00;
 } PENDIENTE;
 
 typedef struct TRANSACCION {
@@ -43,13 +49,16 @@ typedef struct TRANSACCION {
 VACA registro_Vacas[MAX_REGISTER];
 CLIENTE registro_Clientes[MAX_REGISTER];
 VENTA registro_Ventas[MAX_REGISTER];
+PENDIENTE registro_Pendientes[MAX_REGISTER];
 TRANSACCION registro_costos_Fijos[MAX_REGISTER];
 TRANSACCION registro_costos_Variables[MAX_REGISTER];
+
+char* meses[] = { "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
 
 float precio_galon = 0.00;
 int num_vacas = 0;
 int num_clientes = 0;
-int num_pagos = 0;
 int num_ventas = 0;
+int num_pendientes = 0;
 int num_costos_Fijos = 0;
 int num_costos_Variables = 0;

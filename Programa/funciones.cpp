@@ -1,13 +1,9 @@
 #include <iostream>
 #include <cstring>
+#include <ctime>
 #include <windows.h>
 #include "funciones_soporte.h"
 using namespace std;
-
-/*PENDIENTES:
--- mierdas de fecha
--- hacer que se actualicen los pagos pendientes de un cliente si se ingresa que no se ha pagado su compra
--- literalmente el 90% del sistema :D */
 
 //***************************************************************************************************
 
@@ -40,7 +36,7 @@ bool registrar_Vacas(int num) {
     for (int i = 0; i < num; i++) {
         cout << "\n\tVaca #" << num_vacas+1 << ":" << endl;
         cout << "************************\n";
-        cin.ignore();
+        cin.ignore(); //quita el \n para que el getline de pedir_Cstring funcione bien
         pedir_Cstring("ID", registro_Vacas[num_vacas].id, ID);
         pedir_Cstring("estado de salud", registro_Vacas[num_vacas].estado_salud);
         registro_Vacas[num_vacas].edad = pedir_int("edad");
@@ -79,11 +75,12 @@ bool registrar_Clientes(int num) {
 
 bool registrar_Ventas(int num) {
     system("cls || clear");
-    bool leer_V = false, leer_P = false, escribir = false;
+    bool leer_Ventas = false, leer_Precio = false, leer_Pendientes = false, escribir_Ventas = false, escribir_Pendientes = false;
 
-    leer_V = leer_archivo("registro_Ventas.txt");
-    leer_P = leer_archivo("precio_galon.txt");
-    if (!leer_V || !leer_P) return false;
+    leer_Ventas = leer_archivo("registro_Ventas.txt");
+    leer_Pendientes = leer_archivo("registro_Pendientes.txt");
+    leer_Precio = leer_archivo("precio_galon.txt");
+    if (!leer_Ventas || !leer_Pendientes || !leer_Precio) return false; //si cualquiera de las lecturas falla, retornar false
 
     for (int i = 0; i < num; i++) {
         cout << "\n\tVenta #" << num_ventas+1 << ":" << endl;
@@ -91,18 +88,34 @@ bool registrar_Ventas(int num) {
         cin.ignore();
         pedir_Cstring("ID", registro_Ventas[num_ventas].id, ID);
         pedir_Cstring("nombre del cliente", registro_Ventas[num_ventas].nombre_cliente);
-        //fechas
+
+        tm *time = actualizar_fecha();
+        registro_Ventas[num_ventas].fecha.dia = time->tm_mday;
+        strcpy(registro_Ventas[num_ventas].fecha.mes, meses[time->tm_mon]); //usar el numero de mes como index para retornar el nombre del mes
+        registro_Ventas[num_ventas].fecha.year = time->tm_year + 1900; //sumar 1900 pq time->tm_year es el numero de años desde 1900
+        
         registro_Ventas[num_ventas].cantidad_leche = pedir_int("cantidad de leche");
-        registro_Ventas[num_ventas].monto = precio_galon * registro_Ventas[num_ventas].cantidad_leche;
+        registro_Ventas[num_ventas].monto = precio_galon * registro_Ventas[num_ventas].cantidad_leche; //calcular monto automaticamente
         cin.ignore();
         registro_Ventas[num_ventas].pagada = pedir_pagada();
+
+        //si se ingresa que no se ha pagado la compra, agregar los datos del cliente y la compra al registro de pagos pendientes
+        if (!registro_Ventas[num_ventas].pagada) {
+            strcpy(registro_Pendientes[num_pendientes].id_venta, registro_Ventas[num_ventas].id);
+            registro_Pendientes[num_pendientes].fecha = registro_Ventas[num_ventas].fecha;
+            strcpy(registro_Pendientes[num_pendientes].nombre_cliente, registro_Ventas[num_ventas].nombre_cliente);
+            registro_Pendientes[num_pendientes].monto = registro_Ventas[num_ventas].monto;
+            num_pendientes++;
+        }
+
         num_ventas++;
     }
 
-    escribir = escribir_archivo("registro_Ventas.txt");
-    if (!escribir) return false;
+    escribir_Ventas = escribir_archivo("registro_Ventas.txt");
+    escribir_Pendientes = escribir_archivo("registro_Pendientes.txt");
+    if (!escribir_Ventas || !escribir_Pendientes) return false; //lo mismo que las operaciones de lectura
 
-    return true; //si no se ha retornado, significa que las operaciones de leer y escribir funcionaron bien y se guardaron los datos
+    return true;
 }
 
 bool registrar_costos_Fijos(int num) {
@@ -124,7 +137,7 @@ bool registrar_costos_Fijos(int num) {
     escribir = escribir_archivo("registro_costos_Fijos.txt");
     if (!escribir) return false;
 
-    return true; //si no se ha retornado, significa que las operaciones de leer y escribir funcionaron bien y se guardaron los datos
+    return true;
 }
 
 bool registrar_costos_Variables(int num) {
@@ -146,5 +159,5 @@ bool registrar_costos_Variables(int num) {
     escribir = escribir_archivo("registro_costos_Variables.txt");
     if (!escribir) return false;
 
-    return true; //si no se ha retornado, significa que las operaciones de leer y escribir funcionaron bien y se guardaron los datos
+    return true;
 }
