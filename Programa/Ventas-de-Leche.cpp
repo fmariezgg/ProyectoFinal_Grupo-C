@@ -13,23 +13,29 @@ int main() {
 
         if (start == 1) {
             int acceder = 0;
-            cout << "Abriendo menú...";
+            cambiar_color(14);
+            cout << "      Abriendo menú...";
+            resetear_color();
             Sleep(1000);
 
             while (acceder != 7) acceder = principal();
 
         } else if (start == 2) {
-            cout << "Cerrando programa...";
+            cambiar_color(12);
+            cout << "      Cerrando programa...";
+            resetear_color();
             break;
         } else {
-            cout << "\nOpción inválida...";
+            cambiar_color(12);
+            cout << "      Opción inválida...";
+            resetear_color();
             Sleep(1000);
             continue;
         }
 
-    } while (start != 2); 
+    } while (start != 2);
 
     Sleep(1250);
-    cout << "\n";
+    cout << endl;
     return 0;
 }

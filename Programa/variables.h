@@ -1,7 +1,3 @@
-#include <chrono>
-#include <ctime>
-using namespace std;
-
 #define ID 10
 #define MAX_INPUT 100
 #define MAX_REGISTER 1000
@@ -53,9 +49,12 @@ PENDIENTE registro_Pendientes[MAX_REGISTER];
 TRANSACCION registro_costos_Fijos[MAX_REGISTER];
 TRANSACCION registro_costos_Variables[MAX_REGISTER];
 
-char* meses[] = { "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
+//para convertir lo que retorna time->tm_mon a un string
+const char* meses[] = { "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
 
 float precio_galon = 0.00;
+
+//contadores de elementos de registros:
 int num_vacas = 0;
 int num_clientes = 0;
 int num_ventas = 0;
