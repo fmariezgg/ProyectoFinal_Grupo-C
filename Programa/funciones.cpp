@@ -2,7 +2,7 @@
 #include <cstring>
 #include <ctime>
 #include <windows.h>
-#include "funciones_soporte.h"
+#include "funciones_externas.h"
 using namespace std;
 
 //***************************************************************************************************
