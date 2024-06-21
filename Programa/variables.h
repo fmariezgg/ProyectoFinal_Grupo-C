@@ -10,6 +10,7 @@ typedef struct VACA {
 } VACA;
 
 typedef struct CLIENTE {
+    char id[ID] = "";
     char nombre[MAX_INPUT] = "";
     char direccion[MAX_INPUT] = "";
     char contacto[MAX_INPUT] = "";
@@ -37,17 +38,17 @@ typedef struct PENDIENTE {
     float monto = 0.00;
 } PENDIENTE;
 
-typedef struct TRANSACCION {
+typedef struct COSTO {
     float monto = 0.00;
     char descripcion[MAX_INPUT] = "";
-} TRANSACCION;
+} COSTO;
 
 VACA registro_Vacas[MAX_REGISTER];
 CLIENTE registro_Clientes[MAX_REGISTER];
 VENTA registro_Ventas[MAX_REGISTER];
 PENDIENTE registro_Pendientes[MAX_REGISTER];
-TRANSACCION registro_costos_Fijos[MAX_REGISTER];
-TRANSACCION registro_costos_Variables[MAX_REGISTER];
+COSTO registro_costos_Fijos[MAX_REGISTER];
+COSTO registro_costos_Variables[MAX_REGISTER];
 
 //para convertir lo que retorna time->tm_mon a un string
 const char* meses[] = { "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
