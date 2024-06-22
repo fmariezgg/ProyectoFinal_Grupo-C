@@ -5,6 +5,13 @@
 #include "funciones_externas.h"
 using namespace std;
 
+/*
+pendiente:
+-- si se ingresa una venta de un cliente que no esta registrado, pedir al usuario que registre al cliente primero
+-- las funciones de mostrar, buscar, editar, eliminar
+-- los procesos de salida: calcular ingresos, costos, utilidad + generar facturas y reportes
+*/
+
 //***************************************************************************************************
 
 bool cambiar_Precio(); //todas estas retornan bool para que se pueda checkear si se pudo abrir/leer/escribir al archivo
@@ -18,12 +25,15 @@ bool registrar_costos_Variables(int num);
 
 bool cambiar_Precio() {
     cambiar_color(14);
-    cout << endl << "      Ingrese el nuevo precio por galon: ";
+    cout << "      Ingrese el nuevo precio por galon: ";
     cin >> precio_galon;
-    resetear_color();
 
     bool escribir = escribir_archivo("precio_galon.txt");
     if (!escribir) return false;
+
+    cout << "      ";
+    Sleep(375);
+    resetear_color();
     return true;
 }
 
@@ -46,10 +56,12 @@ bool registrar_Vacas(int num) {
         num_vacas++;
     }
 
-    resetear_color();
     escribir = escribir_archivo("registro_Vacas.txt");
     if (!escribir) return false;
 
+    cout << "   ";
+    Sleep(500);
+    resetear_color();
     return true; //si no se ha retornado, significa que las operaciones de leer y escribir funcionaron bien y se guardaron los datos
 }
 
@@ -74,6 +86,8 @@ bool registrar_Clientes(int num) {
     escribir = escribir_archivo("registro_Clientes.txt");
     if (!escribir) return false;
 
+    cout << "   ";
+    Sleep(500);
     resetear_color();
     return true;
 }
@@ -125,8 +139,10 @@ bool registrar_Ventas(int num) {
             strcpy(registro_Pendientes[num_pendientes].nombre_cliente, registro_Ventas[num_ventas].nombre_cliente);
             registro_Pendientes[num_pendientes].monto = registro_Ventas[num_ventas].monto;
             cambiar_color(10);
-            cout << "   Pago pendiente registrado...\n";
+            cout << "   Pago pendiente registrado...";
+            Sleep(650);
             resetear_color();
+            cout << endl;
             num_pendientes++;
         }
 
@@ -137,6 +153,8 @@ bool registrar_Ventas(int num) {
     escribir_Pendientes = escribir_archivo("registro_Pendientes.txt");
     if (!escribir_Ventas || !escribir_Pendientes) return false; //lo mismo que las operaciones de lectura
 
+    cout << "   ";
+    Sleep(500);
     resetear_color();
     return true;
 }
@@ -161,6 +179,8 @@ bool registrar_costos_Fijos(int num) {
     escribir = escribir_archivo("registro_costos_Fijos.txt");
     if (!escribir) return false;
 
+    cout << "   ";
+    Sleep(500);
     resetear_color();
     return true;
 }
@@ -185,6 +205,8 @@ bool registrar_costos_Variables(int num) {
     escribir = escribir_archivo("registro_costos_Variables.txt");
     if (!escribir) return false;
 
+    cout << "   ";
+    Sleep(500);
     resetear_color();
     return true;
 }

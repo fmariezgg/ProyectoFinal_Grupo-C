@@ -112,14 +112,14 @@ int principal() {
                 check = cambiar_Precio();
                 if (check) {
                     cambiar_color(10);
-                    cout << "      Precio actualizado a: " << precio_galon << "...";
+                    cout << "Precio actualizado a: " << precio_galon << "...";
                 } else {
                     cambiar_color(12);
-                    cout << "      ERROR DE ARCHIVO: no se pudo escribir el precio ingresado al archivo 'precio_galon.txt'...";
+                    cout << "ERROR DE ARCHIVO: no se pudo escribir el precio ingresado al archivo 'precio_galon.txt'...";
                 }
                 
                 resetear_color();
-                Sleep(3000);
+                Sleep(2250);
                 break;
             case 7:
                 cambiar_color(11);
@@ -181,7 +181,7 @@ int produccion() {
                 }
 
                 resetear_color();
-                Sleep(3000);
+                Sleep(2250);
                 break;
             case 2:
                 //coso de mostrar todo
@@ -251,7 +251,7 @@ int clientes() {
                 }
 
                 resetear_color();
-                Sleep(3000);
+                Sleep(2250);
                 break;
             case 2:
                 //coso de mostrar todo
@@ -402,7 +402,7 @@ int ventas() {
                 }
 
                 resetear_color();
-                Sleep(3000);
+                Sleep(2250);
                 break;
             case 3:
                 //coso de mostrar todo
@@ -564,7 +564,7 @@ int costos_Fijos() {
                 }
 
                 resetear_color();
-                Sleep(3000);
+                Sleep(2250);
                 break;
             case 2:
                 //coso de mostrar todo
@@ -634,7 +634,7 @@ int costos_Variables() {
                 }
 
                 resetear_color();
-                Sleep(3000);
+                Sleep(2250);
                 break;
             case 2:
                 //coso de mostrar todo

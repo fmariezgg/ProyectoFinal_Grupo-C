@@ -31,8 +31,7 @@ void cambiar_color(int color) {
 }
 
 void resetear_color() {
-    HANDLE consola = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(consola, 15);
+    cambiar_color(15);
 }
 
 //***************************************************************************************************

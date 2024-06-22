@@ -110,10 +110,11 @@ bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
         if (!file) return false; //si todavia da error, ni modo, salir y retornar false
 
         cambiar_color(12);
-        cout << "\n   " << nombre_archivo << " no encontrado...\n";
-        cambiar_color(10);
-        cout << "   Creando " << nombre_archivo << "..." << endl;
-        resetear_color();
+        cout << "\n   " << nombre_archivo << " no encontrado...";
+        Sleep(500); cambiar_color(10);
+        cout << "\n   Creando " << nombre_archivo << "...";
+        Sleep(1000); resetear_color();
+        cout << endl;
     }
 
     else {
