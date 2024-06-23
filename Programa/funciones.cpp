@@ -14,24 +14,47 @@ pendiente:
 
 //***************************************************************************************************
 
-bool cambiar_Precio(); //todas estas retornan bool para que se pueda checkear si se pudo abrir/leer/escribir al archivo
+bool ingresar_Precio(); //todas estas retornan bool para que se pueda checkear si se pudo abrir/leer/escribir al archivo
 bool registrar_Vacas(int num); //y num es la cantidad de cosas que se van a registrar (para que el usuario no tenga que estar ingresando 1 por 1)
 bool registrar_Clientes(int num);
 bool registrar_Ventas(int num);
 bool registrar_costos_Fijos(int num);
 bool registrar_costos_Variables(int num);
 
+bool mostrar_Precio();
+bool mostrar_Vacas();
+bool mostrar_Clientes();
+bool mostrar_Ventas();
+bool mostrar_Pendientes();
+bool mostrar_costos_Fijos();
+bool mostrar_costos_Variables();
+
+bool editar_Vacas();
+bool editar_Clientes();
+bool editar_Ventas(); //si se cambia a que ya se pago, quitar la venta del registro de pendientes
+bool editar_Pendientes();
+bool editar_costos_Fijos();
+bool editar_costos_Variables();
+
+bool eliminar_Vacas();
+bool eliminar_Clientes();
+bool eliminar_Ventas();
+bool eliminar_Pendientes(); //cuando se elimine, que actualice el registro de la venta para que no aparezca como pendiente
+bool eliminar_costos_Fijos();
+bool eliminar_costos_Variables();
+
 //***************************************************************************************************
 
-bool cambiar_Precio() {
+bool ingresar_Precio() {
+    system("cls || clear");
     cambiar_color(14);
-    cout << "      Ingrese el nuevo precio por galon: ";
+    cout << "\n   Ingrese el precio por galón: ";
     cin >> precio_galon;
 
     bool escribir = escribir_archivo("precio_galon.txt");
     if (!escribir) return false;
 
-    cout << "      ";
+    cout << "   ";
     Sleep(375);
     resetear_color();
     return true;
@@ -50,9 +73,9 @@ bool registrar_Vacas(int num) {
         cout << "   ***********************************************************************\n";
         resetear_color();
         pedir_Cstring("ID", registro_Vacas[num_vacas].id, ID);
-        pedir_Cstring("estado de salud", registro_Vacas[num_vacas].estado_salud);
         registro_Vacas[num_vacas].edad = pedir_int("edad");
         registro_Vacas[num_vacas].prod_diaria = pedir_int("producción diaria");
+        pedir_Cstring("estado de salud", registro_Vacas[num_vacas].estado_salud);
         num_vacas++;
     }
 
@@ -77,6 +100,7 @@ bool registrar_Clientes(int num) {
         cout << endl << "                                Cliente #" << num_clientes+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
         resetear_color();
+        pedir_Cstring("ID", registro_Clientes[num_clientes].id, ID);
         pedir_Cstring("nombre", registro_Clientes[num_clientes].nombre);
         pedir_Cstring("dirección", registro_Clientes[num_clientes].direccion);
         pedir_Cstring("contacto", registro_Clientes[num_clientes].contacto);
@@ -109,8 +133,10 @@ bool registrar_Ventas(int num) {
 
         bool check = escribir_archivo("precio_galon.txt");
         cambiar_color(10);
-        if (check) cout << "   Precio guardado...\n";
+        if (check) cout << "   Precio guardado...";
         else return false;
+        Sleep(500);
+        cout << endl;
         resetear_color();
     }
 

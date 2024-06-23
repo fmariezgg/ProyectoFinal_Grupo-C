@@ -4,9 +4,9 @@
 
 typedef struct VACA {
     char id[ID] = "";
-    char estado_salud[MAX_INPUT] = "";
     int edad = 0;
     int prod_diaria = 0;
+    char estado_salud[MAX_INPUT] = "";
 } VACA;
 
 typedef struct CLIENTE {

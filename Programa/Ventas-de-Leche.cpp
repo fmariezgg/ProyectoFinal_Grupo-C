@@ -18,7 +18,7 @@ int main() {
             resetear_color();
             Sleep(1000);
 
-            while (acceder != 7) acceder = principal();
+            while (acceder != 6) acceder = principal();
 
         } else if (start == 2) {
             cambiar_color(12);

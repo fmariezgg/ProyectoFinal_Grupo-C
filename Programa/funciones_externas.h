@@ -29,6 +29,9 @@ bool pedir_pagada();
 bool leer_archivo(const char nombre_archivo[MAX_INPUT]);
 bool escribir_archivo(const char nombre_archivo[MAX_INPUT]);
 
+//busca la posicion de un elemento en el archivo que le pasan
+int buscar_Registro(const char nombre_archivo);
+
 //***************************************************************************************************
 
 tm* obtener_fecha() {
@@ -125,9 +128,9 @@ bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
         else if (strcmp(nombre_archivo, "registro_Vacas.txt") == 0) {
             while (true) {
                 file.getline(registro_Vacas[i].id, MAX_INPUT);
-                file.getline(registro_Vacas[i].estado_salud, MAX_INPUT);
                 file >> registro_Vacas[i].edad;
                 file >> registro_Vacas[i].prod_diaria;
+                file.getline(registro_Vacas[i].estado_salud, MAX_INPUT);
 
                 if (file.fail()) break; //si no se pudo leer nada, salir
                 if (file.peek() == '\n') file.ignore();; //quitar el \n del stream para que getline funcione bien
@@ -140,6 +143,7 @@ bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
         //leer clientes
         else if (strcmp(nombre_archivo, "registro_Clientes.txt") == 0) {
             while (true) {
+                file.getline(registro_Clientes[i].id, ID);
                 file.getline(registro_Clientes[i].nombre, MAX_INPUT);
                 file.getline(registro_Clientes[i].direccion, MAX_INPUT);
                 file.getline(registro_Clientes[i].contacto, MAX_INPUT);
@@ -237,9 +241,9 @@ bool escribir_archivo(const char nombre_archivo[MAX_INPUT]) {
         if (strcmp(nombre_archivo, "registro_Vacas.txt") == 0) {
             for (int i = 0; i < num_vacas; i++) {
                 file << registro_Vacas[i].id << "\n";
-                file << registro_Vacas[i].estado_salud << "\n";
                 file << registro_Vacas[i].edad << "\n";
                 file << registro_Vacas[i].prod_diaria << "\n";
+                file << registro_Vacas[i].estado_salud << "\n";
                 x++;
             }
 
@@ -249,6 +253,7 @@ bool escribir_archivo(const char nombre_archivo[MAX_INPUT]) {
         //escribir clientes
         else if (strcmp(nombre_archivo, "registro_Clientes.txt") == 0) {
             for (int i = 0; i < num_clientes; i++) {
+                file << registro_Clientes[i].id << "\n";
                 file << registro_Clientes[i].nombre << "\n";
                 file << registro_Clientes[i].direccion << "\n";
                 file << registro_Clientes[i].contacto << "\n";
