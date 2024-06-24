@@ -7,9 +7,10 @@ using namespace std;
 
 /*
 pendientes:
+-- quitar la estructura de fecha y solo convertir  el tm* a un string?
 -- cuando se ingrese una venta de un cliente que no esta registrado, avisarle al usuario que lo registre primero
--- las funciones de buscar, editar y eliminar
--- los procesos de salida: calcular ingresos, costos, utilidad + generar facturas y reportes
+-- las funciones de editar y eliminar
+-- los procesos de salida: calcular produccion, ingresos, costos y utilidad
 */
 
 //***************************************************************************************************
@@ -30,13 +31,14 @@ bool mostrar_Pendientes();
 bool mostrar_costos_Fijos();
 bool mostrar_costos_Variables();
 
-bool buscar_Vaca(const char id[ID]);
-bool buscar_Cliente(const char id[ID]); //por el id
-bool buscar_Cliente(const char nombre[MAX_INPUT]); //por el nombre
-bool buscar_Venta(const char id[ID]);
-bool buscar_Pendiente(const char id[ID]);
-bool buscar_costo_Fijo(const char id[ID]);
-bool buscar_costo_Variable(const char id[ID]);
+//estas retornan la posicion del id en el arreglo:
+//retornan -2 si hubo un error con el archivo y -1 si no se encontro el id (si es >=0, es la posicion del id en el arreglo)
+int buscar_Vaca(const char id[ID]);
+int buscar_Cliente(const char input[MAX_INPUT], bool buscar_nombre); //buscar por el id o nombre dependiendo del segundo parametro
+int buscar_Venta(const char id[ID]);
+int buscar_Pendiente(const char id[ID]);
+int buscar_costo_Fijo(const char id[ID]);
+int buscar_costo_Variable(const char id[ID]);
 
 bool editar_Vacas();
 bool editar_Clientes();
@@ -227,6 +229,7 @@ bool registrar_costos_Fijos(int num) {
 bool registrar_costos_Variables(int num) {
     system("cls || clear");
     bool leer = false, escribir = false;
+    tm* time = obtener_fecha();
 
     leer = leer_Archivos("registro_costos_Variables.txt");
     if (!leer) return false;
@@ -239,6 +242,7 @@ bool registrar_costos_Variables(int num) {
         pedir_Cstring("ID", registro_costos_Variables[num_costos_Variables].id, ID);
         registro_costos_Variables[num_costos_Variables].monto = pedir_float("monto (en C$)");
         pedir_Cstring("descripción", registro_costos_Variables[num_costos_Variables].descripcion);
+        strcpy(registro_costos_Variables[num_costos_Variables].mes, meses[time->tm_mon]);
         num_costos_Variables++;
     }
 
@@ -278,7 +282,7 @@ bool mostrar_Vacas() {
     bool leer = leer_Archivos("registro_Vacas.txt");
     if (!leer) return false;
 
-    if (num_vacas == 0) {
+    if (num_vacas == 0) { //checkear si el archivo estaba vacio
         cambiar_color(12);
         cout << "\n   No hay vacas registradas...";
         Sleep(3000);
@@ -297,8 +301,8 @@ bool mostrar_Vacas() {
         cout << "   ***********************************************************************\n";
         cambiar_color(14);
         cout << "   ID: " << registro_Vacas[i].id << "\n";
-        cout << "   Edad: " << registro_Vacas[i].edad << "\n";
-        cout << "   Producción diaria: " << registro_Vacas[i].prod_diaria << "\n";
+        cout << "   Edad: " << registro_Vacas[i].edad << " año(s)\n";
+        cout << "   Producción diaria: " << registro_Vacas[i].prod_diaria << " galón(es)\n";
         cout << "   Estado de salud: " << registro_Vacas[i].estado_salud << "\n";
         cout << "   ";
         Sleep(800);
@@ -308,6 +312,8 @@ bool mostrar_Vacas() {
     cout << endl << "   ***********************************************************************\n";
     cambiar_color(14);
     cout << "   Presione cualquier tecla para continuar...";
+
+    //para que system("pause") no muestre el mensaje default, le pongo eso de '> NULL', e imprimo mi propio mensaje (con mi formato y colores) antes
     system("pause > NULL");
     return true;
 }
@@ -381,8 +387,8 @@ bool mostrar_Ventas() {
         cout << "   ID: " << registro_Ventas[i].id << "\n";
         cout << "   Fecha: " << registro_Ventas[i].fecha.dia << " de " << registro_Ventas[i].fecha.mes << ", " << registro_Ventas[i].fecha.year << "\n";
         cout << "   Nombre de cliente: " << registro_Ventas[i].nombre_cliente << "\n";
-        cout << "   Cantidad de leche: " << registro_Ventas[i].cantidad_leche << "\n";
-        cout << "   Monto: " << registro_Ventas[i].monto << "\n";
+        cout << "   Cantidad de leche: " << registro_Ventas[i].cantidad_leche << " galone(s)\n";
+        cout << "   Monto: C$" << registro_Ventas[i].monto << "\n";
         cout << "   ¿Está pagada? "; cambiar_color(9); cout << pagada << "\n";
         cout << "   ";
         Sleep(800);
@@ -422,7 +428,7 @@ bool mostrar_Pendientes() {
         cout << "   ID de venta: " << registro_Pendientes[i].id_venta << "\n";
         cout << "   Fecha: " << registro_Pendientes[i].fecha.dia << " de " << registro_Pendientes[i].fecha.mes << ", " << registro_Pendientes[i].fecha.year << "\n";
         cout << "   Nombre de cliente: " << registro_Pendientes[i].nombre_cliente << "\n";
-        cout << "   Monto: " << registro_Pendientes[i].monto << "\n";
+        cout << "   Monto: C$" << registro_Pendientes[i].monto << "\n";
         cout << "   ";
         Sleep(800);
     }
@@ -459,7 +465,7 @@ bool mostrar_costos_Fijos() {
         cout << "   ***********************************************************************\n";
         cambiar_color(14);
         cout << "   ID: " << registro_costos_Fijos[i].id << "\n";
-        cout << "   Monto: " << registro_costos_Fijos[i].monto << "\n";
+        cout << "   Monto: C$" << registro_costos_Fijos[i].monto << "\n";
         cout << "   Descripción: " << registro_costos_Fijos[i].descripcion << "\n";
         cout << "   ";
         Sleep(800);
@@ -497,8 +503,9 @@ bool mostrar_costos_Variables() {
         cout << "   ***********************************************************************\n";
         cambiar_color(14);
         cout << "   ID: " << registro_costos_Variables[i].id << "\n";
-        cout << "   Monto: " << registro_costos_Variables[i].monto << "\n";
+        cout << "   Monto: C$" << registro_costos_Variables[i].monto << "\n";
         cout << "   Descripción: " << registro_costos_Variables[i].descripcion << "\n";
+        cout << "   Mes: "; cambiar_color(9); cout << registro_costos_Variables[i].mes << "\n";
         cout << "   ";
         Sleep(800);
     }
@@ -512,3 +519,75 @@ bool mostrar_costos_Variables() {
 }
 
 //***************************************************************************************************
+
+int buscar_Vaca(const char id[ID]) {
+    bool leer = leer_Archivos("registro_Vacas.txt");
+    if (!leer) return -2; //-2 significa que no se pudo leer el archivo
+    
+    for (int i = 0; i < num_vacas; i++) {
+        if (strcmp(registro_Vacas[i].id, id) == 0) return i;
+    }
+    
+    return -1; //si no se ha retornado, significa que no se encontro el id
+}
+
+int buscar_Cliente(const char input[MAX_INPUT], bool buscar_nombre) {
+    bool leer = leer_Archivos("registro_Clientes.txt");
+    if (!leer) return -2;
+
+    if (buscar_nombre) {
+        for (int i = 0; i < num_clientes; i++) {
+            if (strcmp(registro_Clientes[i].nombre, input) == 0) return i;
+        }
+    } else {
+        for (int i = 0; i < num_clientes; i++) {
+            if (strcmp(registro_Clientes[i].id, input) == 0) return i;
+        }
+    }    
+    
+    return -1;
+}
+
+int buscar_Venta(const char id[ID]) {
+    bool leer = leer_Archivos("registro_Ventas.txt");
+    if (!leer) return -2;
+    
+    for (int i = 0; i < num_ventas; i++) {
+        if (strcmp(registro_Ventas[i].id, id) == 0) return i;
+    }
+    
+    return -1;
+}
+
+int buscar_Pendiente(const char id[ID]) {
+    bool leer = leer_Archivos("registro_Pendientes.txt");
+    if (!leer) return -2;
+    
+    for (int i = 0; i < num_pendientes; i++) {
+        if (strcmp(registro_Pendientes[i].id_venta, id) == 0) return i;
+    }
+    
+    return -1;
+}
+
+int buscar_costo_Fijo(const char id[ID]) {
+    bool leer = leer_Archivos("registro_costos_Fijos.txt");
+    if (!leer) return -2;
+    
+    for (int i = 0; i < num_costos_Fijos; i++) {
+        if (strcmp(registro_costos_Fijos[i].id, id) == 0) return i;
+    }
+    
+    return -1;
+}
+
+int buscar_costo_Variable(const char id[ID]) {
+    bool leer = leer_Archivos("registro_costos_Variables.txt");
+    if (!leer) return -2;
+    
+    for (int i = 0; i < num_costos_Variables; i++) {
+        if (strcmp(registro_costos_Variables[i].id, id) == 0) return i;
+    }
+    
+    return -1;
+}
