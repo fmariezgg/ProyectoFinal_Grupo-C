@@ -1,16 +1,16 @@
 Proceso mostrarReportes
-	Definir reporteAnterio,reporteActual Como Real;
-	// Mostrar reportes ingresados
+	Definir reportes Como Real;
+	Definir x Como Entero;
+	Dimensionar reportes(100,5);
+	
+	Escribir 'Que reporte quiere ver? ';
+	Leer x;
+	
+	Escribir 'Mostrando reporte #', x, ': ';
 	Escribir 'Reporte Mes Antepasado:';
-	Escribir 'Produccion Semanal: ',reporteAnterior;
-	Escribir 'Produccion Mensual: ',reporteAnterior;
-	Escribir 'Ingresos Semanales: ',reporteAnterior;
-	Escribir 'Ingresos Mensuales: ',reporteAnterior;
-	Escribir 'Utilidad del Mes: ',reporteAnterior;
-	Escribir 'Reporte Mes Pasado:';
-	Escribir 'Produccion Semanal: ',reporteActual;
-	Escribir 'Produccion Mensual: ',reporteActual;
-	Escribir 'Ingresos Semanales: ',reporteActual;
-	Escribir 'Ingresos Mensuales: ',reporteActual;
-	Escribir 'Utilidad del Mes: ',reporteActual;
+	Escribir 'Produccion Semanal: ', reportes[x,0];
+	Escribir 'Produccion Mensual: ', reportes[x,1];
+	Escribir 'Ingresos Semanales: ', reportes[x,2];
+	Escribir 'Ingresos Mensuales: ', reportes[x,3];
+	Escribir 'Utilidad del Mes: ', reportes[x,4];
 FinProceso

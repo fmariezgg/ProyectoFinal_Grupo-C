@@ -1,7 +1,6 @@
 Proyecto Final
+Lógica y Algoritmos, Grupo 4
 
 Integrantes:
--Fátima
--Joaquín
--Adrián
--Ernesto
+-Fátima Zogaib
+-Joaquín Pérez

@@ -6,6 +6,7 @@ Proceso mostrarClientes
 	Dimensionar contacto(300);
 	Dimensionar pagos_pendientes(300);
 	Dimensionar compras(300);
+	
 	Para i<-0 Hasta cantidad_clientes Con Paso +1 Hacer
 		Escribir 'Cliente #', i+1, ': ';
 		Escribir 'Nombre: ', nombre[i];
