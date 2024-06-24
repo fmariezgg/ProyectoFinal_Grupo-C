@@ -26,11 +26,8 @@ float pedir_float(const char dato[MAX_INPUT]);
 bool pedir_pagada();
 
 //funciones para abrir/leer/escribir a archivos
-bool leer_archivo(const char nombre_archivo[MAX_INPUT]);
-bool escribir_archivo(const char nombre_archivo[MAX_INPUT]);
-
-//busca la posicion de un elemento en el archivo que le pasan
-int buscar_Registro(const char nombre_archivo);
+bool leer_Archivos(const char nombre_archivo[MAX_INPUT]);
+bool escribir_Archivos(const char nombre_archivo[MAX_INPUT]);
 
 //***************************************************************************************************
 
@@ -79,16 +76,18 @@ float pedir_float(const char dato[MAX_INPUT]) {
 }
 
 bool pedir_pagada() {
-    char input = '\0';
+    char input[3] = "";
 
     while (true) {
         cambiar_color(14);
-        cout << "   ¿Ha pagado el cliente? (s/n) ";
+        cout << "   ¿Ha pagado el cliente? (si/no) ";
         cin >> input;
 
-        if ((input == 's') || (input == 'S')) return true;
-        else if ((input == 'n') || (input == 'N')) return false;
-        else {
+        if ((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)) {
+            return true;
+        } else if ((strcmp(input, "n") == 0) || (strcmp(input, "N") == 0) || (strcmp(input, "no") == 0) || (strcmp(input, "No") == 0) || (strcmp(input, "nO") == 0) || (strcmp(input, "NO") == 0)) {
+            return false;
+        } else {
             cambiar_color(12);
             cout << "\n   ERROR: respuesta invalida...\n\n";
             continue;
@@ -100,7 +99,7 @@ bool pedir_pagada() {
 
 //***************************************************************************************************
 
-bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
+bool leer_Archivos(const char nombre_archivo[MAX_INPUT]) {
     int i = 0; //contador de elementos
     fstream file;
     file.open(nombre_archivo, ios::in);
@@ -130,10 +129,11 @@ bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
                 file.getline(registro_Vacas[i].id, MAX_INPUT);
                 file >> registro_Vacas[i].edad;
                 file >> registro_Vacas[i].prod_diaria;
+                if (file.peek() == '\n') file.ignore(); //si el proximo caracter es un \n, quitarlo del stream para que getline funcione bien
                 file.getline(registro_Vacas[i].estado_salud, MAX_INPUT);
 
                 if (file.fail()) break; //si no se pudo leer nada, salir
-                if (file.peek() == '\n') file.ignore();; //quitar el \n del stream para que getline funcione bien
+                if (file.peek() == '\n') file.ignore(); //quitar el \n otra vez
                 i++;
             }
             
@@ -144,12 +144,15 @@ bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
         else if (strcmp(nombre_archivo, "registro_Clientes.txt") == 0) {
             while (true) {
                 file.getline(registro_Clientes[i].id, ID);
+                if (file.peek() == '\n') file.ignore();
                 file.getline(registro_Clientes[i].nombre, MAX_INPUT);
+                if (file.peek() == '\n') file.ignore();
                 file.getline(registro_Clientes[i].direccion, MAX_INPUT);
+                if (file.peek() == '\n') file.ignore();
                 file.getline(registro_Clientes[i].contacto, MAX_INPUT);
 
-                if (file.fail()) break;
-                file.ignore();
+                if (file.fail()) break;                
+                if (file.peek() == '\n') file.ignore();
                 i++;
             }
             
@@ -160,16 +163,18 @@ bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
         else if (strcmp(nombre_archivo, "registro_Ventas.txt") == 0) {
             while (true) {
                 file.getline(registro_Ventas[i].id, ID);
+                if (file.peek() == '\n') file.ignore();
                 file.getline(registro_Ventas[i].nombre_cliente, MAX_INPUT);
-                /*file.getline(registro_Ventas[i].fecha.mes, ID);
                 file >> registro_Ventas[i].fecha.dia;
-                file >> registro_Ventas[i].fecha.year;*/
+                if (file.peek() == '\n') file.ignore();
+                file.getline(registro_Ventas[i].fecha.mes, ID);
+                file >> registro_Ventas[i].fecha.year;
                 file >> registro_Ventas[i].cantidad_leche;
                 file >> registro_Ventas[i].monto;
                 file >> registro_Ventas[i].pagada;
 
                 if (file.fail()) break;
-                if (file.peek() == '\n') file.ignore();;
+                if (file.peek() == '\n') file.ignore();
                 i++;
             }
 
@@ -180,11 +185,16 @@ bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
         else if (strcmp(nombre_archivo, "registro_Pendientes.txt") == 0) {
             while (true) {
                 file.getline(registro_Pendientes[i].id_venta, ID);
+                file >> registro_Pendientes[i].fecha.dia;
+                if (file.peek() == '\n') file.ignore();
+                file.getline(registro_Pendientes[i].fecha.mes, ID);
+                file >> registro_Pendientes[i].fecha.year;
+                if (file.peek() == '\n') file.ignore();
                 file.getline(registro_Pendientes[i].nombre_cliente, MAX_INPUT);
                 file >> registro_Pendientes[i].monto;
 
                 if (file.fail()) break;
-                if (file.peek() == '\n') file.ignore();;
+                if (file.peek() == '\n') file.ignore();
                 i++;
             }
 
@@ -194,12 +204,13 @@ bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
         //leer costos fijos
         else if (strcmp(nombre_archivo, "registro_costos_Fijos.txt") == 0) {
             while (true) {
+                file.getline(registro_costos_Fijos[i].id, ID);
                 file >> registro_costos_Fijos[i].monto;
-                if (file.peek() == '\n') file.ignore();;
+                if (file.peek() == '\n') file.ignore();
                 file.getline(registro_costos_Fijos[i].descripcion, MAX_INPUT);
 
                 if (file.fail()) break;
-                if (file.peek() == '\n') file.ignore();;
+                if (file.peek() == '\n') file.ignore();
                 i++;
             }
             
@@ -209,12 +220,13 @@ bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
         //leer costos variables
         else if (strcmp(nombre_archivo, "registro_costos_Variables.txt") == 0) {
             while (true) {
+                file.getline(registro_costos_Variables[i].id, ID);
                 file >> registro_costos_Variables[i].monto;
-                if (file.peek() == '\n') file.ignore();;
+                if (file.peek() == '\n') file.ignore();
                 file.getline(registro_costos_Variables[i].descripcion, MAX_INPUT);
                 
                 if (file.fail()) break;
-                if (file.peek() == '\n') file.ignore();;
+                if (file.peek() == '\n') file.ignore();
                 i++;
             }
             
@@ -226,7 +238,7 @@ bool leer_archivo(const char nombre_archivo[MAX_INPUT]) {
     return true;
 }
 
-bool escribir_archivo(const char nombre_archivo[MAX_INPUT]) {
+bool escribir_Archivos(const char nombre_archivo[MAX_INPUT]) {
     int x = 0; //contador de elementos
     fstream file;
     file.open(nombre_archivo, ios::trunc | ios::out);
@@ -268,9 +280,9 @@ bool escribir_archivo(const char nombre_archivo[MAX_INPUT]) {
             for (int i = 0; i < num_ventas; i++) {
                 file << registro_Ventas[i].id << "\n";
                 file << registro_Ventas[i].nombre_cliente << "\n";
-                /*file << registro_Ventas[i].fecha.mes << "\n";
                 file << registro_Ventas[i].fecha.dia << "\n";
-                file << registro_Ventas[i].fecha.year << "\n";*/
+                file << registro_Ventas[i].fecha.mes << "\n";
+                file << registro_Ventas[i].fecha.year << "\n";
                 file << registro_Ventas[i].cantidad_leche << "\n";
                 file << registro_Ventas[i].monto << "\n";
                 file << registro_Ventas[i].pagada << "\n";
@@ -284,6 +296,9 @@ bool escribir_archivo(const char nombre_archivo[MAX_INPUT]) {
         else if (strcmp(nombre_archivo, "registro_Pendientes.txt") == 0) {
             for (int i = 0; i < num_pendientes; i++) {
                 file << registro_Pendientes[i].id_venta << "\n";
+                file << registro_Pendientes[i].fecha.dia << "\n";
+                file << registro_Pendientes[i].fecha.mes << "\n";
+                file << registro_Pendientes[i].fecha.year << "\n";
                 file << registro_Pendientes[i].nombre_cliente << "\n";
                 file << registro_Pendientes[i].monto << "\n";
                 x++;
@@ -295,6 +310,7 @@ bool escribir_archivo(const char nombre_archivo[MAX_INPUT]) {
         //escribir costos fijos
         else if (strcmp(nombre_archivo, "registro_costos_Fijos.txt") == 0) {
             for (int i = 0; i < num_costos_Fijos; i++) {
+                file << registro_costos_Fijos[i].id << "\n";
                 file << registro_costos_Fijos[i].monto << "\n";
                 file << registro_costos_Fijos[i].descripcion << "\n";
                 x++;
@@ -306,6 +322,7 @@ bool escribir_archivo(const char nombre_archivo[MAX_INPUT]) {
         //escribir costos variables
         else if (strcmp(nombre_archivo, "registro_costos_Variables.txt") == 0) {
             for (int i = 0; i < num_costos_Variables; i++) {
+                file << registro_costos_Fijos[i].id << "\n";
                 file << registro_costos_Variables[i].monto << "\n";
                 file << registro_costos_Variables[i].descripcion << "\n";
                 x++;

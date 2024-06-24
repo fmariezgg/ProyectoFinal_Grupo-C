@@ -11,9 +11,10 @@ int produccion();
 int clientes();
 //---------------------------------
 int finanzas();
+int ventas();
+int pendientes();
 int costos_Fijos();
 int costos_Variables();
-int ventas();
 //---------------------------------
 int facturacion();
 int reportes();
@@ -168,7 +169,12 @@ int produccion() {
                 Sleep(2250);
                 break;
             case 2:
-                //coso de mostrar todo
+                check = mostrar_Vacas();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Vacas.txt'...";
+                }
+
                 break;
             case 3:
                 //coso de buscar
@@ -241,7 +247,12 @@ int clientes() {
                 Sleep(2250);
                 break;
             case 2:
-                //coso de mostrar todo
+                check = mostrar_Clientes();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Clientes.txt'...";
+                }
+                
                 break;
             case 3:
                 //coso de buscar
@@ -284,19 +295,20 @@ int finanzas() {
         cambiar_color(14);
         cout << endl;
         cout << "   1. Acceder a menú de ventas\n";
-        cout << "   2. Acceder a menú de costos fijos\n";
-        cout << "   3. Acceder a menú de costos variables\n";
+        cout << "   2. Acceder a menú de pagos pendientes\n";
+        cout << "   3. Acceder a menú de costos fijos\n";
+        cout << "   4. Acceder a menú de costos variables\n";
         cambiar_color(10);
-        cout << "\n   4. Calcular ingresos totales\n";
+        cout << "\n   5. Calcular ingresos totales\n";
         cambiar_color(12);
-        cout << "   5. Calcular costos totales\n";
+        cout << "   6. Calcular costos totales\n";
         resetear_color();
-        cout << "   6. Calcular utilidad\n";
+        cout << "   7. Calcular utilidad\n";
         cambiar_color(14);
-        cout << "\n   7. Mostrar precio por galón\n";
-        cout << "   8. Cambiar precio por galón\n";
+        cout << "\n   8. Mostrar precio por galón\n";
+        cout << "   9. Cambiar precio por galón\n";
         cambiar_color(11);
-        cout << "\n   9. Regresar a menú principal\n";
+        cout << "\n   10. Regresar a menú principal\n";
         cambiar_color(9);
         cout << "\n   => Ingrese su opción: ";
         cin >> option;
@@ -304,23 +316,23 @@ int finanzas() {
 
         /*si se escogio entrar a los menus de costos fijos/variables y se quiere mover
         directamente entre los dos sin tener que regresar al menu de finanzas*/
-        while (option == 2 || option == 3) { 
-            if (option == 2) {
+        while (option == 3 || option == 4) { 
+            if (option == 3) {
                 cambiar_color(14);
                 cout << "      Accediendo a submenú de costos fijos...";
                 resetear_color();
                 Sleep(1000);
 
                 submenu = costos_Fijos();
-                if (submenu == 6) option = 3; //ir al menu de costos variables
-            } else if (option == 3) {
+                if (submenu == 6) option = 4; //ir al menu de costos variables
+            } else if (option == 4) {
                 cambiar_color(14);
                 cout << "      Accediendo a submenú de costos variables...";
                 resetear_color();
                 Sleep(1000);
 
                 submenu = costos_Variables();
-                if (submenu == 6) option = 2; //ir al menu de costos fijos
+                if (submenu == 6) option = 3; //ir al menu de costos fijos
             }
 
             //si se escogio regresar al menu de finanzas, salir del while
@@ -349,36 +361,51 @@ int finanzas() {
                 if (submenu == 6) continue; //si el submenu retorna la opcion de regresar al menu de finanzas, ir a la proxima iteracion
                 else if (submenu == 7) return 9; //retorna la opcion que hace que se regrese al menu principal
                 break;
+            case 2:
+                cambiar_color(14);
+                cout << "      Accediendo a menú de pagos pendientes...";
+                resetear_color();
+                Sleep(1000);
 
-            case 2: break; //para que el switch no se vaya al caso default si option es 2 o 3
-            case 3: break; //^^
-            
-            case 4:
+                submenu = pendientes();
+                if (submenu == 5) continue; //^^
+                else if (submenu == 6) return 9; //^^
+                break;
+
+            case 3: break; //para que el switch no se vaya al caso default si option es 2 o 3
+            case 4: break; //^^
+
+            case 5:
                 //coso de ingresos
                 break;
-            case 5:
+            case 6:
                 //coso de costos totales
                 break;
-            case 6:
+            case 7:
                 //coso de utilidad
                 break;
-            case 7:
-                //coso de mostrar precio
-                break;
             case 8:
-                check = ingresar_Precio();
-                if (check) {
-                    cambiar_color(10);
-                    cout << "Precio actualizado a: " << precio_galon << "...";
-                } else {
+                check = mostrar_Precio();
+                if (!check) {
+                    Sleep(500);
                     cambiar_color(12);
-                    cout << "ERROR DE ARCHIVO: no se pudo escribir el precio ingresado al archivo 'precio_galon.txt'...";
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'precio_galon.txt'...";
+                }
+
+                resetear_color();
+                Sleep(2250);
+                break;
+            case 9:
+                check = ingresar_Precio();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo escribir el precio ingresado al archivo 'precio_galon.txt'...";
                 }
                 
                 resetear_color();
                 Sleep(2250);
                 break;
-            case 9:
+            case 10:
                 cambiar_color(11);
                 cout << "      Regresando a menú principal...";
                 resetear_color();
@@ -391,7 +418,7 @@ int finanzas() {
                 Sleep(1000);
                 break;
         }
-    } while (option != 9);
+    } while (option != 10);
 
     resetear_color();
     return option;
@@ -405,9 +432,9 @@ int ventas() {
         system("cls || clear");
         titulo_ventas();
 
-        cout << endl;
         cambiar_color(14);
-        cout << "\n   1. Registrar venta\n";
+        cout << endl;
+        cout << "   1. Registrar venta\n";
         cout << "   2. Mostrar ventas\n";
         cout << "   3. Buscar venta\n";
         cout << "   4. Modificar ventas\n";
@@ -441,7 +468,12 @@ int ventas() {
                 Sleep(2250);
                 break;
             case 2:
-                //coso de mostrar todo
+                check = mostrar_Ventas();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Ventas.txt'...";
+                }
+                
                 break;
             case 3:
                 //coso de buscar
@@ -475,6 +507,70 @@ int ventas() {
 
     resetear_color();
     return option; //retornar la opcion del menu al que se quiere regresar
+}
+
+int pendientes() {
+    int option = 0;
+    bool check = false;
+
+    do {
+        system("cls || clear");
+        titulo_pendientes();
+
+        cambiar_color(14);
+        cout << endl;
+        cout << "   1. Mostrar pagos pendientes\n";
+        cout << "   2. Buscar pago pendiente\n";
+        cout << "   3. Modificar pago pendiente\n";
+        cout << "   4. Eliminar pago pendiente\n";
+        cambiar_color(11);
+        cout << "\n   5. Regresar a menú de finanzas\n";
+        cout << "   6. Regresar a menú principal\n";
+        cambiar_color(9);
+        cout << "\n   => Ingrese su opción: ";
+        cin >> option;
+
+        switch (option) {
+            case 1:
+                check = mostrar_Pendientes();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Pendientes.txt'...";
+                }
+                
+                break;
+            case 2:
+                //coso de buscar
+                break;
+            case 3:
+                //coso de modificar
+                break;
+            case 4:
+                //coso de eliminar
+                break;
+            case 5:
+                cambiar_color(11);
+                cout << "      Regresando a menú de finanzas...";
+                resetear_color();
+                Sleep(1000);
+                break;
+            case 6:
+                cambiar_color(11);
+                cout << "      Regresando a menú principal...";
+                resetear_color();
+                Sleep(1000);
+                break;
+            default:
+                cambiar_color(12);
+                cout << "      Opción inválida...";
+                resetear_color();
+                Sleep(1000);
+                break;
+        }
+    } while ((option != 5) && (option != 6));
+
+    resetear_color();
+    return option;
 }
 
 int costos_Fijos() {
@@ -522,7 +618,12 @@ int costos_Fijos() {
                 Sleep(2250);
                 break;
             case 2:
-                //coso de mostrar todo
+                check = mostrar_costos_Fijos();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Fijos.txt'...";
+                }
+
                 break;
             case 3:
                 //coso de buscar
@@ -548,7 +649,7 @@ int costos_Fijos() {
     } while ((option < 6) || (option > 8)); //mientras no se quiera salir del submenu, quedarse en el do while
 
     resetear_color();
-    return option; //cuando se quiera salir, terminar el bucle y retornar option
+    return option;
 }
 
 int costos_Variables() {
@@ -596,7 +697,12 @@ int costos_Variables() {
                 Sleep(2250);
                 break;
             case 2:
-                //coso de mostrar todo
+                check = mostrar_costos_Variables();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Variables.txt'...";
+                }
+                
                 break;
             case 3:
                 //coso de buscar
@@ -619,10 +725,10 @@ int costos_Variables() {
                 Sleep(1000);
                 break;
         }
-    } while ((option < 6) || (option > 8)); //mientras no se quiera salir del submenu, quedarse en el do while
+    } while ((option < 6) || (option > 8));
 
     resetear_color();
-    return option; //cuando se quiera salir, terminar el bucle y retornar option
+    return option;
 }
 
 //***************************************************************************************************

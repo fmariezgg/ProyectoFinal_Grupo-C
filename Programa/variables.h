@@ -2,6 +2,12 @@
 #define MAX_INPUT 100
 #define MAX_REGISTER 1000
 
+typedef struct FECHA {
+    int dia = 0;
+    char mes[ID] = "";
+    int year = 0;
+} FECHA;
+
 typedef struct VACA {
     char id[ID] = "";
     int edad = 0;
@@ -15,12 +21,6 @@ typedef struct CLIENTE {
     char direccion[MAX_INPUT] = "";
     char contacto[MAX_INPUT] = "";
 } CLIENTE;
-
-typedef struct FECHA {
-    int dia = 0;
-    char mes[ID] = "";
-    int year = 0;
-} FECHA;
 
 typedef struct VENTA {
     char id[ID] = "";
@@ -39,6 +39,7 @@ typedef struct PENDIENTE {
 } PENDIENTE;
 
 typedef struct COSTO {
+    char id[ID] = "";
     float monto = 0.00;
     char descripcion[MAX_INPUT] = "";
 } COSTO;
