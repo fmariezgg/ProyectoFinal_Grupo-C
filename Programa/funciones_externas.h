@@ -32,8 +32,8 @@ bool escribir_Archivos(const char nombre_archivo[MAX_INPUT]);
 //***************************************************************************************************
 
 tm* obtener_fecha() {
-    time_t now = time(0);
-    tm* time = localtime(&now);
+    time_t now = time(0); //retorna la cantidad de segundos desde 1970
+    tm* time = localtime(&now); //convierte la cantidad de segundos a una fecha y hora legible
     return time;
 }
 
@@ -48,7 +48,7 @@ void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_I
 
         if (cin.fail()) {
             cin.clear();
-            while (cin.get() != '\n' && !cin.eof());
+            while ((cin.get() != '\n') && (!cin.eof())); //limpia el resto de los caracteres que quedaron en el stream
             cambiar_color(12);
             cout << "\n   ERROR: " << dato << " ingresado es demasiado largo...\n\n";
         } else break;
@@ -74,6 +74,8 @@ float pedir_float(const char dato[MAX_INPUT]) {
     resetear_color();
     return num;
 }
+
+//***************************************************************************************************
 
 bool pedir_pagada() {
     char input[3] = "";
@@ -126,7 +128,7 @@ bool leer_Archivos(const char nombre_archivo[MAX_INPUT]) {
         //leer vacas
         else if (strcmp(nombre_archivo, "registro_Vacas.txt") == 0) {
             while (true) {
-                file.getline(registro_Vacas[i].id, MAX_INPUT);
+                file.getline(registro_Vacas[i].id, ID);
                 file >> registro_Vacas[i].edad;
                 file >> registro_Vacas[i].prod_diaria;
                 if (file.peek() == '\n') file.ignore(); //si el proximo caracter es un \n, quitarlo del stream para que getline funcione bien
@@ -224,6 +226,8 @@ bool leer_Archivos(const char nombre_archivo[MAX_INPUT]) {
                 file >> registro_costos_Variables[i].monto;
                 if (file.peek() == '\n') file.ignore();
                 file.getline(registro_costos_Variables[i].descripcion, MAX_INPUT);
+                if (file.peek() == '\n') file.ignore();
+                file.getline(registro_costos_Variables[i].mes, ID);
                 
                 if (file.fail()) break;
                 if (file.peek() == '\n') file.ignore();
@@ -240,7 +244,7 @@ bool leer_Archivos(const char nombre_archivo[MAX_INPUT]) {
 
 bool escribir_Archivos(const char nombre_archivo[MAX_INPUT]) {
     int x = 0; //contador de elementos
-    fstream file;
+    ofstream file;
     file.open(nombre_archivo, ios::trunc | ios::out);
 
     if (!file) return false;
@@ -325,6 +329,7 @@ bool escribir_Archivos(const char nombre_archivo[MAX_INPUT]) {
                 file << registro_costos_Fijos[i].id << "\n";
                 file << registro_costos_Variables[i].monto << "\n";
                 file << registro_costos_Variables[i].descripcion << "\n";
+                file << registro_costos_Variables[i].mes << "\n";
                 x++;
             }
             num_costos_Variables = x;
@@ -335,3 +340,5 @@ bool escribir_Archivos(const char nombre_archivo[MAX_INPUT]) {
     file.close();
     return true;
 }
+
+//***************************************************************************************************
