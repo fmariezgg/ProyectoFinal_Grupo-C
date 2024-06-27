@@ -1,7 +1,7 @@
 #include "funciones_externas.h"
 using namespace std;
 
-//implementaciones de todas las funciones del modulo de gestion de VENTAS y PENDIENTES:
+//implementaciones de todas las funciones del modulo de gestion de ventas y las de pagos pendientes:
 //***************************************************************************************************
 
 bool registrar_Ventas(int num) {
@@ -181,6 +181,158 @@ int buscar_Pendiente(const char id[ID]) {
     }
     
     return -1;
+}
+
+//***************************************************************************************************
+
+bool editar_Ventas() {
+    system("cls || clear");
+    bool leer_Ventas = leer_Archivos("registro_Ventas.txt");
+    bool leer_Pendientes = leer_Archivos("registro_Pendientes.txt");
+    if (!leer_Ventas || !leer_Pendientes) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID de la venta a editar", id, ID);
+
+    for (int i = 0; i < num_ventas; i++) {
+        if (strcmp(registro_Ventas[i].id, id) == 0) {
+            cambiar_color(11);
+            cout << endl << "                                  Venta #" << i+1 << ":" << endl;
+            cout << "   ***********************************************************************\n";
+            resetear_color();
+            pedir_Cstring("nombre del cliente", registro_Ventas[i].nombre_cliente);
+            registro_Ventas[i].cantidad_leche = pedir_int("cantidad de leche (en galones)");
+            registro_Ventas[i].monto = precio_galon * registro_Ventas[i].cantidad_leche;
+            registro_Ventas[i].pagada = pedir_pagada();
+
+            if (!registro_Ventas[i].pagada) {
+                strcpy(registro_Pendientes[num_pendientes].id_venta, registro_Ventas[i].id);
+                registro_Pendientes[num_pendientes].fecha = registro_Ventas[i].fecha;
+                strcpy(registro_Pendientes[num_pendientes].nombre_cliente, registro_Ventas[i].nombre_cliente);
+                registro_Pendientes[num_pendientes].monto = registro_Ventas[i].monto;
+                cambiar_color(10);
+                cout << "   Pago pendiente registrado...";
+                Sleep(650);
+                resetear_color();
+                cout << endl;
+                num_pendientes++;
+            }
+
+            cambiar_color(10);
+            cout << "   Venta editada...";
+            Sleep(1500);
+            resetear
+            return true;
+        }
+    }
+    cambiar_color(11);
+    cout << "\n   Venta no encontrada...";
+    Sleep(1500);
+    resetear_color();
+    return true;
+}
+
+bool editar_Pendientes() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_Pendientes.txt");
+    if (!leer) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID del pago pendiente a editar", id, ID);
+
+    for (int i = 0; i < num_pendientes; i++) {
+        if (strcmp(registro_Pendientes[i].id_venta, id) == 0) {
+            cambiar_color(11);
+            cout << endl << "                              Pago Pendiente #" << i+1 << ":" << endl;
+            cout << "   ***********************************************************************\n";
+            resetear_color();
+            pedir_Cstring("ID de la venta", registro_Pendientes[i].id_venta, ID);
+            registro_Pendientes[i].fecha = pedir_fecha();
+            pedir_Cstring("nombre del cliente", registro_Pendientes[i].nombre_cliente);
+            registro_Pendientes[i].monto = pedir_float("monto (en C$)");
+            cambiar_color(10);
+            cout << "   Pago pendiente editado...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Pago pendiente no encontrado...";
+    Sleep(1500);
+    resetear_color();
+    return true;
+}
+
+//***************************************************************************************************
+
+bool eliminar_Venta() {
+    system("cls || clear");
+    bool leer_Ventas = leer_Archivos("registro_Ventas.txt");
+    bool leer_Pendientes = leer_Archivos("registro_Pendientes.txt");
+    if (!leer_Ventas || !leer_Pendientes) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID de la venta a eliminar", id, ID);
+
+    for (int i = 0; i < num_ventas; i++) {
+        if (strcmp(registro_Ventas[i].id, id) == 0) {
+            for (int j = i; j < num_ventas; j++) {
+                registro_Ventas[j] = registro_Ventas[j+1];
+            }
+            num_ventas--;
+            for (int j = 0; j < num_pendientes; j++) {
+                if (strcmp(registro_Pendientes[j].id_venta, id) == 0) {
+                    for (int k = j; k < num_pendientes; k++) {
+                        registro_Pendientes[k] = registro_Pendientes[k+1];
+                    }
+                    num_pendientes--;
+                    break;
+                }
+            }
+            cambiar_color(10);
+            cout << "\n   Venta eliminada...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Venta no encontrada...";
+    Sleep(1500);
+    resetear_color();
+    return true;
+}
+
+bool eliminar_Pendiente() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_Pendientes.txt");
+    if (!leer) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID del pago pendiente a eliminar", id, ID);
+
+    for (int i = 0; i < num_pendientes; i++) {
+        if (strcmp(registro_Pendientes[i].id_venta, id) == 0) {
+            for (int j = i; j < num_pendientes; j++) {
+                registro_Pendientes[j] = registro_Pendientes[j+1];
+            }
+            num_pendientes--;
+            cambiar_color(10);
+            cout << "\n   Pago pendiente eliminado...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Pago pendiente no encontrado...";
+    Sleep(1500);
+    resetear_color();
+    return true;
 }
 
 //***************************************************************************************************

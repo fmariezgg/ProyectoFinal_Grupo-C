@@ -1,5 +1,3 @@
-#include <iostream>
-#include <windows.h>
 #include "menus.cpp"
 using namespace std;
 

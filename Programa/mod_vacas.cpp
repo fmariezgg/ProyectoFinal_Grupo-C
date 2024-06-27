@@ -1,7 +1,7 @@
 #include "funciones_externas.h"
 using namespace std;
 
-//implementaciones de todas las funciones del modulo de gestion de VACAS:
+//implementaciones de todas las funciones del modulo de gestion de vacas:
 //***************************************************************************************************
 
 bool registrar_Vacas(int num) {
@@ -86,6 +86,72 @@ int buscar_Vaca(const char id[ID]) {
     }
     
     return -1; //si no se ha retornado, significa que no se encontro el id
+}
+
+//***************************************************************************************************
+
+bool editar_Vacas() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_Vacas.txt");
+    if (!leer) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID de la vaca a editar", id, ID);
+
+    for (int i = 0; i < num_vacas; i++) {
+        if (strcmp(registro_Vacas[i].id, id) == 0) {
+            cambiar_color(11);
+            cout << endl << "                                  Vaca #" << i+1 << ":" << endl;
+            cout << "   ***********************************************************************\n";
+            resetear_color();
+            pedir_Cstring("ID", registro_Vacas[i].id, ID);
+            registro_Vacas[i].edad = pedir_int("edad (en años)");
+            registro_Vacas[i].prod_diaria = pedir_int("producción diaria (en galones)");
+            pedir_Cstring("estado de salud", registro_Vacas[i].estado_salud);
+            cambiar_color(10);
+            cout << "   Vaca editada...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Vaca no encontrada...";
+    Sleep(1500);
+    resetear_color();
+    return true;
+}
+
+//***************************************************************************************************
+
+bool eliminar_Vaca() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_Vacas.txt");
+    if (!leer) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID de la vaca a eliminar", id, ID);
+
+    for (int i = 0; i < num_vacas; i++) {
+        if (strcmp(registro_Vacas[i].id, id) == 0) {
+            for (int j = i; j < num_vacas; j++) {
+                registro_Vacas[j] = registro_Vacas[j+1];
+            }
+            num_vacas--;
+            cambiar_color(10);
+            cout << "\n   Vaca eliminada...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Vaca no encontrada...";
+    Sleep(1500);
+    resetear_color();
+    return true;
 }
 
 //***************************************************************************************************

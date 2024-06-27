@@ -1,7 +1,7 @@
 #include "funciones_externas.h"
 using namespace std;
 
-//implementaciones de todas las funciones del modulo de gestion de CLIENTES:
+//implementaciones de todas las funciones del modulo de gestion de clientes:
 //***************************************************************************************************
 
 bool registrar_Clientes(int num) {
@@ -90,6 +90,72 @@ int buscar_Cliente(const char input[MAX_INPUT], bool buscar_nombre) {
     }    
     
     return -1;
+}
+
+//***************************************************************************************************
+
+bool editar_Clientes() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_Clientes.txt");
+    if (!leer) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID del cliente a editar", id, ID);
+
+    for (int i = 0; i < num_clientes; i++) {
+        if (strcmp(registro_Clientes[i].id, id) == 0) {
+            cambiar_color(11);
+            cout << endl << "                                Cliente #" << i+1 << ":" << endl;
+            cout << "   ***********************************************************************\n";
+            resetear_color();
+            pedir_Cstring("ID", registro_Clientes[i].id, ID);
+            pedir_Cstring("nombre", registro_Clientes[i].nombre);
+            pedir_Cstring("dirección", registro_Clientes[i].direccion);
+            pedir_Cstring("contacto", registro_Clientes[i].contacto);
+            cambiar_color(10);
+            cout << "   Cliente editado...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Cliente no encontrado...";
+    Sleep(1500);
+    resetear_color();
+    return true;
+}
+
+//***************************************************************************************************
+
+bool eliminar_Cliente() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_Clientes.txt");
+    if (!leer) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID del cliente a eliminar", id, ID);
+
+    for (int i = 0; i < num_clientes; i++) {
+        if (strcmp(registro_Clientes[i].id, id) == 0) {
+            for (int j = i; j < num_clientes; j++) {
+                registro_Clientes[j] = registro_Clientes[j+1];
+            }
+            num_clientes--;
+            cambiar_color(10);
+            cout << "\n   Cliente eliminado...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Cliente no encontrado...";
+    Sleep(1500);
+    resetear_color();
+    return true;
 }
 
 //***************************************************************************************************

@@ -1,5 +1,3 @@
-#include <iostream>
-#include <windows.h>
 #include "mod_vacas.cpp"
 #include "mod_clientes.cpp"
 #include "mod_ventas+pendientes.cpp"
@@ -8,14 +6,15 @@ using namespace std;
 
 /*
 pendientes:
--- quitar la estructura de fecha y solo convertir  el tm* a un string?
+-- quitar la estructura de fecha y solo convertir  el tm* a un string para que sea mas facil de manejar
+-- validar id's para que no se repitan
 -- cuando se ingrese una venta de un cliente que no esta registrado, avisarle al usuario que lo registre primero
--- las funciones de editar y eliminar
+-- debug/refine de editar y eliminar
 -- los procesos de salida: calcular produccion, ingresos, costos y utilidad
 */
 
-//  aqui se definen los prototipos de todas las funciones del sistema
-// (tambien estan las implementaciones de las funciones de precio pero shhhhh, no valia la pena darles su propio archivo)
+/*aqui se definen los prototipos de todas las funciones del sistema
+ (tambien estan las implementaciones de las funciones de precio pero shhhhh, no valia la pena darles su propio archivo)*/
 
 //***************************************************************************************************
 

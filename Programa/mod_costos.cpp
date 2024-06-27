@@ -1,7 +1,7 @@
 #include "funciones_externas.h"
 using namespace std;
 
-//implementaciones de todas las funciones del modulo de gestion de COSTOS:
+//implementaciones de todas las funciones del modulo de gestion de costos (fijos + variables):
 //***************************************************************************************************
 
 bool registrar_costos_Fijos(int num) {
@@ -161,6 +161,132 @@ int buscar_costo_Variable(const char id[ID]) {
     }
     
     return -1;
+}
+
+//***************************************************************************************************
+
+bool editar_costos_Fijos() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_costos_Fijos.txt");
+    if (!leer) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID del costo fijo a editar", id, ID);
+
+    for (int i = 0; i < num_costos_Fijos; i++) {
+        if (strcmp(registro_costos_Fijos[i].id, id) == 0) {
+            cambiar_color(11);
+            cout << endl << "                              Costo Fijo #" << i+1 << ":" << endl;
+            cout << "   ***********************************************************************\n";
+            resetear_color();
+            pedir_Cstring("ID", registro_costos_Fijos[i].id, ID);
+            registro_costos_Fijos[i].monto = pedir_float("monto (en C$)");
+            pedir_Cstring("descripción", registro_costos_Fijos[i].descripcion);
+            cambiar_color(10);
+            cout << "   Costo fijo editado...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Costo fijo no encontrado...";
+    Sleep(1500);
+    resetear_color();
+    return true;
+}
+
+bool editar_costos_Variables() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_costos_Variables.txt");
+    if (!leer) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID del costo variable a editar", id, ID);
+
+    for (int i = 0; i < num_costos_Variables; i++) {
+        if (strcmp(registro_costos_Variables[i].id, id) == 0) {
+            cambiar_color(11);
+            cout << endl << "                            Costo Variable #" << i+1 << ":" << endl;
+            cout << "   ***********************************************************************\n";
+            resetear_color();
+            pedir_Cstring("ID", registro_costos_Variables[i].id, ID);
+            registro_costos_Variables[i].monto = pedir_float("monto (en C$)");
+            pedir_Cstring("descripción", registro_costos_Variables[i].descripcion);
+            cambiar_color(10);
+            cout << "   Costo variable editado...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Costo variable no encontrado...";
+    Sleep(1500);
+    resetear_color();
+    return true;
+}
+
+//***************************************************************************************************
+
+bool eliminar_costo_Fijo() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_costos_Fijos.txt");
+    if (!leer) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID del costo fijo a eliminar", id, ID);
+
+    for (int i = 0; i < num_costos_Fijos; i++) {
+        if (strcmp(registro_costos_Fijos[i].id, id) == 0) {
+            for (int j = i; j < num_costos_Fijos; j++) {
+                registro_costos_Fijos[j] = registro_costos_Fijos[j+1];
+            }
+            num_costos_Fijos--;
+            cambiar_color(10);
+            cout << "\n   Costo fijo eliminado...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Costo fijo no encontrado...";
+    Sleep(1500);
+    resetear_color();
+    return true;
+}
+
+bool eliminar_costo_Variable() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_costos_Variables.txt");
+    if (!leer) return false;
+
+    char id[ID] = "";
+    pedir_Cstring("ID del costo variable a eliminar", id, ID);
+
+    for (int i = 0; i < num_costos_Variables; i++) {
+        if (strcmp(registro_costos_Variables[i].id, id) == 0) {
+            for (int j = i; j < num_costos_Variables; j++) {
+                registro_costos_Variables[j] = registro_costos_Variables[j+1];
+            }
+            num_costos_Variables--;
+            cambiar_color(10);
+            cout << "\n   Costo variable eliminado...";
+            Sleep(1500);
+            resetear_color();
+            return true;
+        }
+    }
+
+    cambiar_color(12);
+    cout << "\n   Costo variable no encontrado...";
+    Sleep(1500);
+    resetear_color();
+    return true;
 }
 
 //***************************************************************************************************
