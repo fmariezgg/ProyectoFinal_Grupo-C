@@ -42,6 +42,7 @@ typedef struct COSTO {
     char id[ID] = "";
     float monto = 0.00;
     char descripcion[MAX_INPUT] = "";
+    char mes[ID] = "";
 } COSTO;
 
 VACA registro_Vacas[MAX_REGISTER];
@@ -52,7 +53,7 @@ COSTO registro_costos_Fijos[MAX_REGISTER];
 COSTO registro_costos_Variables[MAX_REGISTER];
 
 //para convertir lo que retorna time->tm_mon a un string
-const char* meses[] = { "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
+const char* meses[] = { "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre" };
 
 float precio_galon = 0.00;
 

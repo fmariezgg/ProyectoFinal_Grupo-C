@@ -3,7 +3,7 @@
 using namespace std;
 
 //cambian los colores de la consola para que se vea bonito
-void cambiar_color(int color);
+void cambiar_color(int codigo_color);
 void resetear_color();
 
 //ascii art para los menus
@@ -18,15 +18,12 @@ void titulo_ventas();
 void titulo_pendientes();
 void titulo_costos_Fijos();
 void titulo_costos_Variables();
-//---------------------------------
-void titulo_facturacion();
-void titulo_reportes();
 
 //***************************************************************************************************
 
-void cambiar_color(int color) {
+void cambiar_color(int codigo_color) {
     HANDLE consola = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(consola, color);
+    SetConsoleTextAttribute(consola, codigo_color);
 }
 
 void resetear_color() {
@@ -188,36 +185,4 @@ void titulo_costos_Variables() {
     resetear_color();
 }
 
-void titulo_facturacion() {
-    cambiar_color(10);
-    cout << endl;
-    cout << "    /$$$$$$$$                   /$$                                            /$$                    \n";
-    cout << "   | $$_____/                  | $$                                           |__/                    \n";
-    cout << "   | $$    /$$$$$$   /$$$$$$$ /$$$$$$   /$$   /$$  /$$$$$$  /$$$$$$   /$$$$$$$ /$$  /$$$$$$  /$$$$$$$ \n";
-    cout << "   | $$$$$|____  $$ /$$_____/|_  $$_/  | $$  | $$ /$$__  $$|____  $$ /$$_____/| $$ /$$__  $$| $$__  $$\n";
-    cout << "   | $$__/ /$$$$$$$| $$        | $$    | $$  | $$| $$  \\__/ /$$$$$$$| $$      | $$| $$  \\ $$| $$  \\ $$\n";
-    cout << "   | $$   /$$__  $$| $$        | $$ /$$| $$  | $$| $$      /$$__  $$| $$      | $$| $$  | $$| $$  | $$\n";
-    cout << "   | $$  |  $$$$$$$|  $$$$$$$  |  $$$$/|  $$$$$$/| $$     |  $$$$$$$|  $$$$$$$| $$|  $$$$$$/| $$  | $$\n";
-    cout << "   |__/   \\_______/ \\_______/   \\___/   \\______/ |__/      \\_______/ \\_______/|__/ \\______/ |__/  |__/\n" << endl;
-    cambiar_color(8);
-    cout << " -------------------------------------------------------------------------------------------------------\n";
-    resetear_color();
-}
-
-void titulo_reportes() {
-    cambiar_color(10);
-    cout << endl;
-    cout << "    /$$$$$$$                                            /$$                        \n";
-    cout << "   | $$__  $$                                          | $$                        \n";
-    cout << "   | $$  \\ $$  /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$  /$$$$$$    /$$$$$$   /$$$$$$$\n";
-    cout << "   | $$$$$$$/ /$$__  $$ /$$__  $$ /$$__  $$ /$$__  $$|_  $$_/   /$$__  $$ /$$_____/\n";
-    cout << "   | $$__  $$| $$$$$$$$| $$  \\ $$| $$  \\ $$| $$  \\__/  | $$    | $$$$$$$$|  $$$$$$ \n";
-    cout << "   | $$  \\ $$| $$_____/| $$  | $$| $$  | $$| $$        | $$ /$$| $$_____/ \\____  $$\n";
-    cout << "   | $$  | $$|  $$$$$$$| $$$$$$$/|  $$$$$$/| $$        |  $$$$/|  $$$$$$$ /$$$$$$$/\n";
-    cout << "   |__/  |__/ \\_______/| $$____/  \\______/ |__/         \\___/   \\_______/|_______/ \n";
-    cout << "                       | $$                                                        \n";
-    cout << "                       |__/                                                        \n" << endl;
-    cambiar_color(8);
-    cout << " ------------------------------------------------------------------------------------\n";
-    resetear_color();
-}
+//***************************************************************************************************
