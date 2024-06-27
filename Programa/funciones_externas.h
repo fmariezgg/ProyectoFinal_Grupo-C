@@ -1,7 +1,7 @@
 #include <iostream>
-#include <fstream>
-#include <cstring>
-#include <ctime>
+#include <fstream> // para usar ficheros 
+#include <cstring> //funciones de arreglos de char
+#include <ctime> // fechas
 #include <windows.h>
 #include "titulos.h"
 #include "variables.h"
