@@ -1,3 +1,6 @@
+#ifndef FUNCIONES_EXTERNAS_H  //como estoy incluyendo este .h en varios archivos, a la hora de incluir esos otros archivos en prototipos.h
+#define FUNCIONES_EXTERNAS_H //van a haber redefiniciones de las funciones de este archivo, y esto de ifndef evita que pase eso y solo se incluye una vez
+
 #include <iostream>
 #include <fstream> // para usar ficheros 
 #include <cstring> //funciones de arreglos de char
@@ -342,3 +345,5 @@ bool escribir_Archivos(const char nombre_archivo[MAX_INPUT]) {
 }
 
 //***************************************************************************************************
+
+#endif

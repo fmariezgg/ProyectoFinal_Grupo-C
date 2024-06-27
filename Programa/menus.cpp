@@ -1,6 +1,4 @@
-#include <iostream>
-#include <windows.h>
-#include "funciones.cpp"
+#include "prototipos.h"
 using namespace std;
 
 //menus y submenus:
