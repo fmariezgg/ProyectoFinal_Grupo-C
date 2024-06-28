@@ -4,17 +4,8 @@
 #include "mod_costos.cpp"
 using namespace std;
 
-/*
-pendientes:
--- quitar la estructura de fecha y solo convertir  el tm* a un string para que sea mas facil de manejar
--- validar id's para que no se repitan
--- cuando se ingrese una venta de un cliente que no esta registrado, avisarle al usuario que lo registre primero
--- debug/refine de editar y eliminar
--- los procesos de salida: calcular produccion, ingresos, costos y utilidad
-*/
-
-/*aqui se definen los prototipos de todas las funciones del sistema
- (tambien estan las implementaciones de las funciones de precio pero shhhhh, no valia la pena darles su propio archivo)*/
+//aqui se definen los prototipos de todas las funciones del sistema
+//tambien estan las implementaciones de las funciones de precio pero shhhhh, no valia la pena darles su propio archivo
 
 //***************************************************************************************************
 
@@ -43,19 +34,26 @@ int buscar_Pendiente(const char id[ID]);
 int buscar_costo_Fijo(const char id[ID]);
 int buscar_costo_Variable(const char id[ID]);
 
-bool editar_Vacas();
-bool editar_Clientes();
-bool editar_Ventas(); //si se cambia a que ya se pago, quitar la venta del registro de pendientes
-bool editar_Pendientes();
-bool editar_costos_Fijos();
-bool editar_costos_Variables();
+bool editar_Vaca();
+bool editar_Cliente();
+bool editar_Venta(); //si se cambia a que ya se pago, la quita del registro de pendientes (y si no, la agrega)
+bool editar_Pendiente();
+bool editar_costo_Fijo();
+bool editar_costo_Variable();
 
-bool eliminar_Vacas();
-bool eliminar_Clientes();
-bool eliminar_Ventas();
-bool eliminar_Pendientes(); //cuando se elimine, que actualice el registro de la venta para que no aparezca como pendiente
-bool eliminar_costos_Fijos();
-bool eliminar_costos_Variables();
+//estas retornan 0 si se elimino bien, -1 si no se encontro el id y -2 si hubo un error con el archivo
+//si el registro estaba vacio retorna 1 y manda un mensaje (por eso es que no hay un caso de indice == 1 cuando las llamo en los menus)
+int eliminar_Vaca(const char id[ID]);
+int eliminar_Cliente(const char id[ID]);
+int eliminar_Venta(const char id[ID]);
+int eliminar_Pendiente(const char id[ID]); //tambien actualiza el registro de la venta para que no este pendiente
+int eliminar_costo_Fijo(const char id[ID]);
+int eliminar_costo_Variable(const char id[ID]);
+
+bool calcular_Produccion();
+bool calcular_Ingresos();
+bool calcular_Costos();
+bool calcular_Utilidad();
 
 //***************************************************************************************************
 

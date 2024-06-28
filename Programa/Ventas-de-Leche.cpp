@@ -1,6 +1,13 @@
 #include "menus.cpp"
 using namespace std;
 
+/*
+-- debug eliminar_Cliente(), editar_Venta(), eliminar_Venta(), editar_Pendiente(), eliminar_Pendiente(), 
+-- validar id's para que no se repitan
+-- cuando se ingrese una venta de un cliente que no esta registrado, avisarle al usuario que lo registre primero
+-- los procesos de salida: calcular produccion, ingresos, costos y utilidad
+*/
+
 int main() {
     SetConsoleOutputCP(CP_UTF8);
     int start = 0;
@@ -33,7 +40,7 @@ int main() {
 
     } while (start != 2);
 
-    Sleep(1250);
+    Sleep(1500);
     cout << endl;
     return 0;
 }

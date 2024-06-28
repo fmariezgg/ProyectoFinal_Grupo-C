@@ -39,13 +39,7 @@ bool mostrar_Clientes() {
     bool leer = leer_Archivos("registro_Clientes.txt");
     if (!leer) return false;
 
-    if (num_clientes == 0) {
-        cambiar_color(12);
-        cout << "\n   No hay clientes registrados...";
-        Sleep(3000);
-        resetear_color();
-        return true;
-    }
+    if (checkear_Vacio(num_clientes)) return true;
 
     cambiar_color(10);
     cout << "\n   Mostrando clientes registrados...";
@@ -60,16 +54,16 @@ bool mostrar_Clientes() {
         cout << "   ID: " << registro_Clientes[i].id << "\n";
         cout << "   Nombre: " << registro_Clientes[i].nombre << "\n";
         cout << "   Dirección: " << registro_Clientes[i].direccion << "\n";
-        cout << "   Contacto: " << registro_Clientes[i].contacto << "\n";
+        cout << "   Contacto: " << registro_Clientes[i].contacto << endl;
         cout << "   ";
         Sleep(800);
     }
 
     cambiar_color(11);
     cout << endl << "   ***********************************************************************\n";
-    cambiar_color(14);
     cout << "   Presione cualquier tecla para continuar...";
     system("pause > NULL");
+    resetear_color();
     return true;
 }
 
@@ -94,68 +88,105 @@ int buscar_Cliente(const char input[MAX_INPUT], bool buscar_nombre) {
 
 //***************************************************************************************************
 
-bool editar_Clientes() {
+bool editar_Cliente() {
     system("cls || clear");
-    bool leer = leer_Archivos("registro_Clientes.txt");
-    if (!leer) return false;
-
+    bool leer = false, escribir = false;
+    int indice = 0, info = 0;
     char id[ID] = "";
-    pedir_Cstring("ID del cliente a editar", id, ID);
 
-    for (int i = 0; i < num_clientes; i++) {
-        if (strcmp(registro_Clientes[i].id, id) == 0) {
-            cambiar_color(11);
-            cout << endl << "                                Cliente #" << i+1 << ":" << endl;
-            cout << "   ***********************************************************************\n";
+    leer = leer_Archivos("registro_Clientes.txt");
+    if (!leer) return false;
+    if (checkear_Vacio(num_clientes)) return true;
+
+    cout << endl;
+    pedir_Cstring("ID del cliente a editar", id, ID);
+    indice = buscar_Cliente(id, false);
+
+    cambiar_color(9);
+    cout << "\n   Buscando cliente...";
+    Sleep(800);
+    resetear_color();
+
+    if (indice == -1) {
+        cambiar_color(12);
+        cout << "\n   ERROR: ID ingresado no esta registrado...";
+        Sleep(2250);
+        resetear_color();
+        return true;
+    } else if (indice == -2) return false;
+
+    else if (indice >= 0) {
+        cambiar_color(10);
+        cout << "\n   Cliente encontrado!";
+        Sleep(750);
+        cambiar_color(11);
+        cout << endl << "\n                                Cliente #" << indice+1 << ":" << endl;
+        cout << "   ***********************************************************************";
+        do {
+            cambiar_color(14);
+            cout << "\n\n   ¿Qué información quiere editar?" << endl;
+            cout << "   1. Nombre\n   2. Dirección\n   3. Contacto\n";
+            cambiar_color(9);
+            cout << "   Ingrese su opción: ";
+            cin >> info;
+
+            cout << endl;
             resetear_color();
-            pedir_Cstring("ID", registro_Clientes[i].id, ID);
-            pedir_Cstring("nombre", registro_Clientes[i].nombre);
-            pedir_Cstring("dirección", registro_Clientes[i].direccion);
-            pedir_Cstring("contacto", registro_Clientes[i].contacto);
+            switch (info) {
+                case 1:
+                    pedir_Cstring("nombre", registro_Clientes[indice].nombre);
+                    break;
+                case 2:
+                    pedir_Cstring("dirección", registro_Clientes[indice].direccion);
+                    break;
+                case 3:
+                    pedir_Cstring("contacto", registro_Clientes[indice].contacto);
+                    break;
+                default:
+                    cambiar_color(12);
+                    cout << "   Opción inválida...";
+                    Sleep(1000);
+                    resetear_color();
+                    break;
+            }
+        } while (info < 1 || info > 3);
+
+        cout << "   "; Sleep(500);
+        cambiar_color(10);
+        escribir = escribir_Archivos("registro_Clientes.txt");
+        if (escribir) {
             cambiar_color(10);
-            cout << "   Cliente editado...";
-            Sleep(1500);
-            resetear_color();
-            return true;
-        }
+            cout << "\n   ***********************************************************************";
+            cout << "\n                              Cliente editado...";
+        } else return false;
+        
+        Sleep(2250);
+        resetear_color();
     }
 
-    cambiar_color(12);
-    cout << "\n   Cliente no encontrado...";
-    Sleep(1500);
-    resetear_color();
     return true;
 }
 
 //***************************************************************************************************
 
-bool eliminar_Cliente() {
-    system("cls || clear");
-    bool leer = leer_Archivos("registro_Clientes.txt");
-    if (!leer) return false;
+int eliminar_Cliente(const char id[ID]) {
+    int indice = 0;
+    bool leer = false, escribir = false;
 
-    char id[ID] = "";
-    pedir_Cstring("ID del cliente a eliminar", id, ID);
+    leer = leer_Archivos("registro_Clientes.txt");
+    if (!leer) return -2;
+    if (checkear_Vacio(num_clientes)) return 1;
 
-    for (int i = 0; i < num_clientes; i++) {
-        if (strcmp(registro_Clientes[i].id, id) == 0) {
-            for (int j = i; j < num_clientes; j++) {
-                registro_Clientes[j] = registro_Clientes[j+1];
-            }
-            num_clientes--;
-            cambiar_color(10);
-            cout << "\n   Cliente eliminado...";
-            Sleep(1500);
-            resetear_color();
-            return true;
-        }
-    }
+    indice = buscar_Cliente(id, false);
+    if (indice < 0) return indice;
 
-    cambiar_color(12);
-    cout << "\n   Cliente no encontrado...";
-    Sleep(1500);
-    resetear_color();
-    return true;
+    for (int i = indice; i < num_clientes; i++) {
+        registro_Clientes[i] = registro_Clientes[i+1];
+    } num_clientes--;
+
+    escribir = escribir_Archivos("registro_Clientes.txt");
+    if (escribir) return 0;
+    else return -2;
 }
 
 //***************************************************************************************************

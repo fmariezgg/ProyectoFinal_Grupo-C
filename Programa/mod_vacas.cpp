@@ -39,13 +39,7 @@ bool mostrar_Vacas() {
     bool leer = leer_Archivos("registro_Vacas.txt");
     if (!leer) return false;
 
-    if (num_vacas == 0) { //checkear si el archivo estaba vacio
-        cambiar_color(12);
-        cout << "\n   No hay vacas registradas...";
-        Sleep(3000);
-        resetear_color();
-        return true;
-    }
+    if (checkear_Vacio(num_vacas)) return true; //checkea si esta vacio el registro
 
     cambiar_color(10);
     cout << "\n   Mostrando vacas registradas...";
@@ -60,18 +54,18 @@ bool mostrar_Vacas() {
         cout << "   ID: " << registro_Vacas[i].id << "\n";
         cout << "   Edad: " << registro_Vacas[i].edad << " año(s)\n";
         cout << "   Producción diaria: " << registro_Vacas[i].prod_diaria << " galón(es)\n";
-        cout << "   Estado de salud: " << registro_Vacas[i].estado_salud << "\n";
+        cout << "   Estado de salud: " << registro_Vacas[i].estado_salud << endl;
         cout << "   ";
         Sleep(800);
     }
 
     cambiar_color(11);
     cout << endl << "   ***********************************************************************\n";
-    cambiar_color(14);
     cout << "   Presione cualquier tecla para continuar...";
 
     //para que system("pause") no muestre el mensaje default, le pongo eso de '> NULL', e imprimo mi propio mensaje (con mi formato y colores) antes
     system("pause > NULL");
+    resetear_color();
     return true;
 }
 
@@ -90,68 +84,105 @@ int buscar_Vaca(const char id[ID]) {
 
 //***************************************************************************************************
 
-bool editar_Vacas() {
+bool editar_Vaca() {
     system("cls || clear");
-    bool leer = leer_Archivos("registro_Vacas.txt");
-    if (!leer) return false;
-
+    bool leer = false, escribir = false;
+    int indice = 0, info = 0;
     char id[ID] = "";
-    pedir_Cstring("ID de la vaca a editar", id, ID);
 
-    for (int i = 0; i < num_vacas; i++) {
-        if (strcmp(registro_Vacas[i].id, id) == 0) {
-            cambiar_color(11);
-            cout << endl << "                                  Vaca #" << i+1 << ":" << endl;
-            cout << "   ***********************************************************************\n";
+    leer = leer_Archivos("registro_Vacas.txt");
+    if (!leer) return false;
+    if (checkear_Vacio(num_vacas)) return true;
+
+    cout << endl;
+    pedir_Cstring("ID de la vaca a editar", id, ID);
+    indice = buscar_Vaca(id);
+
+    cambiar_color(9);
+    cout << "\n   Buscando vaca...";
+    Sleep(800);
+    resetear_color();
+
+    if (indice == -1) {
+        cambiar_color(12);
+        cout << "\n   ERROR: ID ingresado no esta registrado...";
+        Sleep(2250);
+        resetear_color();
+        return true;
+    } else if (indice == -2) return false;
+
+    else if (indice >= 0) {
+        cambiar_color(10);
+        cout << "\n   Vaca encontrada!";
+        Sleep(750);
+        cambiar_color(11);
+        cout << endl << "\n                                  Vaca #" << indice+1 << ":" << endl;
+        cout << "   ***********************************************************************";
+        do {
+            cambiar_color(14);
+            cout << "\n\n   ¿Qué información quiere editar?" << endl;
+            cout << "   1. Edad\n   2. Producción diaria\n   3. Estado de salud\n";
+            cambiar_color(9);
+            cout << "   Ingrese su opción: ";
+            cin >> info;
+
+            cout << endl;
             resetear_color();
-            pedir_Cstring("ID", registro_Vacas[i].id, ID);
-            registro_Vacas[i].edad = pedir_int("edad (en años)");
-            registro_Vacas[i].prod_diaria = pedir_int("producción diaria (en galones)");
-            pedir_Cstring("estado de salud", registro_Vacas[i].estado_salud);
+            switch (info) {
+                case 1:
+                    registro_Vacas[indice].edad = pedir_int("edad (en años)");
+                    break;
+                case 2:
+                    registro_Vacas[indice].edad = pedir_int("producción diaria (en galones)");
+                    break;
+                case 3:
+                    pedir_Cstring("estado de salud", registro_Vacas[indice].estado_salud);
+                    break;
+                default:
+                    cambiar_color(12);
+                    cout << "   Opción inválida...";
+                    Sleep(1000);
+                    resetear_color();
+                    break;
+            }
+        } while (info < 1 || info > 3);
+
+        cout << "   "; Sleep(500);
+        cambiar_color(10);
+        escribir = escribir_Archivos("registro_Vacas.txt");
+        if (escribir) {
             cambiar_color(10);
-            cout << "   Vaca editada...";
-            Sleep(1500);
-            resetear_color();
-            return true;
-        }
+            cout << "\n   ***********************************************************************";
+            cout << "\n                              Vaca editada...";
+        } else return false;
+        
+        Sleep(2250);
+        resetear_color();
     }
 
-    cambiar_color(12);
-    cout << "\n   Vaca no encontrada...";
-    Sleep(1500);
-    resetear_color();
     return true;
 }
 
 //***************************************************************************************************
 
-bool eliminar_Vaca() {
-    system("cls || clear");
-    bool leer = leer_Archivos("registro_Vacas.txt");
-    if (!leer) return false;
+int eliminar_Vaca(const char id[ID]) {
+    int indice = 0;
+    bool leer = false, escribir = false;
 
-    char id[ID] = "";
-    pedir_Cstring("ID de la vaca a eliminar", id, ID);
+    leer = leer_Archivos("registro_Vacas.txt");
+    if (!leer) return -2;
+    if (checkear_Vacio(num_vacas)) return 1;
 
-    for (int i = 0; i < num_vacas; i++) {
-        if (strcmp(registro_Vacas[i].id, id) == 0) {
-            for (int j = i; j < num_vacas; j++) {
-                registro_Vacas[j] = registro_Vacas[j+1];
-            }
-            num_vacas--;
-            cambiar_color(10);
-            cout << "\n   Vaca eliminada...";
-            Sleep(1500);
-            resetear_color();
-            return true;
-        }
-    }
+    indice = buscar_Vaca(id);
+    if (indice < 0) return indice;
 
-    cambiar_color(12);
-    cout << "\n   Vaca no encontrada...";
-    Sleep(1500);
-    resetear_color();
-    return true;
+    for (int i = indice; i < num_vacas; i++) {
+        registro_Vacas[i] = registro_Vacas[i+1];
+    } num_vacas--;
+
+    escribir = escribir_Archivos("registro_Vacas.txt");
+    if (escribir) return 0;
+    else return -2;
 }
 
 //***************************************************************************************************

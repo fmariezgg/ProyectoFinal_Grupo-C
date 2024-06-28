@@ -1,12 +1,14 @@
 #include "funciones_externas.h"
 using namespace std;
 
-//implementaciones de todas las funciones del modulo de gestion de ventas y las de pagos pendientes:
+//implementaciones de todas las funciones del modulo de gestion de ventas y de pagos pendientes:
+//las de eliminar van primero para que esten definidas cuando se llaman en las de editar (por eso estan al reves tambien)
 //***************************************************************************************************
 
 bool registrar_Ventas(int num) {
     system("cls || clear");
-    bool leer_Ventas = false, leer_Precio = false, leer_Pendientes = false, escribir_Ventas = false, escribir_Pendientes = false;
+    bool leer_Ventas = false, leer_Precio = false, leer_Pendientes = false;
+    bool escribir_Ventas = false, escribir_Pendientes = false;
 
     leer_Ventas = leer_Archivos("registro_Ventas.txt");
     leer_Pendientes = leer_Archivos("registro_Pendientes.txt");
@@ -81,13 +83,7 @@ bool mostrar_Ventas() {
     bool leer = leer_Archivos("registro_Ventas.txt");
     if (!leer) return false;
 
-    if (num_ventas == 0) {
-        cambiar_color(12);
-        cout << "\n   No hay ventas registradas...";
-        Sleep(3000);
-        resetear_color();
-        return true;
-    }
+    if (checkear_Vacio(num_ventas)) return true;
 
     cambiar_color(10);
     cout << "\n   Mostrando ventas registradas...";
@@ -107,16 +103,16 @@ bool mostrar_Ventas() {
         cout << "   Nombre de cliente: " << registro_Ventas[i].nombre_cliente << "\n";
         cout << "   Cantidad de leche: " << registro_Ventas[i].cantidad_leche << " galone(s)\n";
         cout << "   Monto: C$" << registro_Ventas[i].monto << "\n";
-        cout << "   ¿Está pagada? "; cambiar_color(9); cout << pagada << "\n";
+        cout << "   ¿Está pagada? "; cambiar_color(9); cout << pagada << endl;
         cout << "   ";
         Sleep(800);
     }
 
     cambiar_color(11);
     cout << endl << "   ***********************************************************************\n";
-    cambiar_color(14);
     cout << "   Presione cualquier tecla para continuar...";
     system("pause > NULL");
+    resetear_color();
     return true;
 }
 
@@ -125,13 +121,7 @@ bool mostrar_Pendientes() {
     bool leer = leer_Archivos("registro_Pendientes.txt");
     if (!leer) return false;
 
-    if (num_pendientes == 0) {
-        cambiar_color(12);
-        cout << "\n   No hay pagos pendientes...";
-        Sleep(3000);
-        resetear_color();
-        return true;
-    }
+    if (checkear_Vacio(num_pendientes)) return true;
 
     cambiar_color(10);
     cout << "\n   Mostrando pagos pendientes...";
@@ -146,16 +136,16 @@ bool mostrar_Pendientes() {
         cout << "   ID de venta: " << registro_Pendientes[i].id_venta << "\n";
         cout << "   Fecha: " << registro_Pendientes[i].fecha.dia << " de " << registro_Pendientes[i].fecha.mes << ", " << registro_Pendientes[i].fecha.year << "\n";
         cout << "   Nombre de cliente: " << registro_Pendientes[i].nombre_cliente << "\n";
-        cout << "   Monto: C$" << registro_Pendientes[i].monto << "\n";
+        cout << "   Monto a pagar: C$" << registro_Pendientes[i].monto << endl;
         cout << "   ";
         Sleep(800);
     }
 
     cambiar_color(11);
     cout << endl << "   ***********************************************************************\n";
-    cambiar_color(14);
     cout << "   Presione cualquier tecla para continuar...";
     system("pause > NULL");
+    resetear_color();
     return true;
 }
 
@@ -185,153 +175,242 @@ int buscar_Pendiente(const char id[ID]) {
 
 //***************************************************************************************************
 
-bool editar_Ventas() {
-    system("cls || clear");
-    bool leer_Ventas = leer_Archivos("registro_Ventas.txt");
-    bool leer_Pendientes = leer_Archivos("registro_Pendientes.txt");
-    if (!leer_Ventas || !leer_Pendientes) return false;
+int eliminar_Pendiente(const char id[ID]) {
+    int indice = 0, indice_venta = 0;
+    bool leer = false, escribir = false;
 
-    char id[ID] = "";
-    pedir_Cstring("ID de la venta a editar", id, ID);
+    leer = leer_Archivos("registro_Pendientes.txt");
+    if (!leer) return -2;
+    if (checkear_Vacio(num_pendientes)) return 1;
 
-    for (int i = 0; i < num_ventas; i++) {
-        if (strcmp(registro_Ventas[i].id, id) == 0) {
-            cambiar_color(11);
-            cout << endl << "                                  Venta #" << i+1 << ":" << endl;
-            cout << "   ***********************************************************************\n";
-            resetear_color();
-            pedir_Cstring("nombre del cliente", registro_Ventas[i].nombre_cliente);
-            registro_Ventas[i].cantidad_leche = pedir_int("cantidad de leche (en galones)");
-            registro_Ventas[i].monto = precio_galon * registro_Ventas[i].cantidad_leche;
-            registro_Ventas[i].pagada = pedir_pagada();
+    indice = buscar_Pendiente(id);
+    if (indice < 0) return indice;
 
-            if (!registro_Ventas[i].pagada) {
-                strcpy(registro_Pendientes[num_pendientes].id_venta, registro_Ventas[i].id);
-                registro_Pendientes[num_pendientes].fecha = registro_Ventas[i].fecha;
-                strcpy(registro_Pendientes[num_pendientes].nombre_cliente, registro_Ventas[i].nombre_cliente);
-                registro_Pendientes[num_pendientes].monto = registro_Ventas[i].monto;
-                cambiar_color(10);
-                cout << "   Pago pendiente registrado...";
-                Sleep(650);
-                resetear_color();
-                cout << endl;
-                num_pendientes++;
-            }
+    //si se va a eliminar un pago pendiente, es pq ya se pago, entonces hay que actualizar el registro de la venta correspondiente
+    indice_venta = buscar_Venta(registro_Pendientes[indice].id_venta);
+    if (indice_venta >= 0) registro_Ventas[indice_venta].pagada = true;
+    else return indice_venta;
 
-            cambiar_color(10);
-            cout << "   Venta editada...";
-            Sleep(1500);
-            resetear
-            return true;
-        }
-    }
-    cambiar_color(11);
-    cout << "\n   Venta no encontrada...";
-    Sleep(1500);
-    resetear_color();
-    return true;
+    for (int i = indice; i < num_pendientes; i++) {
+        registro_Pendientes[i] = registro_Pendientes[i+1];
+    } num_ventas--;
+
+    escribir = escribir_Archivos("registro_Pendientes.txt");
+    if (escribir) return 0;
+    else return -2;
 }
 
-bool editar_Pendientes() {
-    system("cls || clear");
-    bool leer = leer_Archivos("registro_Pendientes.txt");
-    if (!leer) return false;
+int eliminar_Venta(const char id[ID]) {
+    int indice = 0;
+    bool leer = false, escribir = false;
 
-    char id[ID] = "";
-    pedir_Cstring("ID del pago pendiente a editar", id, ID);
+    leer = leer_Archivos("registro_Ventas.txt");
+    if (!leer) return -2;
+    if (checkear_Vacio(num_ventas)) return 1;
 
-    for (int i = 0; i < num_pendientes; i++) {
-        if (strcmp(registro_Pendientes[i].id_venta, id) == 0) {
-            cambiar_color(11);
-            cout << endl << "                              Pago Pendiente #" << i+1 << ":" << endl;
-            cout << "   ***********************************************************************\n";
-            resetear_color();
-            pedir_Cstring("ID de la venta", registro_Pendientes[i].id_venta, ID);
-            registro_Pendientes[i].fecha = pedir_fecha();
-            pedir_Cstring("nombre del cliente", registro_Pendientes[i].nombre_cliente);
-            registro_Pendientes[i].monto = pedir_float("monto (en C$)");
-            cambiar_color(10);
-            cout << "   Pago pendiente editado...";
-            Sleep(1500);
-            resetear_color();
-            return true;
-        }
-    }
+    indice = buscar_Venta(id);
+    if (indice < 0) return indice;
 
-    cambiar_color(12);
-    cout << "\n   Pago pendiente no encontrado...";
-    Sleep(1500);
-    resetear_color();
-    return true;
+    //si la venta no esta pagada, significa que tambien estaba registrada como pendiente, entonces se elimina de ahi igual
+    if (!registro_Ventas[indice].pagada) eliminar_Pendiente(id);
+
+    for (int i = indice; i < num_ventas; i++) {
+        registro_Ventas[i] = registro_Ventas[i+1];
+    } num_ventas--;
+
+    escribir = escribir_Archivos("registro_Ventas.txt");
+    if (escribir) return 0;
+    else return -2;
 }
 
 //***************************************************************************************************
 
-bool eliminar_Venta() {
+bool editar_Venta() {
     system("cls || clear");
-    bool leer_Ventas = leer_Archivos("registro_Ventas.txt");
-    bool leer_Pendientes = leer_Archivos("registro_Pendientes.txt");
-    if (!leer_Ventas || !leer_Pendientes) return false;
-
+    bool leer = false, escribir = false;
+    int indice = 0, indice_pendiente = 0, info = 0;
     char id[ID] = "";
-    pedir_Cstring("ID de la venta a eliminar", id, ID);
 
-    for (int i = 0; i < num_ventas; i++) {
-        if (strcmp(registro_Ventas[i].id, id) == 0) {
-            for (int j = i; j < num_ventas; j++) {
-                registro_Ventas[j] = registro_Ventas[j+1];
-            }
-            num_ventas--;
-            for (int j = 0; j < num_pendientes; j++) {
-                if (strcmp(registro_Pendientes[j].id_venta, id) == 0) {
-                    for (int k = j; k < num_pendientes; k++) {
-                        registro_Pendientes[k] = registro_Pendientes[k+1];
-                    }
-                    num_pendientes--;
-                    break;
-                }
-            }
-            cambiar_color(10);
-            cout << "\n   Venta eliminada...";
-            Sleep(1500);
+    leer = leer_Archivos("registro_Ventas.txt");
+    if (!leer) return false;
+    if (checkear_Vacio(num_ventas)) return true;
+
+    cout << endl;
+    pedir_Cstring("ID de la venta a editar", id, ID);
+    indice = buscar_Venta(id);
+
+    cambiar_color(9);
+    cout << "\n   Buscando venta...";
+    Sleep(800);
+    resetear_color();
+
+    if (indice == -1) {
+        cambiar_color(12);
+        cout << "\n   ERROR: ID ingresado no esta registrado...";
+        Sleep(2250);
+        resetear_color();
+        return true;
+    } else if (indice == -2) return false;
+
+    else if (indice >= 0) {
+        cambiar_color(10);
+        cout << "\n   Venta encontrada!";
+        Sleep(750);
+        cambiar_color(11);
+        cout << endl << "\n                                  Venta #" << indice+1 << ":" << endl;
+        cout << "   ***********************************************************************\n";
+        do {
+            cambiar_color(14);
+            cout << "\n\n   ¿Qué información quiere editar?" << endl;
+            cout << "   1. Nombre del cliente\n   2. Cantidad de leche comprada\n   3. Monto\n   4. ¿Está pendiente el pago?\n";
+            cambiar_color(9);
+            cout << "   Ingrese su opción: ";
+            cin >> info;
+
+            cout << endl;
             resetear_color();
-            return true;
-        }
+            switch (info) {
+                case 1:
+                    pedir_Cstring("nombre del cliente", registro_Ventas[indice].nombre_cliente);
+
+                    indice_pendiente = buscar_Pendiente(id);
+                    if (indice_pendiente >= 0) strcpy(registro_Pendientes[indice].nombre_cliente, registro_Ventas[indice_pendiente].nombre_cliente);
+                    else return indice_pendiente;
+
+                    break;
+                case 2:
+                    registro_Ventas[indice].cantidad_leche = pedir_int("cantidad de leche (en galones)");
+                    break;
+                case 3:
+                    registro_Ventas[indice].monto = pedir_float("monto (en C$)");
+
+                    indice_pendiente = buscar_Pendiente(id);
+                    if (indice_pendiente >= 0) registro_Pendientes[indice].monto = registro_Ventas[indice_pendiente].monto;
+                    else return indice_pendiente;
+
+                    break;
+                case 4:
+                    registro_Ventas[indice].pagada = pedir_pagada();
+                    
+                    //si esta pagada, la quita del registro de pendientes, y si no, la agrega
+                    if (registro_Ventas[indice].pagada) eliminar_Pendiente(registro_Ventas[indice].id); 
+                    else {
+                        strcpy(registro_Pendientes[num_pendientes].id_venta, registro_Ventas[indice].id);
+                        registro_Pendientes[num_pendientes].fecha = registro_Ventas[indice].fecha;
+                        strcpy(registro_Pendientes[num_pendientes].nombre_cliente, registro_Ventas[indice].nombre_cliente);
+                        registro_Pendientes[num_pendientes].monto = registro_Ventas[indice].monto;
+                        num_pendientes++;
+                    }
+                    
+                    break;
+                default:
+                    cambiar_color(12);
+                    cout << "   Opción inválida...";
+                    Sleep(1000);
+                    resetear_color();
+                    break;
+            }
+        } while (info < 1 || info > 4);
+
+        cout << "   "; Sleep(500);
+        cambiar_color(10);
+        escribir = escribir_Archivos("registro_Ventas.txt");
+        if (escribir) {
+            cambiar_color(10);
+            cout << "\n   ***********************************************************************";
+            cout << "\n                              Venta editada...";
+        } else return false;
+        
+        Sleep(2250);
+        resetear_color();
     }
 
-    cambiar_color(12);
-    cout << "\n   Venta no encontrada...";
-    Sleep(1500);
-    resetear_color();
     return true;
 }
 
-bool eliminar_Pendiente() {
+bool editar_Pendiente() {
     system("cls || clear");
-    bool leer = leer_Archivos("registro_Pendientes.txt");
-    if (!leer) return false;
-
+    bool leer = false, escribir = false;
+    int indice = 0, indice_venta = 0, info = 0;
     char id[ID] = "";
-    pedir_Cstring("ID del pago pendiente a eliminar", id, ID);
 
-    for (int i = 0; i < num_pendientes; i++) {
-        if (strcmp(registro_Pendientes[i].id_venta, id) == 0) {
-            for (int j = i; j < num_pendientes; j++) {
-                registro_Pendientes[j] = registro_Pendientes[j+1];
-            }
-            num_pendientes--;
-            cambiar_color(10);
-            cout << "\n   Pago pendiente eliminado...";
-            Sleep(1500);
+    leer = leer_Archivos("registro_Pendientes.txt");
+    if (!leer) return false;
+    if (checkear_Vacio(num_pendientes)) return true;
+
+    cout << endl;
+    pedir_Cstring("ID del pago pendiente a editar", id, ID);
+    indice = buscar_Venta(id);
+
+    cambiar_color(9);
+    cout << "\n   Buscando pago pendiente...";
+    Sleep(800);
+    resetear_color();
+
+    if (indice == -1) {
+        cambiar_color(12);
+        cout << "\n   ERROR: ID ingresado no esta registrado...";
+        Sleep(2250);
+        resetear_color();
+        return true;
+    } else if (indice == -2) return false;
+
+    else if (indice >= 0) {
+        cambiar_color(10);
+        cout << "\n   Pago pendiente encontrado!";
+        Sleep(750);
+        cambiar_color(11);
+        cout << endl << "\n                              Pago Pendiente #" << indice+1 << ":" << endl;
+        cout << "   ***********************************************************************\n";
+        do {
+            cambiar_color(14);
+            cout << "\n\n   ¿Qué información quiere editar?" << endl;
+            cout << "   1. Nombre del cliente\n   2. Monto de la compra\n";
+            cambiar_color(9);
+            cout << "   Ingrese su opción: ";
+            cin >> info;
+
+            cout << endl;
             resetear_color();
-            return true;
-        }
+            switch (info) {
+                case 1:
+                    pedir_Cstring("nombre del cliente", registro_Pendientes[indice].nombre_cliente);
+
+                    indice_venta = buscar_Venta(id);
+                    if (indice_venta >= 0) strcpy(registro_Ventas[indice_venta].nombre_cliente, registro_Pendientes[indice].nombre_cliente);
+                    else return indice_venta;
+
+                    break;
+                case 2:
+                    registro_Pendientes[indice].monto = pedir_float("monto a pagar (en C$)");
+
+                    indice_venta = buscar_Venta(id);
+                    if (indice_venta >= 0) registro_Ventas[indice_venta].monto = registro_Pendientes[indice].monto;
+                    else return indice_venta;
+
+                    break;
+                default:
+                    cambiar_color(12);
+                    cout << "   Opción inválida...";
+                    Sleep(1000);
+                    resetear_color();
+                    break;
+            }
+        } while (info < 1 || info > 4);
+
+        cout << "   "; Sleep(500);
+        cambiar_color(10);
+        escribir = escribir_Archivos("registro_Ventas.txt");
+        if (escribir) {
+            cambiar_color(10);
+            cout << "\n   ***********************************************************************";
+            cout << "\n                              Venta editada...";
+        } else return false;
+        
+        Sleep(2250);
+        resetear_color();
     }
 
-    cambiar_color(12);
-    cout << "\n   Pago pendiente no encontrado...";
-    Sleep(1500);
-    resetear_color();
     return true;
 }
 

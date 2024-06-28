@@ -24,9 +24,13 @@ void pedir_Cstring(const char dato[MAX_INPUT], const char* input, int longitud =
 int pedir_int(const char dato[MAX_INPUT]);
 float pedir_float(const char dato[MAX_INPUT]);
 
-//y esta es para pedir si el cliente ha pagado su compra o no
-//(la tengo aqui pq no quiero tener la logica de validar el input en registrar_Ventas())
+//esta es para pedir si el cliente ha pagado su compra o no
+//la tengo aqui pq no quiero tener la logica de validar el input en registrar_Ventas()
 bool pedir_pagada();
+
+//en varias funciones se checkea si el registro esta vacio antes de hacer algo,
+//entonces para no estar repitiendo el mismo codigo, lo puse en su propia funcion
+bool checkear_Vacio(int num_registro);
 
 //funciones para abrir/leer/escribir a archivos
 bool leer_Archivos(const char nombre_archivo[MAX_INPUT]);
@@ -100,6 +104,18 @@ bool pedir_pagada() {
     }
 
     resetear_color();
+}
+
+bool checkear_Vacio(int nun_registro) {
+    if (nun_registro == 0) {
+        cambiar_color(12);
+        cout << "\n   El registro esta vacío...";
+        Sleep(2250);
+        resetear_color();
+        return true;
+    }
+
+    return false;
 }
 
 //***************************************************************************************************
