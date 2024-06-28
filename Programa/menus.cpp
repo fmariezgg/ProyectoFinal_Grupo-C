@@ -1,6 +1,4 @@
-#include <iostream>
-#include <windows.h>
-#include "funciones.cpp"
+#include "prototipos.h"
 using namespace std;
 
 //menus y submenus:
@@ -62,7 +60,7 @@ int principal() {
                 Sleep(1000);
 
                 submenu = produccion(); //llamar al submenu
-                if (submenu == 6) continue; //si el submenu retorna la opcion de regresar al menu principal, ir a la proxima iteracion
+                if (submenu == 7) continue; //si el submenu retorna la opcion de regresar al menu principal, ir a la proxima iteracion
                 break;
             case 2:
                 cambiar_color(14);
@@ -111,16 +109,16 @@ int produccion() {
     do {
         system("cls || clear");
         titulo_prod();
-
+        
+        cout << endl << "   1. Calcular producción total\n";
         cambiar_color(14);
-        cout << endl;
-        cout << "   1. Registrar vacas\n";
-        cout << "   2. Mostrar vacas\n";
-        cout << "   3. Buscar vaca\n";
-        cout << "   4. Editar registro\n";
-        cout << "   5. Eliminar vaca\n";
+        cout << "\n   2. Registrar vacas\n";
+        cout << "   3. Mostrar vacas\n";
+        cout << "   4. Buscar vaca\n";
+        cout << "   5. Modificar datos de vaca\n";
+        cout << "   6. Eliminar vaca\n";
         cambiar_color(11);
-        cout << "\n   6. Regresar a menú principal\n";
+        cout << "\n   7. Regresar a menú principal\n";
         cambiar_color(9);
         cout << "\n   => Ingrese su opción: ";
         cin >> option;
@@ -128,6 +126,9 @@ int produccion() {
 
         switch (option) {
             case 1:
+                //coso de calcular total
+                break;
+            case 2:
                 cambiar_color(14);
                 cout << "     ¿Cuántas vacas desea registrar? ";
                 cin >> num;
@@ -146,19 +147,22 @@ int produccion() {
                 resetear_color();
                 Sleep(2250);
                 break;
-            case 2:
+            case 3:
                 check = mostrar_Vacas();
                 if (!check) {
                     cambiar_color(12);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Vacas.txt'...";
+                    resetear_color();
+                    Sleep(2250);
                 }
 
                 break;
-            case 3:
+            case 4:
                 system("cls || clear");
                 cout << endl;
                 pedir_Cstring("ID de la vaca a buscar", input_id, ID);
                 indice = buscar_Vaca(input_id);
+
                 cambiar_color(9);
                 cout << "\n   Buscando vaca...";
                 resetear_color();
@@ -184,22 +188,50 @@ int produccion() {
                     cout << "   ID: " << registro_Vacas[indice].id << "\n";
                     cout << "   Edad: " << registro_Vacas[indice].edad << "\n";
                     cout << "   Producción diaria: " << registro_Vacas[indice].prod_diaria << "\n";
-                    cout << "   Estado de salud: " << registro_Vacas[indice].estado_salud << "\n";
+                    cout << "   Estado de salud: " << registro_Vacas[indice].estado_salud << endl;
                     cambiar_color(11);
                     cout << endl << "   ***********************************************************************\n";
-                    cambiar_color(14);
                     cout << "   Presione cualquier tecla para continuar...";
                     system("pause > NULL");
                 }
-
-                break;
-            case 4:
-                //coso de modificar
+                
+                resetear_color();
                 break;
             case 5:
-                //coso de eliminar (se palmo la vaca :< )
+                check = editar_Vaca();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Vacas.txt'...";
+                    Sleep(2250);
+                }
+
                 break;
-            case 6:
+            case 6: //se palmo la vaca :(
+                system("cls || clear");
+                cout << endl;
+                pedir_Cstring("ID de la vaca a eliminar", input_id, ID);
+                indice = eliminar_Vaca(input_id);
+
+                cambiar_color(9);
+                cout << "\n   Buscando vaca...";
+                resetear_color();
+                Sleep(800);
+
+                if (indice == -1) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
+                } else if (indice == -2) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Vacas.txt'...";
+                } else if (indice == 0) {
+                    cambiar_color(10);
+                    cout << "\n   Vaca eliminada!";     
+                }
+                
+                resetear_color();
+                Sleep(2250);
+                break;
+            case 7:
                 cambiar_color(11);
                 cout << "      Regresando a menú principal...";
                 resetear_color();
@@ -212,7 +244,7 @@ int produccion() {
                 Sleep(1000);
                 break;
         }
-    } while (option != 6);
+    } while (option != 7);
 
     resetear_color();
     return option;
@@ -232,8 +264,8 @@ int clientes() {
         cout << "   1. Registrar clientes\n";
         cout << "   2. Mostrar clientes\n";
         cout << "   3. Buscar cliente\n";
-        cout << "   4. Modificar clientes\n";
-        cout << "   5. Eliminar clientes\n";
+        cout << "   4. Modificar datos de cliente\n";
+        cout << "   5. Eliminar cliente\n";
         cambiar_color(11);
         cout << "\n   6. Regresar a menú principal\n";
         cambiar_color(9);
@@ -266,6 +298,8 @@ int clientes() {
                 if (!check) {
                     cambiar_color(12);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Clientes.txt'...";
+                    resetear_color();
+                    Sleep(2250);
                 }
                 
                 break;
@@ -274,6 +308,7 @@ int clientes() {
                 cout << endl;
                 pedir_Cstring("ID del cliente a buscar", input_id, ID);
                 indice = buscar_Cliente(input_id, false);
+
                 cambiar_color(9);
                 cout << "\n   Buscando cliente...";
                 resetear_color();
@@ -299,20 +334,49 @@ int clientes() {
                     cout << "   ID: " << registro_Clientes[indice].id << "\n";
                     cout << "   Nombre: " << registro_Clientes[indice].nombre << "\n";
                     cout << "   Dirección: " << registro_Clientes[indice].direccion << "\n";
-                    cout << "   Contacto: " << registro_Clientes[indice].contacto << "\n";
+                    cout << "   Contacto: " << registro_Clientes[indice].contacto << endl;
                     cambiar_color(11);
                     cout << endl << "   ***********************************************************************\n";
-                    cambiar_color(14);
                     cout << "   Presione cualquier tecla para continuar...";
                     system("pause > NULL");
                 }
 
+                resetear_color();
                 break;
             case 4:
-                //coso de modificar
+                check = editar_Cliente();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Clientes.txt'...";
+                    resetear_color();
+                    Sleep(2250);
+                }
+
                 break;
             case 5:
-                //coso de eliminar
+                system("cls || clear");
+                cout << endl;
+                pedir_Cstring("ID del cliente a eliminar", input_id, ID);
+                indice = eliminar_Vaca(input_id);
+
+                cambiar_color(9);
+                cout << "\n   Buscando cliente...";
+                resetear_color();
+                Sleep(800);
+
+                if (indice == -1) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
+                } else if (indice == -2) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Clientes.txt'...";
+                } else if (indice == 0) {
+                    cambiar_color(10);
+                    cout << "\n   Cliente eliminado!";     
+                }
+                
+                resetear_color();
+                Sleep(2250);
                 break;
             case 6:
                 cambiar_color(11);
@@ -441,9 +505,9 @@ int finanzas() {
                     Sleep(500);
                     cambiar_color(12);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'precio_galon.txt'...";
+                    resetear_color();
                 }
 
-                resetear_color();
                 Sleep(2250);
                 break;
             case 9:
@@ -451,9 +515,9 @@ int finanzas() {
                 if (!check) {
                     cambiar_color(12);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo escribir el precio ingresado al archivo 'precio_galon.txt'...";
+                    resetear_color();
                 }
                 
-                resetear_color();
                 Sleep(2250);
                 break;
             case 10:
@@ -486,11 +550,11 @@ int ventas() {
 
         cambiar_color(14);
         cout << endl;
-        cout << "   1. Registrar venta\n";
+        cout << "   1. Registrar ventas\n";
         cout << "   2. Mostrar ventas\n";
         cout << "   3. Buscar venta\n";
-        cout << "   4. Modificar ventas\n";
-        cout << "   5. Eliminar ventas\n";
+        cout << "   4. Modificar venta\n";
+        cout << "   5. Eliminar venta\n";
         cambiar_color(11);
         cout << "\n   6. Regresar a menú de finanzas\n";
         cout << "   7. Regresar a menú principal\n";
@@ -509,7 +573,7 @@ int ventas() {
 
                 if (!check) {
                     cambiar_color(12);
-                    cout << "\n   ERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir al archivo 'registro_Ventas.txt'...";
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir a uno o más los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt', 'precio_galon.txt'...";
                 } else {
                     cambiar_color(10);
                     cout << "\n   ***********************************************************************";
@@ -524,6 +588,8 @@ int ventas() {
                 if (!check) {
                     cambiar_color(12);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Ventas.txt'...";
+                    resetear_color();
+                    Sleep(2250);
                 }
                 
                 break;
@@ -532,6 +598,7 @@ int ventas() {
                 cout << endl;
                 pedir_Cstring("ID de la venta a buscar", input_id, ID);
                 indice = buscar_Venta(input_id);
+
                 cambiar_color(9);
                 cout << "\n   Buscando venta...";
                 resetear_color();
@@ -560,20 +627,49 @@ int ventas() {
                     cout << "   Nombre del cliente: " << registro_Ventas[indice].nombre_cliente << "\n";
                     cout << "   Cantidad de leche: " << registro_Ventas[indice].cantidad_leche << " galones\n";
                     cout << "   Monto: C$" << registro_Ventas[indice].monto << "\n";
-                    cout << "   ¿Está pagada? "; cambiar_color(9); cout << pagada << "\n";
+                    cout << "   ¿Está pagada? "; cambiar_color(9); cout << pagada << endl;
                     cambiar_color(11);
                     cout << endl << "   ***********************************************************************\n";
-                    cambiar_color(14);
                     cout << "   Presione cualquier tecla para continuar...";
                     system("pause > NULL");
                 }
 
+                resetear_color();
                 break;
             case 4:
-                //coso de modificar
+                check = editar_Venta();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir a uno o más de los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt'...";
+                    resetear_color();
+                    Sleep(2250);
+                }
+                
                 break;
             case 5:
-                //coso de eliminar
+                system("cls || clear");
+                cout << endl;
+                pedir_Cstring("ID de la venta a eliminar", input_id, ID);
+                indice = eliminar_Venta(input_id);
+
+                cambiar_color(9);
+                cout << "\n   Buscando venta...";
+                resetear_color();
+                Sleep(800);
+
+                if (indice == -1) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
+                } else if (indice == -2) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir a uno o más los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt'...";
+                } else if (indice >= 0) {
+                    cambiar_color(10);
+                    cout << "\n   Venta eliminada!";
+                }
+
+                resetear_color();
+                Sleep(2250);
                 break;
             case 6:
                 cambiar_color(11);
@@ -628,6 +724,8 @@ int pendientes() {
                 if (!check) {
                     cambiar_color(12);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Pendientes.txt'...";
+                    resetear_color();
+                    Sleep(2250);
                 }
                 
                 break;
@@ -636,6 +734,7 @@ int pendientes() {
                 cout << endl;
                 pedir_Cstring("ID del pago pendiente a buscar", input_id, ID);
                 indice = buscar_Pendiente(input_id);
+
                 cambiar_color(9);
                 cout << "\n   Buscando pago pendiente...";
                 resetear_color();
@@ -660,21 +759,50 @@ int pendientes() {
                     cambiar_color(14);
                     cout << "   ID de la venta: " << registro_Pendientes[indice].id_venta << "\n";
                     cout << "   Fecha: " << registro_Pendientes[indice].fecha.dia << " de " << registro_Pendientes[indice].fecha.mes << ", " << registro_Pendientes[indice].fecha.year << "\n";
-                    cout << "   Nombre del cliente: " << registro_Pendientes[indice].nombre_cliente << "\n";
+                    cout << "   Nombre del cliente: " << registro_Pendientes[indice].nombre_cliente << endl;
                     cout << "   Monto: C$" << registro_Pendientes[indice].monto << "\n";
                     cambiar_color(11);
                     cout << endl << "   ***********************************************************************\n";
-                    cambiar_color(14);
                     cout << "   Presione cualquier tecla para continuar...";
                     system("pause > NULL");
                 }
 
+                resetear_color();
                 break;
             case 3:
-                //coso de modificar
+                check = editar_Pendiente();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Pendientes.txt'...";
+                    resetear_color();
+                    Sleep(2250);
+                }
+                
                 break;
             case 4:
-                //coso de eliminar
+                system("cls || clear");
+                cout << endl;
+                pedir_Cstring("ID del pago pendiente a eliminar", input_id, ID);
+                indice = buscar_Pendiente(input_id);
+
+                cambiar_color(9);
+                cout << "\n   Buscando pago pendiente...";
+                resetear_color();
+                Sleep(800);
+
+                if (indice == -1) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
+                } else if (indice == -2) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Pendientes.txt'...";
+                } else if (indice >= 0) {
+                    cambiar_color(10);
+                    cout << "\n   Pago pendiente eliminado!";
+                }
+
+                resetear_color();
+                Sleep(2250);
                 break;
             case 5:
                 cambiar_color(11);
@@ -712,7 +840,7 @@ int costos_Fijos() {
 
         cambiar_color(14);
         cout << endl;
-        cout << "   1. Registrar costo\n";
+        cout << "   1. Registrar costos\n";
         cout << "   2. Mostrar costos\n";
         cout << "   3. Buscar costo\n";
         cout << "   4. Modificar costo\n";
@@ -751,14 +879,17 @@ int costos_Fijos() {
                 if (!check) {
                     cambiar_color(12);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Fijos.txt'...";
+                    resetear_color();
+                    Sleep(2250);
                 }
 
                 break;
             case 3:
                 system("cls || clear");
                 cout << endl;
-                pedir_Cstring("ID del costo a buscar", input_id, ID);
+                pedir_Cstring("ID del costo fijo a buscar", input_id, ID);
                 indice = buscar_costo_Fijo(input_id);
+
                 cambiar_color(9);
                 cout << "\n   Buscando costo fijo...";
                 resetear_color();
@@ -783,20 +914,49 @@ int costos_Fijos() {
                     cambiar_color(14);
                     cout << "   ID: " << registro_costos_Fijos[indice].id << "\n";
                     cout << "   Monto: C$" << registro_costos_Fijos[indice].monto << "\n";
-                    cout << "   Descripción: " << registro_costos_Fijos[indice].descripcion << "\n";
+                    cout << "   Descripción: " << registro_costos_Fijos[indice].descripcion << endl;
                     cambiar_color(11);
                     cout << endl << "   ***********************************************************************\n";
-                    cambiar_color(14);
                     cout << "   Presione cualquier tecla para continuar...";
                     system("pause > NULL");
                 }
 
+                resetear_color();
                 break;
             case 4:
-                //coso de modificar
+                check = editar_costo_Fijo();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Fijos.txt'...";
+                    resetear_color();
+                    Sleep(2250);
+                }
+
                 break;
             case 5:
-                //coso de eliminar
+                system("cls || clear");
+                cout << endl;
+                pedir_Cstring("ID del costo fijo a eliminar", input_id, ID);
+                indice = eliminar_costo_Fijo(input_id);
+
+                cambiar_color(9);
+                cout << "\n   Buscando costo fijo...";
+                resetear_color();
+                Sleep(800);
+
+                if (indice == -1) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
+                } else if (indice == -2) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Fijos.txt'...";
+                } else if (indice == 0) {
+                    cambiar_color(10);
+                    cout << "\n   Costo fijo eliminado!";
+                }
+
+                resetear_color();
+                Sleep(2250);
                 break;
 
             case 6: break; //el mensaje y el sleep se llaman en finanzas()
@@ -827,7 +987,7 @@ int costos_Variables() {
 
         cambiar_color(14);
         cout << endl;
-        cout << "   1. Registrar costo\n";
+        cout << "   1. Registrar costos\n";
         cout << "   2. Mostrar costos\n";
         cout << "   3. Buscar costo\n";
         cout << "   4. Modificar costo\n";
@@ -866,14 +1026,17 @@ int costos_Variables() {
                 if (!check) {
                     cambiar_color(12);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Variables.txt'...";
+                    resetear_color();
+                    Sleep(2250);
                 }
                 
                 break;
             case 3:
                 system("cls || clear");
                 cout << endl;
-                pedir_Cstring("ID del costo a buscar", input_id, ID);
+                pedir_Cstring("ID del costo variable a buscar", input_id, ID);
                 indice = buscar_costo_Variable(input_id);
+
                 cambiar_color(9);
                 cout << "\n   Buscando costo variable...";
                 resetear_color();
@@ -899,20 +1062,49 @@ int costos_Variables() {
                     cout << "   ID: " << registro_costos_Variables[indice].id << "\n";
                     cout << "   Monto: C$" << registro_costos_Variables[indice].monto << "\n";
                     cout << "   Descripción: " << registro_costos_Variables[indice].descripcion << "\n";
-                    cout << "   Mes: " << registro_costos_Variables[indice].mes << "\n";
+                    cout << "   Mes: " << registro_costos_Variables[indice].mes << endl;
                     cambiar_color(11);
                     cout << endl << "   ***********************************************************************\n";
-                    cambiar_color(14);
                     cout << "   Presione cualquier tecla para continuar...";
                     system("pause > NULL");
                 }
 
+                resetear_color();
                 break;
             case 4:
-                //coso de modificar
+                check = editar_costo_Variable();
+                if (!check) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Variables.txt'...";
+                    resetear_color();
+                    Sleep(2250);
+                }
+                
                 break;
             case 5:
-                //coso de eliminar
+                system("cls || clear");
+                cout << endl;
+                pedir_Cstring("ID del costo variable a eliminar", input_id, ID);
+                indice = eliminar_costo_Variable(input_id);
+
+                cambiar_color(9);
+                cout << "\n   Buscando costo variable...";
+                resetear_color();
+                Sleep(800);
+
+                if (indice == -1) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
+                } else if (indice == -2) {
+                    cambiar_color(12);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Variables.txt'...";
+                } else if (indice == 0) {
+                    cambiar_color(10);
+                    cout << "\n   Costo variable eliminado!";
+                }
+
+                resetear_color();
+                Sleep(2250);
                 break;
 
             case 6: break; //el mensaje y el sleep se llaman en finanzas()
