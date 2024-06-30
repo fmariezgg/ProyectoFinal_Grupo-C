@@ -1,4 +1,4 @@
-#include "prototipos.h"
+#include "modulos/prototipos.h"
 using namespace std;
 
 //menus y submenus:
