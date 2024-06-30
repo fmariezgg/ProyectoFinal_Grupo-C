@@ -9,7 +9,6 @@ int buscar_Vaca(const char id[ID]) {
     if (!leer) return -2; //-2 significa que no se pudo leer el archivo
     
     for (int i = 0; i < num_vacas; i++) {
-        cout << "   buscando" << endl;
         if (strcmp(registro_Vacas[i].id, id) == 0) return i;
     }
     
@@ -25,8 +24,6 @@ bool registrar_Vacas(int num) {
 
     leer = leer_Archivos("registro_Vacas.txt");
     if (!leer) return false;
-
-    cout << buscar_Vaca(registro_Vacas[2].id);
 
     for (int i = 0; i < num; i++) {
         LLC::_colSET(LLC::cCYAN);

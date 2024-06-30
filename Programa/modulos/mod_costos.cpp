@@ -4,6 +4,30 @@ using namespace std;
 //implementaciones de todas las funciones del modulo de gestion de costos (fijos + variables):
 //***************************************************************************************************
 
+int buscar_costo_Fijo(const char id[ID]) {
+    bool leer = leer_Archivos("registro_costos_Fijos.txt");
+    if (!leer) return -2;
+    
+    for (int i = 0; i < num_costos_Fijos; i++) {
+        if (strcmp(registro_costos_Fijos[i].id, id) == 0) return i;
+    }
+    
+    return -1;
+}
+
+int buscar_costo_Variable(const char id[ID]) {
+    bool leer = leer_Archivos("registro_costos_Variables.txt");
+    if (!leer) return -2;
+    
+    for (int i = 0; i < num_costos_Variables; i++) {
+        if (strcmp(registro_costos_Variables[i].id, id) == 0) return i;
+    }
+    
+    return -1;
+}
+
+//***************************************************************************************************
+
 bool registrar_costos_Fijos(int num) {
     system("cls || clear");
     char tempID[ID] = "";
@@ -143,30 +167,6 @@ bool mostrar_costos_Variables() {
     cin.get();
     LLC::_colRESET();
     return true;
-}
-
-//***************************************************************************************************
-
-int buscar_costo_Fijo(const char id[ID]) {
-    bool leer = leer_Archivos("registro_costos_Fijos.txt");
-    if (!leer) return -2;
-    
-    for (int i = 0; i < num_costos_Fijos; i++) {
-        if (strcmp(registro_costos_Fijos[i].id, id) == 0) return i;
-    }
-    
-    return -1;
-}
-
-int buscar_costo_Variable(const char id[ID]) {
-    bool leer = leer_Archivos("registro_costos_Variables.txt");
-    if (!leer) return -2;
-    
-    for (int i = 0; i < num_costos_Variables; i++) {
-        if (strcmp(registro_costos_Variables[i].id, id) == 0) return i;
-    }
-    
-    return -1;
 }
 
 //***************************************************************************************************
