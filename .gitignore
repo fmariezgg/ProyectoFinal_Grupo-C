@@ -9,3 +9,6 @@ Programa/output/registro_Ventas.txt
 Programa/output/registro_Pendientes.txt
 Programa/output/registro_costos_Fijos.txt
 Programa/output/registro_costos_Variables.txt
+Programa/.vscode/c_cpp_properties.json
+Programa/.vscode/launch.json
+Programa/.vscode/settings.json
