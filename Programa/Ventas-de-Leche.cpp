@@ -5,7 +5,6 @@ using namespace std;
 -- agregar opcion de que se pueda ingresar fecha manualmente
 -- validar id's para que no se repitan
 -- cuando se ingrese una venta de un cliente que no esta registrado, avisarle al usuario que lo registre primero
--- los procesos de salida: calcular produccion, ingresos, costos y utilidad
 */
 
 int main() {

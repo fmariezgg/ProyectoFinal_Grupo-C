@@ -34,7 +34,7 @@ bool registrar_Ventas(int num) {
         LLC::_colSET(LLC::cCYAN);
         cout << endl << "                                  Venta #" << num_ventas+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        cin.ignore();
+        if (cin.peek() == '\n') cin.ignore();
         LLC::_colRESET();
         pedir_Cstring("ID", registro_Ventas[num_ventas].id, ID);
         pedir_Cstring("nombre del cliente", registro_Ventas[num_ventas].nombre_cliente);
@@ -111,7 +111,8 @@ bool mostrar_Ventas() {
     LLC::_colSET(LLC::cCYAN);
     cout << endl << "   ***********************************************************************\n";
     cout << "   Presione cualquier tecla para continuar...";
-    pausar = getch();
+    if (cin.peek() == '\n') cin.ignore();
+    cin.get();
     LLC::_colRESET();
     return true;
 }
@@ -144,7 +145,8 @@ bool mostrar_Pendientes() {
     LLC::_colSET(LLC::cCYAN);
     cout << endl << "   ***********************************************************************\n";
     cout << "   Presione cualquier tecla para continuar...";
-    pausar = getch();
+    if (cin.peek() == '\n') cin.ignore();
+    cin.get();
     LLC::_colRESET();
     return true;
 }

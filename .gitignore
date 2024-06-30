@@ -1,7 +1,9 @@
 .vscode/settings.json
 .vscode/c_cpp_properties.json
 .vscode/launch.json
-Programa/output/NULL
+Programa/.vscode/settings.json
+Programa/.vscode/c_cpp_properties.json
+Programa/.vscode/launch.json
 Programa/output/precio_galon.txt
 Programa/output/registro_Vacas.txt
 Programa/output/registro_Clientes.txt

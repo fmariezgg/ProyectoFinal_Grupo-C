@@ -199,7 +199,7 @@ int produccion() {
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cin.get();
                 }
                 
                 LLC::_colRESET();
@@ -345,7 +345,7 @@ int clientes() {
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cin.get();
                 }
 
                 LLC::_colRESET();
@@ -656,7 +656,7 @@ int ventas() {
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cin.get();
                 }
 
                 LLC::_colRESET();
@@ -789,7 +789,7 @@ int pendientes() {
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cin.get();
                 }
 
                 LLC::_colRESET();
@@ -943,7 +943,7 @@ int costos_Fijos() {
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cin.get();
                 }
 
                 LLC::_colRESET();
@@ -1091,7 +1091,7 @@ int costos_Variables() {
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cin.get();
                 }
 
                 LLC::_colRESET();

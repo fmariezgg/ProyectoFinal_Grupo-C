@@ -3,11 +3,10 @@
 
 #include <iostream>
 #include <fstream>
-#include <cstring>
-#include <ctime>
+#include <cstring> //funciones de C-strings
+#include <ctime> //para obtener la fecha y hora actuales
 #include <chrono> //esto y <thread> se ocupan para hacer lo mismo que Sleep() sin tener que usar windows.h
 #include <thread>
-#include <conio.h>
 #include "titulos.h"
 #include "variables.h"
 using namespace std;
