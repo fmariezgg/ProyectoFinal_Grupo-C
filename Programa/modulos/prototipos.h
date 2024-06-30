@@ -95,20 +95,19 @@ bool mostrar_Precio() {
     return true;
 }
 
-bool calcular_Produccion(){
+bool calcular_Produccion() {
     system("cls || clear");
     bool leer = leer_Archivos("registro_Vacas.txt");
     if (!leer) return false;
 
     if (checkear_Vacio(num_vacas)) return true;
 
-
     for (int i = 0; i < num_vacas; i++) {
         produccion_total += registro_Vacas[i].prod_diaria;
     }
 
     LLC::_colSET(LLC::cGREEN);
-    cout << "\n   Producción total diaria: " << total << " galón(es)";
+    cout << "\n   Producción total diaria: " << produccion_total << " galón(es)";
     this_thread::sleep_for(chrono::milliseconds(2250));
     LLC::_colRESET();
     return true;
