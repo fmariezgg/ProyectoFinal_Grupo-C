@@ -126,7 +126,13 @@ int produccion() {
 
         switch (option) {
             case 1:
-                //coso de calcular total
+                check = calcular_Produccion();
+                if (!check) {
+                    LLC::_colSET(LLC::cRED);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Vacas.txt'...";
+                    LLC::_colRESET();
+                    this_thread::sleep_for(chrono::milliseconds(2250));
+                }
                 break;
             case 2:
                 LLC::_colSET(LLC::cLIGHT_YELLOW);
@@ -491,13 +497,28 @@ int finanzas() {
             case 4: break; //^^
 
             case 5:
-                //coso de ingresos
+                bool check = calcular_Ingresos();
+                if (!check) {
+                    LLC::_colSET(LLC::cRED);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Ventas.txt', 'precio_galon.txt'...";
+                    LLC::_colRESET();
+                }
                 break;
             case 6:
-                //coso de costos totales
+                bool check = calcular_Costos();
+                if (!check) {
+                    LLC::_colSET(LLC::cRED);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Pendientes.txt', 'costos_Fijos.txt', 'costos_Variables.txt'...";
+                    LLC::_colRESET();
+                }
                 break;
             case 7:
-                //coso de utilidad
+                bool check = calcular_Utilidad();
+                if (!check) {
+                    LLC::_colSET(LLC::cRED);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Ventas.txt', 'precio_galon.txt', 'costos_Fijos.txt', 'costos_Variables.txt'...";
+                    LLC::_colRESET();
+                }
                 break;
             case 8:
                 check = mostrar_Precio();
