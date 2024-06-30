@@ -50,7 +50,7 @@ int eliminar_Pendiente(const char id[ID]); //tambien actualiza el registro de la
 int eliminar_costo_Fijo(const char id[ID]);
 int eliminar_costo_Variable(const char id[ID]);
 
-bool calcular_Produccion();
+bool calcular_Produccion(); 
 bool calcular_Ingresos();
 bool calcular_Costos();
 bool calcular_Utilidad();
@@ -94,3 +94,90 @@ bool mostrar_Precio() {
     LLC::_colRESET();
     return true;
 }
+
+bool calcular_Produccion() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_Vacas.txt");
+    if (!leer) return false;
+
+    if (checkear_Vacio(num_vacas)) return true;
+
+    for (int i = 0; i < num_vacas; i++) {
+        produccion_total += registro_Vacas[i].prod_diaria;
+    }
+
+    LLC::_colSET(LLC::cGREEN);
+    cout << "\n   Producción total diaria: " << produccion_total << " galón(es)";
+    this_thread::sleep_for(chrono::milliseconds(2250));
+    LLC::_colRESET();
+    return true;
+}
+
+bool calcular_Ingresos() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_Ventas.txt");
+    if (!leer) return false;
+
+    if (checkear_Vacio(num_ventas)) return true;
+
+    for (int i = 0; i < num_ventas; i++) {
+        ingresos_totales += registro_Ventas[i].monto;
+    }
+
+    LLC::_colSET(LLC::cGREEN);
+    cout << "\n   Ingresos totales: C$" << ingresos_totales;
+    this_thread::sleep_for(chrono::milliseconds(2250));
+    LLC::_colRESET();
+    return true;
+}
+
+bool calcular_Costos() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_costos_Fijos.txt");
+    if (!leer) return false;
+
+    if (checkear_Vacio(num_costos_Fijos)) return true;
+
+    for (int i = 0; i < num_costos_Fijos; i++) {
+        costos_totales += registro_costos_Fijos[i].monto;
+    }
+
+    leer = leer_Archivos("registro_costos_Variables.txt");
+    if (!leer) return false;
+
+    if (checkear_Vacio(num_costos_Variables)) return true;
+
+    for (int i = 0; i < num_costos_Variables; i++) {
+        costos_totales += registro_costos_Variables[i].monto;
+    }
+
+    LLC::_colSET(LLC::cGREEN);
+    cout << "\n   Costos totales: C$" << costos_totales;
+    this_thread::sleep_for(chrono::milliseconds(2250));
+    LLC::_colRESET();
+    return true;
+}
+
+bool calcular_Utilidad() {
+    system("cls || clear");
+    bool leer = leer_Archivos("registro_Ventas.txt");
+    if (!leer) return false;
+
+    if (checkear_Vacio(num_ventas)) return true;
+
+    for (int i = 0; i < num_ventas; i++) {
+        if (registro_Ventas[i].pagada) utilidad += registro_Ventas[i].monto;
+    }
+
+    utilidad -= costos_totales;
+
+    LLC::_colSET(LLC::cGREEN);
+    cout << "\n   Utilidad total: C$" << utilidad;
+    this_thread::sleep_for(chrono::milliseconds(2250));
+    LLC::_colRESET();
+    return true;
+}
+
+
+
+

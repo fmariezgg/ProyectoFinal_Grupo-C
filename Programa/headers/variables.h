@@ -65,3 +65,7 @@ int num_ventas = 0;
 int num_pendientes = 0;
 int num_costos_Fijos = 0;
 int num_costos_Variables = 0;
+float ingresos_totales = 0;
+float costos_totales = 0;
+float utilidad = 0;
+float produccion_total = 0;
