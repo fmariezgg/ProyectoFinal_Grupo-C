@@ -6,6 +6,7 @@ using namespace std;
 
 bool registrar_costos_Fijos(int num) {
     system("cls || clear");
+    char tempID[ID] = "";
     bool leer = false, escribir = false;
 
     leer = leer_Archivos("registro_costos_Fijos.txt");
@@ -16,7 +17,22 @@ bool registrar_costos_Fijos(int num) {
         cout << endl << "                              Costo Fijo #" << num_costos_Fijos+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
         LLC::_colRESET();
-        pedir_Cstring("ID", registro_costos_Fijos[num_costos_Fijos].id, ID);
+
+        while (true) {
+            pedir_Cstring("ID", tempID, ID);
+
+            if (buscar_costo_Fijo(tempID) >= 0) {
+                LLC::_colSET(LLC::cRED);
+                cout << "   ERROR: ID ya registrado...";
+                LLC::_colRESET();
+                this_thread::sleep_for(chrono::milliseconds(1500));
+                continue;
+            } else if (buscar_costo_Fijo(tempID) == -1) {
+                strcpy(registro_costos_Fijos[num_costos_Fijos].id, tempID);
+                break;
+            } else if (buscar_costo_Fijo(tempID) == -2) return false;
+        }
+
         registro_costos_Fijos[num_costos_Fijos].monto = pedir_float("monto (en C$)");
         pedir_Cstring("descripción", registro_costos_Fijos[num_costos_Fijos].descripcion);
         num_costos_Fijos++;
