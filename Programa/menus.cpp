@@ -501,7 +501,7 @@ int finanzas() {
                 check = calcular_Ingresos();
                 if (!check) {
                     LLC::_colSET(LLC::cRED);
-                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Ventas.txt', 'precio_galon.txt'...";
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt'...";
                     LLC::_colRESET();
                 }
 
@@ -510,7 +510,7 @@ int finanzas() {
                 check = calcular_Costos();
                 if (!check) {
                     LLC::_colSET(LLC::cRED);
-                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Pendientes.txt', 'costos_Fijos.txt', 'costos_Variables.txt'...";
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'costos_Fijos.txt', 'costos_Variables.txt'...";
                     LLC::_colRESET();
                 }
 
@@ -519,7 +519,7 @@ int finanzas() {
                 check = calcular_Utilidad();
                 if (!check) {
                     LLC::_colSET(LLC::cRED);
-                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Ventas.txt', 'precio_galon.txt', 'costos_Fijos.txt', 'costos_Variables.txt'...";
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt', 'costos_Fijos.txt', 'costos_Variables.txt'...";
                     LLC::_colRESET();
                 }
 

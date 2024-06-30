@@ -31,7 +31,7 @@ bool registrar_Vacas(int num) {
         cout << "   ***********************************************************************\n";
         LLC::_colRESET();
         
-        while (true) {
+        while (true) { //checkear que el ID no este registrado
             pedir_Cstring("ID", tempID, ID);
 
             if (buscar_Vaca(tempID) >= 0) {

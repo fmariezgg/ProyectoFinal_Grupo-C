@@ -4,8 +4,29 @@ using namespace std;
 //implementaciones de todas las funciones del modulo de gestion de clientes:
 //***************************************************************************************************
 
+
+int buscar_Cliente(const char input[MAX_INPUT], bool buscar_nombre) {
+    bool leer = leer_Archivos("registro_Clientes.txt");
+    if (!leer) return -2;
+
+    if (buscar_nombre) {
+        for (int i = 0; i < num_clientes; i++) {
+            if (strcmp(registro_Clientes[i].nombre, input) == 0) return i;
+        }
+    } else {
+        for (int i = 0; i < num_clientes; i++) {
+            if (strcmp(registro_Clientes[i].id, input) == 0) return i;
+        }
+    }    
+    
+    return -1;
+}
+
+//***************************************************************************************************
+
 bool registrar_Clientes(int num) {
     system("cls || clear");
+    char tempID[ID] = "";
     bool leer = false, escribir = false;
 
     leer = leer_Archivos("registro_Clientes.txt");
@@ -16,7 +37,23 @@ bool registrar_Clientes(int num) {
         cout << endl << "                                Cliente #" << num_clientes+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
         LLC::_colRESET();
-        pedir_Cstring("ID", registro_Clientes[num_clientes].id, ID);
+        
+        while (true) {
+            pedir_Cstring("ID", tempID, ID);
+
+            if (buscar_Cliente(tempID, false) >= 0) {
+                LLC::_colSET(LLC::cRED);
+                cout << "\n   ERROR: ID ya registrado...";
+                LLC::_colRESET();
+                this_thread::sleep_for(chrono::milliseconds(1500));
+                cout << endl;
+                continue;
+            } else if (buscar_Cliente(tempID, false) == -1) {
+                strcpy(registro_Clientes[num_clientes].id, tempID);
+                break;
+            } else if (buscar_Cliente(tempID, false) == -2) return false;
+        }
+
         pedir_Cstring("nombre", registro_Clientes[num_clientes].nombre);
         pedir_Cstring("dirección", registro_Clientes[num_clientes].direccion);
         pedir_Cstring("contacto", registro_Clientes[num_clientes].contacto);
@@ -66,25 +103,6 @@ bool mostrar_Clientes() {
     cin.get();
     LLC::_colRESET();
     return true;
-}
-
-//***************************************************************************************************
-
-int buscar_Cliente(const char input[MAX_INPUT], bool buscar_nombre) {
-    bool leer = leer_Archivos("registro_Clientes.txt");
-    if (!leer) return -2;
-
-    if (buscar_nombre) {
-        for (int i = 0; i < num_clientes; i++) {
-            if (strcmp(registro_Clientes[i].nombre, input) == 0) return i;
-        }
-    } else {
-        for (int i = 0; i < num_clientes; i++) {
-            if (strcmp(registro_Clientes[i].id, input) == 0) return i;
-        }
-    }    
-    
-    return -1;
 }
 
 //***************************************************************************************************

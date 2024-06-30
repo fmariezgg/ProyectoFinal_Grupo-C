@@ -1,12 +1,43 @@
 #include "../headers/funciones_externas.h"
+
+#ifndef MOD_CLIENTES_CPP
+#define MOD_CLIENTES_CPP
+#include "mod_clientes.cpp"
+#endif
+
 using namespace std;
 
 //implementaciones de todas las funciones del modulo de gestion de ventas y de pagos pendientes:
 //las de eliminar van primero para que esten definidas cuando se llaman en las de editar (por eso estan al reves tambien)
 //***************************************************************************************************
 
+int buscar_Venta(const char id[ID]) {
+    bool leer = leer_Archivos("registro_Ventas.txt");
+    if (!leer) return -2;
+    
+    for (int i = 0; i < num_ventas; i++) {
+        if (strcmp(registro_Ventas[i].id, id) == 0) return i;
+    }
+    
+    return -1;
+}
+
+int buscar_Pendiente(const char id[ID]) {
+    bool leer = leer_Archivos("registro_Pendientes.txt");
+    if (!leer) return -2;
+    
+    for (int i = 0; i < num_pendientes; i++) {
+        if (strcmp(registro_Pendientes[i].id_venta, id) == 0) return i;
+    }
+    
+    return -1;
+}
+
+//***************************************************************************************************
+
 bool registrar_Ventas(int num) {
     system("cls || clear");
+    char tempID[ID] = "", temp_nombre[MAX_INPUT] = "";
     bool leer_Ventas = false, leer_Precio = false, leer_Pendientes = false;
     bool escribir_Ventas = false, escribir_Pendientes = false;
 
@@ -36,8 +67,36 @@ bool registrar_Ventas(int num) {
         cout << "   ***********************************************************************\n";
         if (cin.peek() == '\n') cin.ignore();
         LLC::_colRESET();
-        pedir_Cstring("ID", registro_Ventas[num_ventas].id, ID);
-        pedir_Cstring("nombre del cliente", registro_Ventas[num_ventas].nombre_cliente);
+        
+        while (true) {
+            pedir_Cstring("ID", tempID, ID);
+
+            if (buscar_Venta(tempID) >= 0) {
+                LLC::_colSET(LLC::cRED);
+                cout << "   ERROR: ID ya registrado...";
+                LLC::_colRESET();
+                this_thread::sleep_for(chrono::milliseconds(1500));
+                continue;
+            } else if (buscar_Venta(tempID) == -1) {
+                strcpy(registro_Ventas[num_ventas].id, tempID);
+                break;
+            } else if (buscar_Venta(tempID) == -2) return false;
+        }
+
+        while (true) { //ver si el cliente ingresado esta registrado o no
+            pedir_Cstring("ID", temp_nombre);
+
+            if (buscar_Cliente(temp_nombre, true) >= 0) {
+                LLC::_colSET(LLC::cRED);
+                cout << "   ERROR: Cliente no registrado...";
+                LLC::_colRESET();
+                this_thread::sleep_for(chrono::milliseconds(1500));
+                return true;
+            } else if (buscar_Cliente(temp_nombre, true) == -1) {
+                strcpy(registro_Ventas[num_ventas].nombre_cliente, temp_nombre);
+                break;
+            } else if (buscar_Cliente(temp_nombre, true) == -2) return false;
+        }
 
         tm *time = obtener_fecha();
         registro_Ventas[num_ventas].fecha.dia = time->tm_mday;
@@ -149,30 +208,6 @@ bool mostrar_Pendientes() {
     cin.get();
     LLC::_colRESET();
     return true;
-}
-
-//***************************************************************************************************
-
-int buscar_Venta(const char id[ID]) {
-    bool leer = leer_Archivos("registro_Ventas.txt");
-    if (!leer) return -2;
-    
-    for (int i = 0; i < num_ventas; i++) {
-        if (strcmp(registro_Ventas[i].id, id) == 0) return i;
-    }
-    
-    return -1;
-}
-
-int buscar_Pendiente(const char id[ID]) {
-    bool leer = leer_Archivos("registro_Pendientes.txt");
-    if (!leer) return -2;
-    
-    for (int i = 0; i < num_pendientes; i++) {
-        if (strcmp(registro_Pendientes[i].id_venta, id) == 0) return i;
-    }
-    
-    return -1;
 }
 
 //***************************************************************************************************

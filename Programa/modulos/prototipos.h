@@ -1,5 +1,10 @@
 #include "mod_vacas.cpp"
+
+#ifndef MOD_CLIENTES_CPP //como mod_clientes.cpp se incluye en mod_ventas+pendientes.cpp, se pone el include guard para que no se incluya mas de una vez
+#define MOD_CLIENTES_CPP
 #include "mod_clientes.cpp"
+#endif
+
 #include "mod_ventas+pendientes.cpp"
 #include "mod_costos.cpp"
 using namespace std;
@@ -95,6 +100,8 @@ bool mostrar_Precio() {
     return true;
 }
 
+//***************************************************************************************************
+
 bool calcular_Produccion() {
     system("cls || clear");
     bool leer = leer_Archivos("registro_Vacas.txt");
@@ -178,6 +185,4 @@ bool calcular_Utilidad() {
     return true;
 }
 
-
-
-
+//***************************************************************************************************

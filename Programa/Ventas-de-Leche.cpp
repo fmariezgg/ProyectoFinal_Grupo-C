@@ -8,7 +8,10 @@ using namespace std;
 */
 
 int main() {
-    SetConsoleOutputCP(CP_UTF8);
+    #ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8); //si se esta ejecutando en windows, se cambia el output a UTF-8 para que se impriman los tildes
+    #endif
+
     int start = 0;
 
     do {
