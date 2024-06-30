@@ -2,10 +2,6 @@
 #include "LemonLibCSB.h"
 using namespace std;
 
-//cambian los colores de la consola para que se vea bonito
-void cambiar_color(int codigo_color);
-void resetear_color();
-
 //ascii art para los menus
 void title_splash();
 void menu_principal();
@@ -21,19 +17,8 @@ void titulo_costos_Variables();
 
 //***************************************************************************************************
 
-void cambiar_color(int codigo_color) {
-    HANDLE consola = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(consola, codigo_color);
-}
-
-void resetear_color() {
-    cambiar_color(15);
-}
-
-//***************************************************************************************************
-
 void title_splash() {
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << endl;
     cout << "    /$$    /$$                      /$$                                     /$$                 /$$                           /$$\n";
     cout << "   | $$   | $$                     | $$                                    | $$                | $$                          | $$\n";
@@ -43,14 +28,14 @@ void title_splash() {
     cout << "     \\  $$$/ | $$_____/| $$  | $$  | $$ /$$ /$$__  $$ \\____  $$      | $$  | $$| $$_____/      | $$      | $$_____/| $$      | $$  | $$| $$_____/\n";
     cout << "      \\  $/  |  $$$$$$$| $$  | $$  |  $$$$/|  $$$$$$$ /$$$$$$$/      |  $$$$$$$|  $$$$$$$      | $$$$$$$$|  $$$$$$$|  $$$$$$$| $$  | $$|  $$$$$$$\n";
     cout << "       \\_/    \\_______/|__/  |__/   \\___/   \\_______/|_______/        \\_______/ \\_______/      |________/ \\_______/ \\_______/|__/  |__/ \\_______/\n" << endl;
-    cambiar_color(8);
+    LLC::_colSET(LLC::cGRAY);
     cout << "    v1.0.0: por Fátima Zogaib y Joaquín Pérez\n";
     cout << " --------------------------------------------------------------------------------------------------------------------------------------------------\n";
-    resetear_color();
+    LLC::_colRESET();
 }
 
 void menu_principal() {
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << endl;
     cout << "    /$$      /$$                                     /$$$$$$$           /$$                     /$$                     /$$\n";
     cout << "   | $$$    /$$$                                    | $$__  $$         |__/                    |__/                    | $$\n";
@@ -62,13 +47,13 @@ void menu_principal() {
     cout << "   |__/     |__/ \\_______/|__/  |__/ \\______/       |__/     |__/      |__/|__/  |__/ \\_______/|__/| $$____/  \\_______/|__/\n";
     cout << "                                                                                                   | $$\n";
     cout << "                                                                                                   |__/" << endl;
-    cambiar_color(8);
+    LLC::_colSET(LLC::cGRAY);
     cout << " ----------------------------------------------------------------------------------------------------------------------------\n";
-    resetear_color();
+    LLC::_colRESET();
 }
 
 void titulo_prod() {
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << endl;
     cout << "    /$$$$$$$                           /$$                               /$$                    \n";
     cout << "   | $$__  $$                         | $$                              |__/                    \n";
@@ -78,13 +63,13 @@ void titulo_prod() {
     cout << "   | $$     | $$      | $$  | $$| $$  | $$| $$  | $$| $$      | $$      | $$| $$  | $$| $$  | $$\n";
     cout << "   | $$     | $$      |  $$$$$$/|  $$$$$$$|  $$$$$$/|  $$$$$$$|  $$$$$$$| $$|  $$$$$$/| $$  | $$\n";
     cout << "   |__/     |__/       \\______/  \\_______/ \\______/  \\_______/ \\_______/|__/ \\______/ |__/  |__/\n" << endl;
-    cambiar_color(8);
+    LLC::_colSET(LLC::cGRAY);
     cout << " -------------------------------------------------------------------------------------------------\n";
-    resetear_color();
+    LLC::_colRESET();
 }
 
 void titulo_clientes() {
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << endl;
     cout << "     /$$$$$$  /$$ /$$                       /$$                        \n";
     cout << "    /$$__  $$| $$|__/                      | $$                        \n";
@@ -94,13 +79,13 @@ void titulo_clientes() {
     cout << "   | $$    $$| $$| $$| $$_____/| $$  | $$  | $$ /$$| $$_____/ \\____  $$\n";
     cout << "   |  $$$$$$/| $$| $$|  $$$$$$$| $$  | $$  |  $$$$/|  $$$$$$$ /$$$$$$$/\n";
     cout << "    \\______/ |__/|__/ \\_______/|__/  |__/   \\___/   \\_______/|_______/ \n" << endl;
-    cambiar_color(8);
+    LLC::_colSET(LLC::cGRAY);
     cout << " ------------------------------------------------------------------------\n";
-    resetear_color();
+    LLC::_colRESET();
 }
 
 void titulo_finanzas() {
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << endl;
     cout << "    /$$$$$$$$ /$$                                                            \n";
     cout << "   | $$_____/|__/                                                            \n";
@@ -110,13 +95,13 @@ void titulo_finanzas() {
     cout << "   | $$      | $$| $$  | $$ /$$__  $$| $$  | $$  /$$__/   /$$__  $$ \\____  $$\n";
     cout << "   | $$      | $$| $$  | $$|  $$$$$$$| $$  | $$ /$$$$$$$$|  $$$$$$$ /$$$$$$$/\n";
     cout << "   |__/      |__/|__/  |__/ \\_______/|__/  |__/|________/ \\_______/|_______/ \n" << endl;
-    cambiar_color(8);
+    LLC::_colSET(LLC::cGRAY);
     cout << " ------------------------------------------------------------------------------\n";
-    resetear_color();
+    LLC::_colRESET();
 }
 
 void titulo_ventas() {
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << endl;
     cout << "    /$$    /$$                      /$$                        \n";
     cout << "   | $$   | $$                     | $$                        \n";
@@ -126,13 +111,13 @@ void titulo_ventas() {
     cout << "     \\  $$$/ | $$_____/| $$  | $$  | $$ /$$ /$$__  $$ \\____  $$\n";
     cout << "      \\  $/  |  $$$$$$$| $$  | $$  |  $$$$/|  $$$$$$$ /$$$$$$$/\n";
     cout << "       \\_/    \\_______/|__/  |__/   \\___/   \\_______/|_______/ \n" << endl;
-    cambiar_color(8);
+    LLC::_colSET(LLC::cGRAY);
     cout << " ----------------------------------------------------------------\n";
-    resetear_color();
+    LLC::_colRESET();
 }
 
 void titulo_pendientes() {
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << endl;
     cout << "    /$$$$$$$                                               /$$$$$$$                           /$$ /$$                       /$$                        \n";
     cout << "   | $$__  $$                                             | $$__  $$                         | $$|__/                      | $$                        \n";
@@ -145,13 +130,13 @@ void titulo_pendientes() {
     cout << "                       /$$  \\ $$                                                                                                                       \n";
     cout << "                      |  $$$$$$/                                                                                                                       \n";
     cout << "                       \\______/                                                                                                                        " << endl;
-    cambiar_color(8);
+    LLC::_colSET(LLC::cGRAY);
     cout << " --------------------------------------------------------------------------------------------------------------------------------------------------------\n";
-    resetear_color();
+    LLC::_colRESET();
 }
 
 void titulo_costos_Fijos() {
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << endl;
     cout << "     /$$$$$$                        /$$                               /$$$$$$$$ /$$                        \n";
     cout << "    /$$__  $$                      | $$                              | $$_____/|__/                        \n";
@@ -164,13 +149,13 @@ void titulo_costos_Fijos() {
     cout << "                                                                              /$$  | $$                    \n";
     cout << "                                                                             |  $$$$$$/                    \n";
     cout << "                                                                              \\______/                     " << endl;
-    cambiar_color(8);
+    LLC::_colSET(LLC::cGRAY);
     cout << " ------------------------------------------------------------------------------------------------------------\n";
-    resetear_color();
+    LLC::_colRESET();
 }
 
 void titulo_costos_Variables() {
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << endl;
     cout << "     /$$$$$$                        /$$                               /$$    /$$                    /$$           /$$       /$$                    \n";
     cout << "    /$$__  $$                      | $$                              | $$   | $$                   |__/          | $$      | $$                    \n";
@@ -180,9 +165,9 @@ void titulo_costos_Variables() {
     cout << "   | $$    $$| $$  | $$ \\____  $$  | $$ /$$| $$  | $$ \\____  $$        \\  $$$/  /$$__  $$| $$      | $$ /$$__  $$| $$  | $$| $$| $$_____/ \\____  $$\n";
     cout << "   |  $$$$$$/|  $$$$$$/ /$$$$$$$/  |  $$$$/|  $$$$$$/ /$$$$$$$/         \\  $/  |  $$$$$$$| $$      | $$|  $$$$$$$| $$$$$$$/| $$|  $$$$$$$ /$$$$$$$/\n";
     cout << "    \\______/  \\______/ |_______/    \\___/   \\______/ |_______/           \\_/    \\_______/|__/      |__/ \\_______/|_______/ |__/ \\_______/|_______/ \n" << endl;
-    cambiar_color(8);
+    LLC::_colSET(LLC::cGRAY);
     cout << " ----------------------------------------------------------------------------------------------------------------------------------------------------\n";
-    resetear_color();
+    LLC::_colRESET();
 }
 
 //***************************************************************************************************

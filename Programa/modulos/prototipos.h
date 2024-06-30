@@ -59,7 +59,7 @@ bool calcular_Utilidad();
 
 bool ingresar_Precio() {
     system("cls || clear");
-    cambiar_color(14);
+    LLC::_colSET(LLC::cLIGHT_YELLOW);
     cout << "\n   Ingrese el precio por galón (en C$): ";
     cin >> precio_galon;
 
@@ -67,11 +67,11 @@ bool ingresar_Precio() {
     if (!escribir) return false;
 
     cout << "   ";
-    Sleep(500);
-    cambiar_color(10);
+    this_thread::sleep_for(chrono::milliseconds(500));
+    LLC::_colSET(LLC::cGREEN);
     cout << "Precio actualizado a: C$" << precio_galon << "...";
-    Sleep(1500);
-    resetear_color();
+    this_thread::sleep_for(chrono::milliseconds(1500));
+    LLC::_colRESET();
     return true;
 }
 
@@ -81,16 +81,16 @@ bool mostrar_Precio() {
     if (!leer) return false;
 
     if (precio_galon == 0.00) {
-        cambiar_color(12);
+        LLC::_colSET(LLC::cRED);
         cout << "\n   No hay precio registrado...";
-        Sleep(3000);
-        resetear_color();
+        this_thread::sleep_for(chrono::milliseconds(2250));
+        LLC::_colRESET();
         return true;
     }
 
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << "\n   Precio por galón: C$" << precio_galon;
-    Sleep(3000);
-    resetear_color();
+    this_thread::sleep_for(chrono::milliseconds(2250));
+    LLC::_colRESET();
     return true;
 }

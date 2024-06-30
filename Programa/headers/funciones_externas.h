@@ -5,6 +5,8 @@
 #include <fstream>
 #include <cstring>
 #include <ctime>
+#include <chrono> //esto y <thread> se ocupan para hacer lo mismo que Sleep() sin tener que usar windows.h
+#include <thread>
 #include <conio.h>
 #include "titulos.h"
 #include "variables.h"
@@ -48,7 +50,7 @@ tm* obtener_fecha() {
 
 void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_INPUT) {
     while (true) {
-        cambiar_color(14);
+        LLC::_colSET(LLC::cLIGHT_YELLOW);
         cout << "   Ingresar " << dato << ": ";
         if (cin.peek() == '\n') cin.ignore();
         cin.getline(input, longitud);
@@ -56,29 +58,29 @@ void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_I
         if (cin.fail()) {
             cin.clear();
             while ((cin.get() != '\n') && (!cin.eof())); //limpia el resto de los caracteres que quedaron en el stream
-            cambiar_color(12);
+            LLC::_colSET(LLC::cRED);
             cout << "\n   ERROR: " << dato << " ingresado es demasiado largo...\n\n";
         } else break;
     }
 
-    resetear_color();
+    LLC::_colRESET();
 }
 
 int pedir_int(const char dato[MAX_INPUT]) {
     int num = 0;
-    cambiar_color(14);
+    LLC::_colSET(LLC::cLIGHT_YELLOW);
     cout << "   Ingresar " << dato << ": ";
     cin >> num;
-    resetear_color();
+    LLC::_colRESET();
     return num;
 }
 
 float pedir_float(const char dato[MAX_INPUT]) {
     float num = 0.00;
-    cambiar_color(14);
+    LLC::_colSET(LLC::cLIGHT_YELLOW);
     cout << "   Ingresar " << dato << ": ";
     cin >> num;
-    resetear_color();
+    LLC::_colRESET();
     return num;
 }
 
@@ -88,7 +90,7 @@ bool pedir_pagada() {
     char input[3] = "";
 
     while (true) {
-        cambiar_color(14);
+        LLC::_colSET(LLC::cLIGHT_YELLOW);
         cout << "   ¿Ha pagado el cliente? (si/no) ";
         cin >> input;
 
@@ -97,21 +99,21 @@ bool pedir_pagada() {
         } else if ((strcmp(input, "n") == 0) || (strcmp(input, "N") == 0) || (strcmp(input, "no") == 0) || (strcmp(input, "No") == 0) || (strcmp(input, "nO") == 0) || (strcmp(input, "NO") == 0)) {
             return false;
         } else {
-            cambiar_color(12);
-            cout << "\n   ERROR: respuesta invalida...\n\n";
+            LLC::_colSET(LLC::cRED);
+            cout << "\n   ERROR: respuesta inválida...\n\n";
             continue;
         }
     }
 
-    resetear_color();
+    LLC::_colRESET();
 }
 
 bool checkear_Vacio(int nun_registro) {
     if (nun_registro == 0) {
-        cambiar_color(12);
+        LLC::_colSET(LLC::cRED);
         cout << "\n   El registro esta vacío...";
-        Sleep(2250);
-        resetear_color();
+        this_thread::sleep_for(chrono::milliseconds(2250));
+        LLC::_colRESET();
         return true;
     }
 
@@ -132,11 +134,11 @@ bool leer_Archivos(const char nombre_archivo[MAX_INPUT]) {
         file.open(nombre_archivo, ios::in); //cerrar el archivo (pq esta en ios::out), y volver a abrirlo en modo de leer
         if (!file) return false; //si todavia da error, ni modo, salir y retornar false
 
-        cambiar_color(12);
+        LLC::_colSET(LLC::cRED);
         cout << "\n   " << nombre_archivo << " no encontrado...";
-        Sleep(500); cambiar_color(10);
+        this_thread::sleep_for(chrono::milliseconds(500)); LLC::_colSET(LLC::cGREEN);
         cout << "\n   Creando " << nombre_archivo << "...";
-        Sleep(1000); resetear_color();
+        this_thread::sleep_for(chrono::milliseconds(1000)); LLC::_colRESET();
         cout << endl;
     }
 

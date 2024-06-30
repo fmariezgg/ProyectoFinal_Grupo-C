@@ -12,10 +12,10 @@ bool registrar_Clientes(int num) {
     if (!leer) return false;
 
     for (int i = 0; i < num; i++) {
-        cambiar_color(11);
+        LLC::_colSET(LLC::cCYAN);
         cout << endl << "                                Cliente #" << num_clientes+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        resetear_color();
+        LLC::_colRESET();
         pedir_Cstring("ID", registro_Clientes[num_clientes].id, ID);
         pedir_Cstring("nombre", registro_Clientes[num_clientes].nombre);
         pedir_Cstring("dirección", registro_Clientes[num_clientes].direccion);
@@ -27,8 +27,8 @@ bool registrar_Clientes(int num) {
     if (!escribir) return false;
 
     cout << "   ";
-    Sleep(500);
-    resetear_color();
+    this_thread::sleep_for(chrono::milliseconds(500));
+    LLC::_colRESET();
     return true;
 }
 
@@ -41,29 +41,29 @@ bool mostrar_Clientes() {
 
     if (checkear_Vacio(num_clientes)) return true;
 
-    cambiar_color(10);
+    LLC::_colSET(LLC::cGREEN);
     cout << "\n   Mostrando clientes registrados...";
-    Sleep(800);
+    this_thread::sleep_for(chrono::milliseconds(500));
 
     cout << endl;
     for (int i = 0; i < num_clientes; i++) {
-        cambiar_color(11);
+        LLC::_colSET(LLC::cCYAN);
         cout << endl << "                                Cliente #" << i+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        cambiar_color(14);
+        LLC::_colSET(LLC::cLIGHT_YELLOW);
         cout << "   ID: " << registro_Clientes[i].id << "\n";
         cout << "   Nombre: " << registro_Clientes[i].nombre << "\n";
         cout << "   Dirección: " << registro_Clientes[i].direccion << "\n";
         cout << "   Contacto: " << registro_Clientes[i].contacto << endl;
         cout << "   ";
-        Sleep(800);
+        this_thread::sleep_for(chrono::milliseconds(800));
     }
 
-    cambiar_color(11);
+    LLC::_colSET(LLC::cCYAN);
     cout << endl << "   ***********************************************************************\n";
     cout << "   Presione cualquier tecla para continuar...";
-    system("pause > NULL");
-    resetear_color();
+    pausar = getch();
+    LLC::_colRESET();
     return true;
 }
 
@@ -102,36 +102,36 @@ bool editar_Cliente() {
     pedir_Cstring("ID del cliente a editar", id, ID);
     indice = buscar_Cliente(id, false);
 
-    cambiar_color(9);
+    LLC::_colSET(LLC::cTEAL);
     cout << "\n   Buscando cliente...";
-    Sleep(800);
-    resetear_color();
+    this_thread::sleep_for(chrono::milliseconds(800));
+    LLC::_colRESET();
 
     if (indice == -1) {
-        cambiar_color(12);
+        LLC::_colSET(LLC::cRED);
         cout << "\n   ERROR: ID ingresado no esta registrado...";
-        Sleep(2250);
-        resetear_color();
+        this_thread::sleep_for(chrono::milliseconds(2250));
+        LLC::_colRESET();
         return true;
     } else if (indice == -2) return false;
 
     else if (indice >= 0) {
-        cambiar_color(10);
+        LLC::_colSET(LLC::cGREEN);
         cout << "\n   Cliente encontrado!";
-        Sleep(750);
-        cambiar_color(11);
+        this_thread::sleep_for(chrono::milliseconds(750));
+        LLC::_colSET(LLC::cCYAN);
         cout << endl << "\n                                Cliente #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
         do {
-            cambiar_color(14);
+            LLC::_colSET(LLC::cLIGHT_YELLOW);
             cout << "\n\n   ¿Qué información quiere editar?" << endl;
             cout << "   1. Nombre\n   2. Dirección\n   3. Contacto\n";
-            cambiar_color(9);
+            LLC::_colSET(LLC::cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
 
             cout << endl;
-            resetear_color();
+            LLC::_colRESET();
             switch (info) {
                 case 1:
                     pedir_Cstring("nombre", registro_Clientes[indice].nombre);
@@ -143,25 +143,25 @@ bool editar_Cliente() {
                     pedir_Cstring("contacto", registro_Clientes[indice].contacto);
                     break;
                 default:
-                    cambiar_color(12);
+                    LLC::_colSET(LLC::cRED);
                     cout << "   Opción inválida...";
-                    Sleep(1000);
-                    resetear_color();
+                    this_thread::sleep_for(chrono::milliseconds(1000));
+                    LLC::_colRESET();
                     break;
             }
         } while (info < 1 || info > 3);
 
-        cout << "   "; Sleep(500);
-        cambiar_color(10);
+        cout << "   "; this_thread::sleep_for(chrono::milliseconds(500));
+        LLC::_colSET(LLC::cGREEN);
         escribir = escribir_Archivos("registro_Clientes.txt");
         if (escribir) {
-            cambiar_color(10);
+            LLC::_colSET(LLC::cGREEN);
             cout << "\n   ***********************************************************************";
             cout << "\n                              Cliente editado...";
         } else return false;
         
-        Sleep(2250);
-        resetear_color();
+        this_thread::sleep_for(chrono::milliseconds(2250));
+        LLC::_colRESET();
     }
 
     return true;

@@ -3,8 +3,9 @@
 #include <string>
 #include <cstdarg>
 
-//Emilio se hizo su propia libreria para hacer un monton de cosas, incluyendo darle colores a la consola sin usar windows.h
-//link del resto de la libreria: https://github.com/LemonpieGBS/LemonLib
+/*mi amigo Emilio se hizo su propia libreria para hacer un monton de cosas
+incluyendo darle colores a la consola sin usar windows.h, y como es una leyenda, me dejo usarla para este proyecto :D
+aqui esta el link del resto de la libreria: https://github.com/LemonpieGBS/LemonLib/ */
 
 #ifdef _WIN32
 #include <windows.h>
@@ -25,7 +26,7 @@ namespace LLC
 
         cBLACK = 0,
         cDARK_RED = 88,
-        cRED = 196,
+        cRED = 160, //lo cambia a un rojo un poquiiiito menos brillante
         cBLUE = 4,
         cDARK_BLUE = 18,
         cPURPLE = 129,
@@ -34,6 +35,7 @@ namespace LLC
         cTEAL = 33,
         cWHITE = 15,
         cGRAY = 8,
+        cLIGHT_YELLOW = 228, //este lo agregue yo
         cYELLOW = 226,
         cDARK_YELLOW = 142,
         cORANGE = 214,
@@ -95,7 +97,7 @@ namespace LLC
     };
 
     void _colSET(COLORS col) { printf("\033[38;5;%dm", col); }
-    void _colRESET() { std::cout << "\033[39m"; }
+    void _colRESET() { _colSET(cWHITE); } //esto lo cambie para que se reseteara a un blanco mas brillante
 
     void _stateSET(STATES st) { printf("\033[%dm", st); }
     template <typename... ARGS> void _stateSET(STATES first, ARGS ... stargs) {
