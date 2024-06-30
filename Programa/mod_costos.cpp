@@ -319,7 +319,7 @@ int eliminar_costo_Fijo(const char id[ID]) {
     indice = buscar_costo_Fijo(id);
     if (indice < 0) return indice;
 
-    for (int i = indice; i < num_costos_Fijos; i++) {
+    for (int i = indice; i < num_costos_Fijos-1; i++) {
         registro_costos_Fijos[i] = registro_costos_Fijos[i+1];
     } num_costos_Fijos--;
 
@@ -339,7 +339,7 @@ int eliminar_costo_Variable(const char id[ID]) {
     indice = buscar_costo_Variable(id);
     if (indice < 0) return indice;
 
-    for (int i = indice; i < num_costos_Variables; i++) {
+    for (int i = indice; i < num_costos_Variables-1; i++) {
         registro_costos_Variables[i] = registro_costos_Variables[i+1];
     } num_costos_Variables--;
 

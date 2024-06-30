@@ -357,7 +357,7 @@ int clientes() {
                 system("cls || clear");
                 cout << endl;
                 pedir_Cstring("ID del cliente a eliminar", input_id, ID);
-                indice = eliminar_Vaca(input_id);
+                indice = eliminar_Cliente(input_id);
 
                 cambiar_color(9);
                 cout << "\n   Buscando cliente...";
@@ -662,7 +662,7 @@ int ventas() {
                     cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
                 } else if (indice == -2) {
                     cambiar_color(12);
-                    cout << "\n   ERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir a uno o más los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt'...";
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir a uno o más los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt', 'precio_galon.txt...";
                 } else if (indice >= 0) {
                     cambiar_color(10);
                     cout << "\n   Venta eliminada!";
@@ -773,7 +773,7 @@ int pendientes() {
                 check = editar_Pendiente();
                 if (!check) {
                     cambiar_color(12);
-                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Pendientes.txt'...";
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Pendientes.txt', 'registro_Ventas.txt...";
                     resetear_color();
                     Sleep(2250);
                 }
@@ -783,7 +783,7 @@ int pendientes() {
                 system("cls || clear");
                 cout << endl;
                 pedir_Cstring("ID del pago pendiente a eliminar", input_id, ID);
-                indice = buscar_Pendiente(input_id);
+                indice = eliminar_Pendiente(input_id);
 
                 cambiar_color(9);
                 cout << "\n   Buscando pago pendiente...";
@@ -795,7 +795,7 @@ int pendientes() {
                     cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
                 } else if (indice == -2) {
                     cambiar_color(12);
-                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Pendientes.txt'...";
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo abrir/leer uno o más de los siguientes archivos: 'registro_Pendientes.txt', 'registro_Ventas.txt', 'precio_galon.txt'...";
                 } else if (indice >= 0) {
                     cambiar_color(10);
                     cout << "\n   Pago pendiente eliminado!";

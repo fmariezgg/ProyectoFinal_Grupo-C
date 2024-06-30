@@ -176,7 +176,7 @@ int eliminar_Vaca(const char id[ID]) {
     indice = buscar_Vaca(id);
     if (indice < 0) return indice;
 
-    for (int i = indice; i < num_vacas; i++) {
+    for (int i = indice; i < num_vacas-1; i++) {
         registro_Vacas[i] = registro_Vacas[i+1];
     } num_vacas--;
 

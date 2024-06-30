@@ -180,7 +180,7 @@ int eliminar_Cliente(const char id[ID]) {
     indice = buscar_Cliente(id, false);
     if (indice < 0) return indice;
 
-    for (int i = indice; i < num_clientes; i++) {
+    for (int i = indice; i < num_clientes-1; i++) {
         registro_Clientes[i] = registro_Clientes[i+1];
     } num_clientes--;
 

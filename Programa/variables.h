@@ -1,4 +1,4 @@
-#define ID 10
+#define ID 10 //tambien se ocupa como la longitud del C-string 'mes'
 #define MAX_INPUT 100
 #define MAX_REGISTER 1000
 
@@ -26,7 +26,7 @@ typedef struct VENTA {
     char id[ID] = "";
     FECHA fecha;
     char nombre_cliente[MAX_INPUT] = "";
-    int cantidad_leche = 0;
+    float cantidad_leche = 0;
     float monto = 0.00;
     bool pagada = false;
 } VENTA;
