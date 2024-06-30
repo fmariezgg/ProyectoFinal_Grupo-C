@@ -62,7 +62,8 @@ bool mostrar_Clientes() {
     LLC::_colSET(LLC::cCYAN);
     cout << endl << "   ***********************************************************************\n";
     cout << "   Presione cualquier tecla para continuar...";
-    pausar = getch();
+    if (cin.peek() == '\n') cin.ignore();
+    cin.get();
     LLC::_colRESET();
     return true;
 }
