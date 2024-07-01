@@ -4,10 +4,7 @@ using namespace std;
 //implementaciones de todas las funciones del modulo de gestion de vacas:
 //***************************************************************************************************
 
-int buscar_Vaca(const char id[ID]) {
-    bool leer = leer_Archivos("registro_Vacas.txt");
-    if (!leer) return -2; //-2 significa que no se pudo leer el archivo
-    
+int buscar_Vaca(const char id[ID]) {  
     for (int i = 0; i < num_vacas; i++) {
         if (strcmp(registro_Vacas[i].id, id) == 0) return i;
     }
@@ -39,6 +36,7 @@ bool registrar_Vacas(int num) {
                 cout << "   ERROR: ID ya registrado...";
                 LLC::_colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
+                cout << endl;
                 continue;
             } else if (buscar_Vaca(tempID) == -1) {
                 strcpy(registro_Vacas[num_vacas].id, tempID);
@@ -90,10 +88,10 @@ bool mostrar_Vacas() {
 
     LLC::_colSET(LLC::cCYAN);
     cout << endl << "   ***********************************************************************\n";
-    cout << "   Presione cualquier tecla para continuar...";
+    cout << "   Presione 'Enter' para continuar...";
 
     //para no usar system("pause"), primero se limpia el ultimo caracter en el buffer y se espera a que el usuario presione una tecla
-    if (cin.peek() == '\n') cin.ignore();
+    cin.ignore();
     cin.get();
     LLC::_colRESET();
     return true;

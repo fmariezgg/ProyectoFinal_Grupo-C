@@ -6,11 +6,9 @@ using namespace std;
 
 
 int buscar_Cliente(const char input[MAX_INPUT], bool buscar_nombre) {
-    bool leer = leer_Archivos("registro_Clientes.txt");
-    if (!leer) return -2;
-
     if (buscar_nombre) {
         for (int i = 0; i < num_clientes; i++) {
+            cout << "   " << registro_Clientes[i].nombre << endl;
             if (strcmp(registro_Clientes[i].nombre, input) == 0) return i;
         }
     } else {
@@ -43,7 +41,7 @@ bool registrar_Clientes(int num) {
 
             if (buscar_Cliente(tempID, false) >= 0) {
                 LLC::_colSET(LLC::cRED);
-                cout << "\n   ERROR: ID ya registrado...";
+                cout << "   ERROR: ID ya registrado...";
                 LLC::_colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
                 cout << endl;
@@ -98,8 +96,8 @@ bool mostrar_Clientes() {
 
     LLC::_colSET(LLC::cCYAN);
     cout << endl << "   ***********************************************************************\n";
-    cout << "   Presione cualquier tecla para continuar...";
-    if (cin.peek() == '\n') cin.ignore();
+    cout << "   Presione 'Enter' para continuar...";
+    cin.ignore();
     cin.get();
     LLC::_colRESET();
     return true;

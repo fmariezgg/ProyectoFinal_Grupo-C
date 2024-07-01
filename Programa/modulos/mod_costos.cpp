@@ -5,9 +5,6 @@ using namespace std;
 //***************************************************************************************************
 
 int buscar_costo_Fijo(const char id[ID]) {
-    bool leer = leer_Archivos("registro_costos_Fijos.txt");
-    if (!leer) return -2;
-    
     for (int i = 0; i < num_costos_Fijos; i++) {
         if (strcmp(registro_costos_Fijos[i].id, id) == 0) return i;
     }
@@ -16,9 +13,6 @@ int buscar_costo_Fijo(const char id[ID]) {
 }
 
 int buscar_costo_Variable(const char id[ID]) {
-    bool leer = leer_Archivos("registro_costos_Variables.txt");
-    if (!leer) return -2;
-    
     for (int i = 0; i < num_costos_Variables; i++) {
         if (strcmp(registro_costos_Variables[i].id, id) == 0) return i;
     }
@@ -50,6 +44,7 @@ bool registrar_costos_Fijos(int num) {
                 cout << "   ERROR: ID ya registrado...";
                 LLC::_colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
+                cout << endl;
                 continue;
             } else if (buscar_costo_Fijo(tempID) == -1) {
                 strcpy(registro_costos_Fijos[num_costos_Fijos].id, tempID);
@@ -89,16 +84,17 @@ bool registrar_costos_Variables(int num) {
         while (true) {
             pedir_Cstring("ID", tempID, ID);
 
-            if (buscar_costo_Fijo(tempID) >= 0) {
+            if (buscar_costo_Variable(tempID) >= 0) {
                 LLC::_colSET(LLC::cRED);
                 cout << "   ERROR: ID ya registrado...";
                 LLC::_colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
+                cout << endl;
                 continue;
-            } else if (buscar_costo_Fijo(tempID) == -1) {
-                strcpy(registro_costos_Fijos[num_costos_Fijos].id, tempID);
+            } else if (buscar_costo_Variable(tempID) == -1) {
+                strcpy(registro_costos_Variables[num_costos_Variables].id, tempID);
                 break;
-            } else if (buscar_costo_Fijo(tempID) == -2) return false;
+            } else if (buscar_costo_Variable(tempID) == -2) return false;
         }
 
         registro_costos_Variables[num_costos_Variables].monto = pedir_float("monto (en C$)");
@@ -144,8 +140,8 @@ bool mostrar_costos_Fijos() {
 
     LLC::_colSET(LLC::cCYAN);
     cout << endl << "   ***********************************************************************\n";
-    cout << "   Presione cualquier tecla para continuar...";
-    if (cin.peek() == '\n') cin.ignore();
+    cout << "   Presione 'Enter' para continuar...";
+    cin.ignore();
     cin.get();
     LLC::_colRESET();
     return true;
@@ -178,8 +174,8 @@ bool mostrar_costos_Variables() {
 
     LLC::_colSET(LLC::cCYAN);
     cout << endl << "   ***********************************************************************\n";
-    cout << "   Presione cualquier tecla para continuar...";
-    if (cin.peek() == '\n') cin.ignore();
+    cout << "   Presione 'Enter' para continuar...";
+    cin.ignore();
     cin.get();
     LLC::_colRESET();
     return true;

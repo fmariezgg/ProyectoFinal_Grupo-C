@@ -1,12 +1,6 @@
 #include "menus.cpp"
 using namespace std;
 
-/*
--- agregar opcion de que se pueda ingresar fecha manualmente
--- validar id's para que no se repitan
--- cuando se ingrese una venta de un cliente que no esta registrado, avisarle al usuario que lo registre primero
-*/
-
 int main() {
     #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8); //si se esta ejecutando en windows, se cambia el output a UTF-8 para que se impriman los tildes

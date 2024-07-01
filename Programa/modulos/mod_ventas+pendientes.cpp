@@ -12,9 +12,6 @@ using namespace std;
 //***************************************************************************************************
 
 int buscar_Venta(const char id[ID]) {
-    bool leer = leer_Archivos("registro_Ventas.txt");
-    if (!leer) return -2;
-    
     for (int i = 0; i < num_ventas; i++) {
         if (strcmp(registro_Ventas[i].id, id) == 0) return i;
     }
@@ -22,10 +19,7 @@ int buscar_Venta(const char id[ID]) {
     return -1;
 }
 
-int buscar_Pendiente(const char id[ID]) {
-    bool leer = leer_Archivos("registro_Pendientes.txt");
-    if (!leer) return -2;
-    
+int buscar_Pendiente(const char id[ID]) { 
     for (int i = 0; i < num_pendientes; i++) {
         if (strcmp(registro_Pendientes[i].id_venta, id) == 0) return i;
     }
@@ -38,13 +32,14 @@ int buscar_Pendiente(const char id[ID]) {
 bool registrar_Ventas(int num) {
     system("cls || clear");
     char tempID[ID] = "", temp_nombre[MAX_INPUT] = "";
-    bool leer_Ventas = false, leer_Precio = false, leer_Pendientes = false;
+    bool leer_Ventas = false, leer_Precio = false, leer_Pendientes = false, leer_Clientes = false;
     bool escribir_Ventas = false, escribir_Pendientes = false;
 
     leer_Ventas = leer_Archivos("registro_Ventas.txt");
     leer_Pendientes = leer_Archivos("registro_Pendientes.txt");
     leer_Precio = leer_Archivos("precio_galon.txt");
-    if (!leer_Ventas || !leer_Pendientes || !leer_Precio) return false; //si cualquiera de las lecturas falla, retornar false
+    leer_Clientes = leer_Archivos("registro_Clientes.txt");
+    if (!leer_Ventas || !leer_Pendientes || !leer_Precio || !leer_Clientes) return false; //si cualquiera de las lecturas falla, retornar false
 
     //si el archivo precio_galon.txt no existe, se va a crear, pero va a estar vacio, entonces hay que pedir un precio para poder calcular el monto de las ventas
     if (precio_galon == 0.00) {
@@ -65,7 +60,7 @@ bool registrar_Ventas(int num) {
         LLC::_colSET(LLC::cCYAN);
         cout << endl << "                                  Venta #" << num_ventas+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        if (cin.peek() == '\n') cin.ignore();
+        cin.ignore();
         LLC::_colRESET();
         
         while (true) {
@@ -76,6 +71,7 @@ bool registrar_Ventas(int num) {
                 cout << "   ERROR: ID ya registrado...";
                 LLC::_colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
+                cout << endl;
                 continue;
             } else if (buscar_Venta(tempID) == -1) {
                 strcpy(registro_Ventas[num_ventas].id, tempID);
@@ -84,15 +80,18 @@ bool registrar_Ventas(int num) {
         }
 
         while (true) { //ver si el cliente ingresado esta registrado o no
-            pedir_Cstring("ID", temp_nombre);
+            pedir_Cstring("nombre del cliente", temp_nombre);
+
+            cout << temp_nombre << endl;
 
             if (buscar_Cliente(temp_nombre, true) >= 0) {
                 LLC::_colSET(LLC::cRED);
-                cout << "   ERROR: Cliente no registrado...";
+                cout << "   ERROR: Cliente debe estar registrado para realizar la venta...";
                 LLC::_colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
                 return true;
             } else if (buscar_Cliente(temp_nombre, true) == -1) {
+                cout << "   AAAAAAAAAAAAAAAAAAAA" << endl;
                 strcpy(registro_Ventas[num_ventas].nombre_cliente, temp_nombre);
                 break;
             } else if (buscar_Cliente(temp_nombre, true) == -2) return false;
@@ -169,8 +168,8 @@ bool mostrar_Ventas() {
 
     LLC::_colSET(LLC::cCYAN);
     cout << endl << "   ***********************************************************************\n";
-    cout << "   Presione cualquier tecla para continuar...";
-    if (cin.peek() == '\n') cin.ignore();
+    cout << "   Presione 'Enter' para continuar...";
+    cin.ignore();
     cin.get();
     LLC::_colRESET();
     return true;
@@ -203,8 +202,8 @@ bool mostrar_Pendientes() {
 
     LLC::_colSET(LLC::cCYAN);
     cout << endl << "   ***********************************************************************\n";
-    cout << "   Presione cualquier tecla para continuar...";
-    if (cin.peek() == '\n') cin.ignore();
+    cout << "   Presione 'Enter' para continuar...";
+    cin.ignore();
     cin.get();
     LLC::_colRESET();
     return true;
@@ -268,14 +267,15 @@ int eliminar_Venta(const char id[ID]) {
 
 bool editar_Venta() {
     system("cls || clear");
-    bool leer_Venta = false, escribir_Venta = false, leer_Pendiente = false, escribir_Pendiente = false, leer_Precio = false;
+    bool leer_Venta = false, escribir_Venta = false, leer_Pendiente = false, escribir_Pendiente = false, leer_Precio = false, leer_Clientes = false;
     int indice = 0, indice_pendiente = -1, info = 0;
-    char id[ID] = "";
+    char id[ID] = "", temp_nombre[MAX_INPUT] = "";
 
     leer_Venta = leer_Archivos("registro_Ventas.txt");
     leer_Pendiente = leer_Archivos("registro_Pendientes.txt");
     leer_Precio = leer_Archivos("precio_galon.txt");
-    if (!leer_Venta || !leer_Pendiente || !leer_Precio) return false;
+    leer_Clientes = leer_Archivos("registro_Clientes.txt");
+    if (!leer_Venta || !leer_Pendiente || !leer_Precio || !leer_Clientes) return false;
     if (checkear_Vacio(num_ventas)) return true;
 
     cout << endl;
@@ -315,7 +315,20 @@ bool editar_Venta() {
             LLC::_colRESET();
             switch (info) {
                 case 1:
-                    pedir_Cstring("nombre del cliente", registro_Ventas[indice].nombre_cliente);
+                    while (true) {
+                        pedir_Cstring("nombre del cliente", temp_nombre);
+
+                        if (buscar_Cliente(temp_nombre, true) >= 0) {
+                            LLC::_colSET(LLC::cRED);
+                            cout << "   ERROR: Cliente debe estar registrado para editar la venta...";
+                            LLC::_colRESET();
+                            this_thread::sleep_for(chrono::milliseconds(1500));
+                            return true;
+                        } else if (buscar_Cliente(temp_nombre, true) == -1) {
+                            strcpy(registro_Ventas[indice].nombre_cliente, temp_nombre);
+                            break;
+                        } else if (buscar_Cliente(temp_nombre, true) == -2) return false;
+                    }
 
                     //si la venta tambien estaba registrada como pendiente, actualizar el nombre en el registro de pendientes
                     if (!registro_Ventas[indice].pagada) strcpy(registro_Pendientes[indice_pendiente].nombre_cliente, registro_Ventas[indice].nombre_cliente);
@@ -396,14 +409,15 @@ bool editar_Venta() {
 
 bool editar_Pendiente() {
     system("cls || clear");
-    bool leer_Venta = false, escribir_Venta = false, leer_Pendiente = false, escribir_Pendiente = false, leer_Precio = false;
+    bool leer_Venta = false, escribir_Venta = false, leer_Pendiente = false, escribir_Pendiente = false, leer_Precio = false, leer_Cliente = false;
     int indice = 0, indice_venta = 0, info = 0;
-    char id[ID] = "";
+    char id[ID] = "", temp_nombre[MAX_INPUT] = "";
 
     leer_Pendiente = leer_Archivos("registro_Pendientes.txt");
     leer_Venta = leer_Archivos("registro_Ventas.txt");
     leer_Precio = leer_Archivos("precio_galon.txt");
-    if (!leer_Pendiente || !leer_Venta || !leer_Precio) return false;
+    leer_Cliente = leer_Archivos("registro_Clientes.txt");
+    if (!leer_Pendiente || !leer_Venta || !leer_Precio || !leer_Cliente) return false;
     if (checkear_Vacio(num_pendientes)) return true;
 
     cout << endl;
@@ -443,7 +457,20 @@ bool editar_Pendiente() {
             LLC::_colRESET();
             switch (info) {
                 case 1:
-                    pedir_Cstring("nombre del cliente", registro_Pendientes[indice].nombre_cliente);
+                    while (true) { 
+                        pedir_Cstring("nombre del cliente", temp_nombre);
+
+                        if (buscar_Cliente(temp_nombre, true) >= 0) {
+                            LLC::_colSET(LLC::cRED);
+                            cout << "   ERROR: Cliente debe estar registrado para editar el pago pendiente...";
+                            LLC::_colRESET();
+                            this_thread::sleep_for(chrono::milliseconds(1500));
+                            return true;
+                        } else if (buscar_Cliente(temp_nombre, true) == -1) {
+                            strcpy(registro_Pendientes[indice].nombre_cliente, temp_nombre);
+                            break;
+                        } else if (buscar_Cliente(temp_nombre, true) == -2) return false;
+                    }
 
                     //hay que actualizar el nombre del cliente en la venta correspondiente
                     if (indice_venta >= 0) strcpy(registro_Ventas[indice_venta].nombre_cliente, registro_Pendientes[indice].nombre_cliente);
