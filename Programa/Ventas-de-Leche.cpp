@@ -8,7 +8,6 @@ using namespace std;
 */
 
 int main() {
-    SetConsoleOutputCP(CP_UTF8);
     int start = 0;
 
     do {
