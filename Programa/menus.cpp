@@ -102,9 +102,9 @@ int principal() {
 //***************************************************************************************************
 
 int produccion() {
-    int option = 0, num = 0, indice = 0;
-    char input_id[ID] = "";
-    bool check = false;
+    int option = 0, num = 0, indice = 0; //num: numero de registros a ingresar; indice: la posicion de un id en el registro
+    char input_id[ID] = ""; //esta es para guardar el id que se va a buscar
+    bool check = false; //para checkear si se pudo abrir/leer/escribir a un archivo
 
     do {
         system("cls || clear");
@@ -126,7 +126,14 @@ int produccion() {
 
         switch (option) {
             case 1:
-                //coso de calcular total
+                check = calcular_Produccion(); //la misma funcion checkea si el registro estaba vacio
+                if (!check) {
+                    LLC::_colSET(LLC::cRED);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Vacas.txt'...";
+                    LLC::_colRESET();
+                    this_thread::sleep_for(chrono::milliseconds(2250));
+                }
+                
                 break;
             case 2:
                 LLC::_colSET(LLC::cLIGHT_YELLOW);
@@ -161,7 +168,9 @@ int produccion() {
                 system("cls || clear");
                 cout << endl;
                 pedir_Cstring("ID de la vaca a buscar", input_id, ID);
-                indice = buscar_Vaca(input_id);
+                check = leer_Archivos("registro_Vacas.txt");
+                if (check) indice = buscar_Vaca(input_id); //si se pudo leer el archivo, buscar el id
+                else indice = -2; //si no, ponerle -2 a id para que se ejecute el else if correcto
 
                 LLC::_colSET(LLC::cTEAL);
                 cout << "\n   Buscando vaca...";
@@ -191,8 +200,8 @@ int produccion() {
                     cout << "   Estado de salud: " << registro_Vacas[indice].estado_salud << endl;
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
-                    cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cout << "   Presione 'Enter' para continuar...";
+                    cin.get();
                 }
                 
                 LLC::_colRESET();
@@ -251,7 +260,7 @@ int produccion() {
 }
 
 int clientes() {
-    int option = 0, num = 0, indice = 0;
+    int option = 0, num = 0, indice = 0; //igual que el menu de produccion
     char input_id[ID] = "";
     bool check = false;
 
@@ -307,7 +316,9 @@ int clientes() {
                 system("cls || clear");
                 cout << endl;
                 pedir_Cstring("ID del cliente a buscar", input_id, ID);
-                indice = buscar_Cliente(input_id, false);
+                check = leer_Archivos("registro_Clientes.txt");
+                if (check) indice = buscar_Cliente(input_id, false); //lo mismo de solo buscar el id si se pudo leer el archivo
+                else indice = -2;
 
                 LLC::_colSET(LLC::cTEAL);
                 cout << "\n   Buscando cliente...";
@@ -337,8 +348,8 @@ int clientes() {
                     cout << "   Contacto: " << registro_Clientes[indice].contacto << endl;
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
-                    cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cout << "   Presione 'Enter' para continuar...";
+                    cin.get();
                 }
 
                 LLC::_colRESET();
@@ -429,7 +440,7 @@ int finanzas() {
         cin >> option;
         LLC::_colRESET();
 
-        /*si se escogio entrar a los menus de costos fijos/variables y se quiere mover
+        /*esto es por si se escogio entrar a los menus de costos fijos/variables y se quiere mover
         directamente entre los dos sin tener que regresar al menu de finanzas*/
         while (option == 3 || option == 4) { 
             if (option == 3) {
@@ -450,7 +461,7 @@ int finanzas() {
                 if (submenu == 6) option = 3; //ir al menu de costos fijos
             }
 
-            //si se escogio regresar al menu de finanzas, salir del while
+            //si se escogio regresar al menu de finanzas, salir del while, y entrar al caso correspondiente del switch
             if (submenu == 7) {
                 LLC::_colSET(LLC::cCYAN);
                 cout << "      Regresando a menú de finanzas...";
@@ -459,12 +470,13 @@ int finanzas() {
                 break;
             }
 
-            /*si se escogio regresar al menu de principal directamente desde
-            los menus de costos fijos/variables, asignar option al valor de este menu
-            que nos regresa a al menu principal y nos saca de este while*/
+            /*si se escogio regresar al menu principal directamente desde
+            los menus de costos fijos/variables, option toma el valor de este menu
+            que nos regresa a al menu principal y nos saca de este while y el do while*/
             else if (submenu == 8) option = 10;
         }
 
+        //resolver el resto de los casos del menu con el switch
         switch (option) {
             case 1:
                 LLC::_colSET(LLC::cLIGHT_YELLOW);
@@ -474,7 +486,7 @@ int finanzas() {
 
                 submenu = ventas();
                 if (submenu == 6) continue; //si el submenu retorna la opcion de regresar al menu de finanzas, ir a la proxima iteracion
-                else if (submenu == 7) return 10; //retorna la opcion que hace que se regrese al menu principal
+                else if (submenu == 7) return 10; //retorna la opcion que hace que termine el do while y se regrese al menu principal
                 break;
             case 2:
                 LLC::_colSET(LLC::cLIGHT_YELLOW);
@@ -487,17 +499,69 @@ int finanzas() {
                 else if (submenu == 6) return 10; //^^
                 break;
 
-            case 3: break; //para que el switch no se vaya al caso default si option es 2 o 3
+            case 3: break; //para que el switch no se vaya al caso default si option es 3 o 4
             case 4: break; //^^
 
             case 5:
-                //coso de ingresos
+                check = calcular_Ingresos();
+
+                if (!check) {
+                    LLC::_colSET(LLC::cRED);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt'...";
+                    LLC::_colRESET();
+                }
+                
+                //si no se pudo calcular, checkear_Vacio va a imprimir el mensaje correcto a la consola, y no hay que hacer nada mas
+                //pero si ingresos_totales si tiene un valor, mostrarlo
+                if (ingresos_totales != 0.00) {
+                    LLC::_colSET(LLC::cTEAL);
+                    cout << "\n   Calculando...";
+                    this_thread::sleep_for(chrono::milliseconds(1000));
+                    LLC::_colSET(LLC::cLIGHT_YELLOW);
+                    cout << "\n   Ingresos totales mensuales: ";
+                    LLC::_colSET(LLC::cGREEN);
+                    cout << "C$" << ingresos_totales;
+                    LLC::_colSET(LLC::cGRAY);
+                    cout << "\n\n   Presione 'Enter' para continuar...";
+                    cin.ignore();
+                    cin.get();
+                    LLC::_colRESET();
+                }
+
                 break;
             case 6:
-                //coso de costos totales
+                check = calcular_Costos();
+
+                if (!check) {
+                    LLC::_colSET(LLC::cRED);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'costos_Fijos.txt', 'costos_Variables.txt'...";
+                    LLC::_colRESET();
+                }
+
+                if (costos_totales != 0.00) { //lo mismo que con los ingresos
+                    LLC::_colSET(LLC::cTEAL);
+                    cout << "\n   Calculando...";
+                    this_thread::sleep_for(chrono::milliseconds(1000));
+                    LLC::_colSET(LLC::cLIGHT_YELLOW);
+                    cout << "\n   Costos totales mensuales: ";
+                    LLC::_colSET(LLC::cRED);
+                    cout << "C$" << costos_totales;
+                    LLC::_colSET(LLC::cGRAY);
+                    cout << "\n\n   Presione 'Enter' para continuar...";
+                    cin.ignore();
+                    cin.get();
+                    LLC::_colRESET();
+                }
+
                 break;
             case 7:
-                //coso de utilidad
+                check = calcular_Utilidad(); //la misma funcion checkea si no se pudo calcular/estaba vacio el registro
+                if (!check) {
+                    LLC::_colSET(LLC::cRED);
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt', 'costos_Fijos.txt', 'costos_Variables.txt'...";
+                    LLC::_colRESET();
+                }
+
                 break;
             case 8:
                 check = mostrar_Precio();
@@ -540,7 +604,7 @@ int finanzas() {
 }
 
 int ventas() {
-    int option = 0, num = 0, indice = 0;
+    int option = 0, num = 0, indice = 0; //igual que los menus anteriores
     char input_id[ID] = "", pagada[3] = "";
     bool check = false;
 
@@ -573,7 +637,7 @@ int ventas() {
 
                 if (!check) {
                     LLC::_colSET(LLC::cRED);
-                    cout << "\n   ERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir a uno o más los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt', 'precio_galon.txt'...";
+                    cout << "\n   ERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir a uno o más los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt', 'registro_Clientes.txt', 'precio_galon.txt'...";
                 } else {
                     LLC::_colSET(LLC::cGREEN);
                     cout << "\n   ***********************************************************************";
@@ -597,7 +661,9 @@ int ventas() {
                 system("cls || clear");
                 cout << endl;
                 pedir_Cstring("ID de la venta a buscar", input_id, ID);
-                indice = buscar_Venta(input_id);
+                check = leer_Archivos("registro_Ventas.txt");
+                if (check) indice = buscar_Venta(input_id);
+                else indice = -2;
 
                 LLC::_colSET(LLC::cTEAL);
                 cout << "\n   Buscando venta...";
@@ -613,7 +679,7 @@ int ventas() {
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Ventas.txt'...";
                     this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice >= 0) {
-                    strcpy(pagada, (registro_Ventas[indice].pagada ? "Sí" : "No"));
+                    strcpy(pagada, (registro_Ventas[indice].pagada ? "Sí" : "No")); //convertir el bool a un string usando una operacion ternaria para que se imprima bien
                     LLC::_colSET(LLC::cGREEN);
                     cout << "\n   Venta encontrada!";
                     this_thread::sleep_for(chrono::milliseconds(800));
@@ -630,8 +696,8 @@ int ventas() {
                     cout << "   ¿Está pagada? "; LLC::_colSET(LLC::cTEAL); cout << pagada << endl;
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
-                    cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cout << "   Presione 'Enter' para continuar...";
+                    cin.get();
                 }
 
                 LLC::_colRESET();
@@ -690,14 +756,14 @@ int ventas() {
                 this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
-    } while ((option != 6) && (option != 7)); //mientras no se quiera regresar a otro menu, permanecer en el bucle
+    } while ((option != 6) && (option != 7)); //mientras no se quiera regresar a otro menu, permanecer en el do while
 
     LLC::_colRESET();
     return option; //retornar la opcion del menu al que se quiere regresar
 }
 
 int pendientes() {
-    int option = 0, indice = 0;
+    int option = 0, indice = 0; //estas se usan igual que en los otros menus
     char input_id[ID] = "";
     bool check = false;
 
@@ -733,7 +799,9 @@ int pendientes() {
                 system("cls || clear");
                 cout << endl;
                 pedir_Cstring("ID del pago pendiente a buscar", input_id, ID);
-                indice = buscar_Pendiente(input_id);
+                check = leer_Archivos("registro_Pendientes.txt");
+                if (check) indice = buscar_Pendiente(input_id);
+                else indice = -2;
 
                 LLC::_colSET(LLC::cTEAL);
                 cout << "\n   Buscando pago pendiente...";
@@ -763,8 +831,8 @@ int pendientes() {
                     cout << "   Monto: C$" << registro_Pendientes[indice].monto << "\n";
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
-                    cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cout << "   Presione 'Enter' para continuar...";
+                    cin.get();
                 }
 
                 LLC::_colRESET();
@@ -830,7 +898,7 @@ int pendientes() {
 }
 
 int costos_Fijos() {
-    int option = 0, num = 0, indice = 0;
+    int option = 0, num = 0, indice = 0; //lo mismo que el resto de los menus basicamente
     char input_id[ID] = "";
     bool check = false;
 
@@ -888,7 +956,9 @@ int costos_Fijos() {
                 system("cls || clear");
                 cout << endl;
                 pedir_Cstring("ID del costo fijo a buscar", input_id, ID);
-                indice = buscar_costo_Fijo(input_id);
+                check = leer_Archivos("registro_costos_Fijos.txt");
+                if (check) indice = buscar_costo_Fijo(input_id);
+                else indice = -2;
 
                 LLC::_colSET(LLC::cTEAL);
                 cout << "\n   Buscando costo fijo...";
@@ -917,8 +987,8 @@ int costos_Fijos() {
                     cout << "   Descripción: " << registro_costos_Fijos[indice].descripcion << endl;
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
-                    cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cout << "   Presione 'Enter' para continuar...";
+                    cin.get();
                 }
 
                 LLC::_colRESET();
@@ -1035,7 +1105,9 @@ int costos_Variables() {
                 system("cls || clear");
                 cout << endl;
                 pedir_Cstring("ID del costo variable a buscar", input_id, ID);
-                indice = buscar_costo_Variable(input_id);
+                check = leer_Archivos("registro_costos_Variables.txt");
+                if (check) indice = buscar_costo_Variable(input_id);
+                else indice = -2;
 
                 LLC::_colSET(LLC::cTEAL);
                 cout << "\n   Buscando costo variable...";
@@ -1065,8 +1137,8 @@ int costos_Variables() {
                     cout << "   Mes: " << registro_costos_Variables[indice].mes << endl;
                     LLC::_colSET(LLC::cCYAN);
                     cout << endl << "   ***********************************************************************\n";
-                    cout << "   Presione cualquier tecla para continuar...";
-                    pausar = getch();
+                    cout << "   Presione 'Enter' para continuar...";
+                    cin.get();
                 }
 
                 LLC::_colRESET();

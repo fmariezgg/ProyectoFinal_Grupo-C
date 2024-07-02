@@ -1,20 +1,16 @@
 #include "menus.cpp"
 using namespace std;
 
-/*
--- agregar opcion de que se pueda ingresar fecha manualmente
--- validar id's para que no se repitan
--- cuando se ingrese una venta de un cliente que no esta registrado, avisarle al usuario que lo registre primero
--- los procesos de salida: calcular produccion, ingresos, costos y utilidad
-*/
-
 int main() {
-    SetConsoleOutputCP(CP_UTF8);
+    #ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8); //si se esta ejecutando en windows, se cambia el output a UTF-8 para que se impriman los tildes
+    #endif
+
     int start = 0;
 
     do {
         system("cls || clear");
-        start = start_screen();
+        start = start_screen(); //iniciar el programa
 
         if (start == 1) {
             int acceder = 0;
@@ -23,7 +19,7 @@ int main() {
             LLC::_colRESET();
             this_thread::sleep_for(chrono::milliseconds(1000));
 
-            while (acceder != 4) acceder = principal();
+            while (acceder != 4) acceder = principal(); //mientras no se quiera regresar a la pantalla principal
 
         } else if (start == 2) {
             LLC::_colSET(LLC::cRED);
@@ -38,9 +34,8 @@ int main() {
             continue;
         }
 
-    } while (start != 2);
+    } while (start != 2); //mientras no se quiera cerrar el programa
 
-    this_thread::sleep_for(chrono::milliseconds(1500));
-    cout << endl;
+    this_thread::sleep_for(chrono::milliseconds(2250));
     return 0;
 }

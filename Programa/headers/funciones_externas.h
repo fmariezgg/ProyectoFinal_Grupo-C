@@ -1,13 +1,12 @@
-#ifndef FUNCIONES_EXTERNAS_H  //como estoy incluyendo este .h en varios archivos, a la hora de incluir esos otros archivos en prototipos.h
+#ifndef FUNCIONES_EXTERNAS_H  //como se esta incluyendo este .h en varios archivos, a la hora de incluir esos otros archivos en prototipos.h
 #define FUNCIONES_EXTERNAS_H //van a haber redefiniciones de las funciones de este archivo, y esto de ifndef evita que pase eso y solo se incluye una vez
 
 #include <iostream>
 #include <fstream>
-#include <cstring>
-#include <ctime>
+#include <cstring> //funciones de C-strings
+#include <ctime> //para obtener la fecha y hora actuales
 #include <chrono> //esto y <thread> se ocupan para hacer lo mismo que Sleep() sin tener que usar windows.h
 #include <thread>
-#include <conio.h>
 #include "titulos.h"
 #include "variables.h"
 using namespace std;
@@ -27,12 +26,14 @@ int pedir_int(const char dato[MAX_INPUT]);
 float pedir_float(const char dato[MAX_INPUT]);
 
 //esta es para pedir si el cliente ha pagado su compra o no
-//la tengo aqui pq no quiero tener la logica de validar el input en registrar_Ventas()
 bool pedir_pagada();
 
 //en varias funciones se checkea si el registro esta vacio antes de hacer algo,
 //entonces para no estar repitiendo el mismo codigo, lo puse en su propia funcion
 bool checkear_Vacio(int num_registro);
+
+//se ocupa en editar_costo_Variable para checkear si el mes ingresado es valido o no
+bool checkear_mes(const char* mes);
 
 //funciones para abrir/leer/escribir a archivos
 bool leer_Archivos(const char nombre_archivo[MAX_INPUT]);
@@ -59,7 +60,7 @@ void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_I
             cin.clear();
             while ((cin.get() != '\n') && (!cin.eof())); //limpia el resto de los caracteres que quedaron en el stream
             LLC::_colSET(LLC::cRED);
-            cout << "\n   ERROR: " << dato << " ingresado es demasiado largo...\n\n";
+            cout << "\n   ERROR: dato ingresado es demasiado largo...\n\n";
         } else break;
     }
 
@@ -118,6 +119,14 @@ bool checkear_Vacio(int nun_registro) {
     }
 
     return false;
+}
+
+bool checkear_mes(const char* mes) {
+    for (int i = 0; i < 12; i++) {
+        if (strcmp(mes, meses[i]) == 0) return true;
+    }
+
+    return false; //si no se ha retornado, el mes no es valido
 }
 
 //***************************************************************************************************
@@ -347,7 +356,7 @@ bool escribir_Archivos(const char nombre_archivo[MAX_INPUT]) {
         //escribir costos variables
         else if (strcmp(nombre_archivo, "registro_costos_Variables.txt") == 0) {
             for (int i = 0; i < num_costos_Variables; i++) {
-                file << registro_costos_Fijos[i].id << "\n";
+                file << registro_costos_Variables[i].id << "\n";
                 file << registro_costos_Variables[i].monto << "\n";
                 file << registro_costos_Variables[i].descripcion << "\n";
                 file << registro_costos_Variables[i].mes << "\n";
