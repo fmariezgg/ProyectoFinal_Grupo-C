@@ -8,7 +8,7 @@
 using namespace std;
 
 //implementaciones de todas las funciones del modulo de gestion de ventas y de pagos pendientes:
-//las de eliminar van primero para que esten definidas cuando se llaman en las de editar (por eso estan al reves tambien)
+//como no hay prototipos, el orden esta medio raro para que no hayan errores de undefined reference
 //***************************************************************************************************
 
 int buscar_Venta(const char id[ID]) {
@@ -37,8 +37,8 @@ bool registrar_Ventas(int num) {
 
     leer_Ventas = leer_Archivos("registro_Ventas.txt");
     leer_Pendientes = leer_Archivos("registro_Pendientes.txt");
-    leer_Precio = leer_Archivos("precio_galon.txt");
-    leer_Clientes = leer_Archivos("registro_Clientes.txt");
+    leer_Precio = leer_Archivos("precio_galon.txt"); //se lee el precio para poder calcular el monto de la venta
+    leer_Clientes = leer_Archivos("registro_Clientes.txt"); //se lee los clientes para poder ver si el cliente ingresado esta registrado o no
     if (!leer_Ventas || !leer_Pendientes || !leer_Precio || !leer_Clientes) return false; //si cualquiera de las lecturas falla, retornar false
 
     //si el archivo precio_galon.txt no existe, se va a crear, pero va a estar vacio, entonces hay que pedir un precio para poder calcular el monto de las ventas
@@ -72,9 +72,9 @@ bool registrar_Ventas(int num) {
                 LLC::_colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
                 cout << endl;
-                continue;
+                continue; //si se encontro el id ingresado, volver a pedirlo
             } else if (buscar_Venta(tempID) == -1) {
-                strcpy(registro_Ventas[num_ventas].id, tempID);
+                strcpy(registro_Ventas[num_ventas].id, tempID); //si no se encontro, se guarda en el registro
                 break;
             } else if (buscar_Venta(tempID) == -2) return false;
         }
@@ -82,22 +82,26 @@ bool registrar_Ventas(int num) {
         while (true) { //ver si el cliente ingresado esta registrado o no
             pedir_Cstring("nombre del cliente", temp_nombre);
 
-            cout << temp_nombre << endl;
-
-            if (buscar_Cliente(temp_nombre, true) >= 0) {
+            if (buscar_Cliente(temp_nombre, true) == -1) {
                 LLC::_colSET(LLC::cRED);
-                cout << "   ERROR: Cliente debe estar registrado para realizar la venta...";
+                cout << "   ERROR: Cliente debe estar registrado antes de registrar la venta...";
                 LLC::_colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
-                return true;
-            } else if (buscar_Cliente(temp_nombre, true) == -1) {
-                cout << "   AAAAAAAAAAAAAAAAAAAA" << endl;
+                cout << endl;
+
+                strcpy(registro_Ventas[num_ventas].id, ""); //si el cliente no esta registrado, se borra el id de la venta
+                escribir_Ventas = escribir_Archivos("registro_Ventas.txt"); //y se escriben los cambios que habia hecho el usuario
+                escribir_Pendientes = escribir_Archivos("registro_Pendientes.txt");
+                return (escribir_Ventas && escribir_Pendientes); //retornar el and de los dos resultados
+            }
+            
+            else if (buscar_Cliente(temp_nombre, true) >= 0) {
                 strcpy(registro_Ventas[num_ventas].nombre_cliente, temp_nombre);
                 break;
             } else if (buscar_Cliente(temp_nombre, true) == -2) return false;
         }
 
-        tm *time = obtener_fecha();
+        tm *time = obtener_fecha(); //obtiene la fecha actual para registrar la venta
         registro_Ventas[num_ventas].fecha.dia = time->tm_mday;
         strcpy(registro_Ventas[num_ventas].fecha.mes, meses[time->tm_mon]); //usar el numero de mes como indice para retornar el nombre del mes
         registro_Ventas[num_ventas].fecha.year = time->tm_year + 1900; //sumarle 1900 pq time->tm_year es el numero de años *desde* 1900
@@ -177,6 +181,7 @@ bool mostrar_Ventas() {
 
 bool mostrar_Pendientes() {
     system("cls || clear");
+    char mes[ID] = ""; //igual que en mostrar_Ventas()
     bool leer = leer_Archivos("registro_Pendientes.txt");
     if (!leer) return false;
 
@@ -193,7 +198,7 @@ bool mostrar_Pendientes() {
         cout << "   ***********************************************************************\n";
         LLC::_colSET(LLC::cLIGHT_YELLOW);
         cout << "   ID de venta: " << registro_Pendientes[i].id_venta << "\n";
-        cout << "   Fecha: " << registro_Pendientes[i].fecha.dia << " de " << registro_Pendientes[i].fecha.mes << ", " << registro_Pendientes[i].fecha.year << "\n";
+        cout << "   Fecha: " << registro_Pendientes[i].fecha.dia << " de " << mes << ", " << registro_Pendientes[i].fecha.year << "\n";
         cout << "   Nombre de cliente: " << registro_Pendientes[i].nombre_cliente << "\n";
         cout << "   Monto a pagar: C$" << registro_Pendientes[i].monto << endl;
         cout << "   ";

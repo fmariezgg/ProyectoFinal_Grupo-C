@@ -4,6 +4,10 @@ using namespace std;
 //implementaciones de todas las funciones del modulo de gestion de vacas:
 //***************************************************************************************************
 
+//las funciones de buscar no leen los archivos ellas mismas, pq si no, a la hora de validar los id's,
+//los datos del arreglo con el que se estaba trabajando se reemplazan con lo que esta en el archivo (que en ese punto esta atrasado pq no se han escrito los cambios)
+//entonces cuando estas se llaman en los menus, se tienen que leer los archivos antes
+
 int buscar_Vaca(const char id[ID]) {  
     for (int i = 0; i < num_vacas; i++) {
         if (strcmp(registro_Vacas[i].id, id) == 0) return i;
@@ -37,9 +41,9 @@ bool registrar_Vacas(int num) {
                 LLC::_colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
                 cout << endl;
-                continue;
+                continue; //si se encontro, volver a pedirlo
             } else if (buscar_Vaca(tempID) == -1) {
-                strcpy(registro_Vacas[num_vacas].id, tempID);
+                strcpy(registro_Vacas[num_vacas].id, tempID); //si no, registrarlo
                 break;
             } else if (buscar_Vaca(tempID) == -2) return false;
         }
@@ -82,7 +86,7 @@ bool mostrar_Vacas() {
         cout << "   Edad: " << registro_Vacas[i].edad << " año(s)\n";
         cout << "   Producción diaria: " << registro_Vacas[i].prod_diaria << " galón(es)\n";
         cout << "   Estado de salud: " << registro_Vacas[i].estado_salud << endl;
-        cout << "   ";
+        cout << "   "; //todos los espacios y endl's asi raros son por estetica
         this_thread::sleep_for(chrono::milliseconds(800));
     }
 
@@ -118,7 +122,7 @@ bool editar_Vaca() {
     this_thread::sleep_for(chrono::milliseconds(800));
     LLC::_colRESET();
 
-    if (indice == -1) {
+    if (indice == -1) { //por si no se encontro el id
         LLC::_colSET(LLC::cRED);
         cout << "\n   ERROR: ID ingresado no esta registrado...";
         this_thread::sleep_for(chrono::milliseconds(2250));
@@ -160,7 +164,7 @@ bool editar_Vaca() {
                     LLC::_colRESET();
                     break;
             }
-        } while (info < 1 || info > 3);
+        } while (info < 1 || info > 3); //repetir mientras que la opcion que se haya ingresado no sea valida
 
         cout << "   "; this_thread::sleep_for(chrono::milliseconds(500));
         LLC::_colSET(LLC::cGREEN);
@@ -189,7 +193,9 @@ int eliminar_Vaca(const char id[ID]) {
     if (checkear_Vacio(num_vacas)) return 1;
 
     indice = buscar_Vaca(id);
-    if (indice < 0) return indice;
+    if (indice < 0) return indice; //si no se encontro/ocurrio un error, retornar el error para mostrar el mensaje correspondiente en el menu
+    //como estas funciones de eliminar se ocupan adentro de otras funciones, sale mejor retornar los errores y lidiar con ellos en el menu,
+    //para que no salgan mensajes raros mientras otra funcion se esta ejecutando
 
     for (int i = indice; i < num_vacas-1; i++) {
         registro_Vacas[i] = registro_Vacas[i+1];

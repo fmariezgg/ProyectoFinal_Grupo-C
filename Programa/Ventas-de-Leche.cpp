@@ -10,7 +10,7 @@ int main() {
 
     do {
         system("cls || clear");
-        start = start_screen();
+        start = start_screen(); //iniciar el programa
 
         if (start == 1) {
             int acceder = 0;
@@ -19,7 +19,7 @@ int main() {
             LLC::_colRESET();
             this_thread::sleep_for(chrono::milliseconds(1000));
 
-            while (acceder != 4) acceder = principal();
+            while (acceder != 4) acceder = principal(); //mientras no se quiera regresar a la pantalla principal
 
         } else if (start == 2) {
             LLC::_colSET(LLC::cRED);
@@ -34,9 +34,8 @@ int main() {
             continue;
         }
 
-    } while (start != 2);
+    } while (start != 2); //mientras no se quiera cerrar el programa
 
-    this_thread::sleep_for(chrono::milliseconds(1500));
-    cout << endl;
+    this_thread::sleep_for(chrono::milliseconds(2250));
     return 0;
 }

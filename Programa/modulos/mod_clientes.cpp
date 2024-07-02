@@ -2,13 +2,14 @@
 using namespace std;
 
 //implementaciones de todas las funciones del modulo de gestion de clientes:
-//***************************************************************************************************
 
+//todas estas son basicamente lo mismo que las de vacas, solo que con los datos de los clientes,
+//entonces todos los comentarios explicando estan en mod_vacas.cpp
+//***************************************************************************************************
 
 int buscar_Cliente(const char input[MAX_INPUT], bool buscar_nombre) {
     if (buscar_nombre) {
         for (int i = 0; i < num_clientes; i++) {
-            cout << "   " << registro_Clientes[i].nombre << endl;
             if (strcmp(registro_Clientes[i].nombre, input) == 0) return i;
         }
     } else {

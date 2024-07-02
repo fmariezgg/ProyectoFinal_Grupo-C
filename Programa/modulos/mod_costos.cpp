@@ -2,6 +2,10 @@
 using namespace std;
 
 //implementaciones de todas las funciones del modulo de gestion de costos (fijos + variables):
+
+//aqui es el mismo cuento que con las funciones de clientes: las explicaciones estan en mod_vacas.cpp
+//la unica diferencia que notar es que aunque la estructura de COSTO tiene un atributo de 'mes',
+// no se ocupa para los costos fijos (pq son fijos) pero si para los variables
 //***************************************************************************************************
 
 int buscar_costo_Fijo(const char id[ID]) {
@@ -84,6 +88,8 @@ bool registrar_costos_Variables(int num) {
         while (true) {
             pedir_Cstring("ID", tempID, ID);
 
+            cout << tempID << endl;
+
             if (buscar_costo_Variable(tempID) >= 0) {
                 LLC::_colSET(LLC::cRED);
                 cout << "   ERROR: ID ya registrado...";
@@ -92,10 +98,13 @@ bool registrar_costos_Variables(int num) {
                 cout << endl;
                 continue;
             } else if (buscar_costo_Variable(tempID) == -1) {
+                cout << tempID << endl;
                 strcpy(registro_costos_Variables[num_costos_Variables].id, tempID);
                 break;
             } else if (buscar_costo_Variable(tempID) == -2) return false;
         }
+
+        cout << registro_costos_Variables[num_costos_Variables].id << endl;
 
         registro_costos_Variables[num_costos_Variables].monto = pedir_float("monto (en C$)");
         pedir_Cstring("descripción", registro_costos_Variables[num_costos_Variables].descripcion);
@@ -310,7 +319,19 @@ bool editar_costo_Variable() {
                     pedir_Cstring("descripción", registro_costos_Variables[indice].descripcion);
                     break;
                 case 3:
-                    pedir_Cstring("mes", registro_costos_Variables[indice].mes, ID);
+                    while (true) { //mientras no se ingrese mes valido, seguir pidiendolo
+                        pedir_Cstring("mes", registro_costos_Variables[indice].mes, ID);
+
+                        if (!checkear_mes(registro_costos_Variables[indice].mes)) {
+                            LLC::_colSET(LLC::cRED);
+                            cout << "   ERROR: Mes inválido...";
+                            LLC::_colRESET();
+                            this_thread::sleep_for(chrono::milliseconds(1500));
+                            cout << endl;
+                            continue;
+                        } else break;
+                    }
+
                     break;
                 default:
                     LLC::_colSET(LLC::cRED);
