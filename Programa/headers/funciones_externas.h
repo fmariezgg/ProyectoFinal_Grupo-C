@@ -5,11 +5,10 @@
 #include <fstream>
 #include <cstring> //funciones de C-strings
 #include <ctime> //para obtener la fecha y hora actuales
-#include <chrono> //esto y <thread> se ocupan para hacer lo mismo que Sleep() sin tener que usar windows.h
-#include <thread>
 #include "titulos.h"
 #include "variables.h"
 using namespace std;
+using namespace LLC;
 
 //hace exactamente lo que dice (se usa en registro_Ventas() para guardar la fecha automaticamente)
 tm* obtener_fecha();
@@ -51,7 +50,7 @@ tm* obtener_fecha() {
 
 void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_INPUT) {
     while (true) {
-        LLC::_colSET(LLC::cLIGHT_YELLOW);
+        _colSET(LLC::cLIGHT_YELLOW);
         cout << "   Ingresar " << dato << ": ";
         if (cin.peek() == '\n') cin.ignore();
         cin.getline(input, longitud);
@@ -59,29 +58,29 @@ void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_I
         if (cin.fail()) {
             cin.clear();
             while ((cin.get() != '\n') && (!cin.eof())); //limpia el resto de los caracteres que quedaron en el stream
-            LLC::_colSET(LLC::cRED);
+            _colSET(LLC::cRED);
             cout << "\n   ERROR: dato ingresado es demasiado largo...\n\n";
         } else break;
     }
 
-    LLC::_colRESET();
+    _colRESET();
 }
 
 int pedir_int(const char dato[MAX_INPUT]) {
     int num = 0;
-    LLC::_colSET(LLC::cLIGHT_YELLOW);
+    _colSET(LLC::cLIGHT_YELLOW);
     cout << "   Ingresar " << dato << ": ";
     cin >> num;
-    LLC::_colRESET();
+    _colRESET();
     return num;
 }
 
 float pedir_float(const char dato[MAX_INPUT]) {
     float num = 0.00;
-    LLC::_colSET(LLC::cLIGHT_YELLOW);
+    _colSET(LLC::cLIGHT_YELLOW);
     cout << "   Ingresar " << dato << ": ";
     cin >> num;
-    LLC::_colRESET();
+    _colRESET();
     return num;
 }
 
@@ -91,7 +90,7 @@ bool pedir_pagada() {
     char input[3] = "";
 
     while (true) {
-        LLC::_colSET(LLC::cLIGHT_YELLOW);
+        _colSET(LLC::cLIGHT_YELLOW);
         cout << "   ¿Ha pagado el cliente? (si/no) ";
         cin >> input;
 
@@ -100,21 +99,21 @@ bool pedir_pagada() {
         } else if ((strcmp(input, "n") == 0) || (strcmp(input, "N") == 0) || (strcmp(input, "no") == 0) || (strcmp(input, "No") == 0) || (strcmp(input, "nO") == 0) || (strcmp(input, "NO") == 0)) {
             return false;
         } else {
-            LLC::_colSET(LLC::cRED);
+            _colSET(LLC::cRED);
             cout << "\n   ERROR: respuesta inválida...\n\n";
             continue;
         }
     }
 
-    LLC::_colRESET();
+    _colRESET();
 }
 
-bool checkear_Vacio(int nun_registro) {
-    if (nun_registro == 0) {
-        LLC::_colSET(LLC::cRED);
+bool checkear_Vacio(int num_registro) {
+    if (num_registro == 0) {
+        _colSET(LLC::cRED);
         cout << "\n   El registro esta vacío...";
-        this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        Sleep(2250);
+        _colRESET();
         return true;
     }
 
@@ -143,11 +142,11 @@ bool leer_Archivos(const char nombre_archivo[MAX_INPUT]) {
         file.open(nombre_archivo, ios::in); //cerrar el archivo (pq esta en ios::out), y volver a abrirlo en modo de leer
         if (!file) return false; //si todavia da error, ni modo, salir y retornar false
 
-        LLC::_colSET(LLC::cRED);
+        _colSET(LLC::cRED);
         cout << "\n   " << nombre_archivo << " no encontrado...";
-        this_thread::sleep_for(chrono::milliseconds(500)); LLC::_colSET(LLC::cGREEN);
+        Sleep(500); _colSET(LLC::cGREEN);
         cout << "\n   Creando " << nombre_archivo << "...";
-        this_thread::sleep_for(chrono::milliseconds(1000)); LLC::_colRESET();
+        Sleep(1000); _colRESET();
         cout << endl;
     }
 

@@ -8,6 +8,7 @@
 #include "mod_ventas+pendientes.cpp"
 #include "mod_costos.cpp"
 using namespace std;
+using namespace LLC;
 
 //aqui se definen los prototipos de todas las funciones del sistema
 //tambien estan las implementaciones de las funciones de precio y de calcular totales
@@ -65,7 +66,7 @@ bool calcular_Utilidad();
 
 bool ingresar_Precio() {
     system("cls || clear");
-    LLC::_colSET(LLC::cLIGHT_YELLOW);
+    _colSET(cLIGHT_YELLOW);
     cout << "\n   Ingrese el precio por galón (en C$): ";
     cin >> precio_galon;
 
@@ -73,11 +74,11 @@ bool ingresar_Precio() {
     if (!escribir) return false;
 
     cout << "   ";
-    this_thread::sleep_for(chrono::milliseconds(500));
-    LLC::_colSET(LLC::cGREEN);
+    Sleep(500);
+    _colSET(cGREEN);
     cout << "Precio actualizado a: C$" << precio_galon << "...";
-    this_thread::sleep_for(chrono::milliseconds(1500));
-    LLC::_colRESET();
+    Sleep(1500);
+    _colRESET();
     return true;
 }
 
@@ -88,10 +89,10 @@ bool mostrar_Precio() {
 
     if (checkear_Vacio(precio_galon)) return true; //ver si esta vacio el archivo
 
-    LLC::_colSET(LLC::cGREEN);
+    _colSET(cGREEN);
     cout << "\n   Precio por galón: C$" << precio_galon;
-    this_thread::sleep_for(chrono::milliseconds(2250));
-    LLC::_colRESET();
+    Sleep(2250);
+    _colRESET();
     return true;
 }
 
@@ -103,34 +104,35 @@ bool calcular_Produccion() {
     if (!leer) return false;
 
     if (checkear_Vacio(num_vacas)) return true;
+    produccion_total = 0.00;
 
-    LLC::_colSET(LLC::cTEAL);
+    _colSET(cTEAL);
     cout << "\n   Calculando...";
-    this_thread::sleep_for(chrono::milliseconds(1000));
+    Sleep(1000);
 
     for (int i = 0; i < num_vacas; i++) {
         produccion_total += registro_Vacas[i].prod_diaria;
     }
 
-    LLC::_colSET(LLC::cLIGHT_YELLOW);
+    _colSET(cLIGHT_YELLOW);
     cout << "\n   Producción total diaria: ";
-    LLC::_colSET(LLC::cGREEN);
+    _colSET(cGREEN);
     cout << produccion_total << " galón(es)";
-    LLC::_colSET(LLC::cLIGHT_YELLOW);
+    _colSET(cLIGHT_YELLOW);
     cout << "\n   Producción total semanal: ";
-    LLC::_colSET(LLC::cGREEN);
+    _colSET(cGREEN);
     cout << produccion_total*7 << " galón(es)";
-    LLC::_colSET(LLC::cLIGHT_YELLOW);
+    _colSET(cLIGHT_YELLOW);
     cout << "\n   Producción total mensual: ";
-    LLC::_colSET(LLC::cGREEN);
+    _colSET(cGREEN);
     cout << produccion_total*30 << " galón(es)";
 
 
-    LLC::_colSET(LLC::cGRAY);
+    _colSET(cGRAY);
     cout << "\n\n   Presione 'Enter' para continuar...";
     cin.ignore();
     cin.get();
-    LLC::_colRESET();
+    _colRESET();
     return true;
 }
 
@@ -140,6 +142,7 @@ bool calcular_Ingresos() {
     if (!leer) return false;
 
     if (checkear_Vacio(num_ventas)) return true;
+    ingresos_totales = 0.00;
 
     tm* time = obtener_fecha(); //para poder sumar las ventas del mes actual
 
@@ -153,14 +156,25 @@ bool calcular_Ingresos() {
 
 bool calcular_Costos() {
     system("cls || clear");
-    bool leer = leer_Archivos("registro_costos_Fijos.txt"), leer2 = leer_Archivos("registro_costos_Variables.txt");
-    if (!leer || !leer2) return false;
+    bool leer_Fijos = false, leer_Variables = false;
 
-    if (checkear_Vacio(num_costos_Fijos) && checkear_Vacio(num_costos_Variables)) return true;
+    leer_Fijos = leer_Archivos("registro_costos_Fijos.txt");
+    leer_Variables = leer_Archivos("registro_costos_Variables.txt");
+
+    if (!leer_Fijos || !leer_Variables) return false;
+
+    if ((num_costos_Fijos == 0) && (num_costos_Variables == 0)) { //si los DOS registros estan vacios, hay que decirle al usuario que no hay nada que sumar
+        _colSET(cRED);
+        cout << "   \nLos registros de costos estan vacíos...";
+        _colRESET();
+        return true;
+    }
+
+    costos_totales = 0.00;
 
     tm* time = obtener_fecha(); //para sumar los costos variables del mes actual
 
-    for (int i = 0; i < num_costos_Fijos; i++) {
+    for (int i = 0; i < num_costos_Fijos; i++) { //sumarle todos los costos fijos
         costos_totales += registro_costos_Fijos[i].monto;
     }
 
@@ -178,28 +192,35 @@ bool calcular_Utilidad() {
     if (!leer || !leer2 || !leer3) return false;
 
     if (checkear_Vacio(num_ventas)) return true;
-    if (checkear_Vacio(num_costos_Fijos) && checkear_Vacio(num_costos_Variables)) return true;
+    if ((num_costos_Fijos == 0) && (num_costos_Variables == 0)) {
+        _colSET(cRED);
+        cout << "   \nLos registros de costos estan vacíos...";
+        _colRESET();
+        return true;
+    }
 
-    LLC::_colSET(LLC::cTEAL);
+    utilidad = 0.00;
+
+    _colSET(cTEAL);
     cout << "\n   Calculando...";
-    this_thread::sleep_for(chrono::milliseconds(1000));
+    Sleep(1000);
 
     if (calcular_Ingresos() && calcular_Costos()) utilidad = ingresos_totales - costos_totales;
     else return false;
 
-    LLC::_colSET(LLC::cLIGHT_YELLOW);
+    _colSET(cLIGHT_YELLOW);
     cout << "\n   Utilidad total mensual: ";
 
-    if (utilidad < 0) LLC::_colSET(LLC::cRED);
-    else if (utilidad > 0) LLC::_colSET(LLC::cGREEN);
-    else LLC::_colRESET();
+    if (utilidad < 0) _colSET(cRED);
+    else if (utilidad > 0) _colSET(cGREEN);
+    else _colRESET();
 
     cout << "C$" << utilidad;
-    LLC::_colSET(LLC::cGRAY);
+    _colSET(cGRAY);
     cout << "\n\n   Presione 'Enter' para continuar...";
     cin.ignore();
     cin.get();
-    LLC::_colRESET();
+    _colRESET();
     return true;
 }
 

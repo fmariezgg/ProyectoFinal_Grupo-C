@@ -1,5 +1,6 @@
 #include "../headers/funciones_externas.h"
 using namespace std;
+using namespace LLC;
 
 //implementaciones de todas las funciones del modulo de gestion de clientes:
 
@@ -32,19 +33,19 @@ bool registrar_Clientes(int num) {
     if (!leer) return false;
 
     for (int i = 0; i < num; i++) {
-        LLC::_colSET(LLC::cCYAN);
+        _colSET(cCYAN);
         cout << endl << "                                Cliente #" << num_clientes+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        LLC::_colRESET();
+        _colRESET();
         
         while (true) {
             pedir_Cstring("ID", tempID, ID);
 
             if (buscar_Cliente(tempID, false) >= 0) {
-                LLC::_colSET(LLC::cRED);
+                _colSET(cRED);
                 cout << "   ERROR: ID ya registrado...";
-                LLC::_colRESET();
-                this_thread::sleep_for(chrono::milliseconds(1500));
+                _colRESET();
+                Sleep(1500);
                 cout << endl;
                 continue;
             } else if (buscar_Cliente(tempID, false) == -1) {
@@ -63,8 +64,8 @@ bool registrar_Clientes(int num) {
     if (!escribir) return false;
 
     cout << "   ";
-    this_thread::sleep_for(chrono::milliseconds(500));
-    LLC::_colRESET();
+    Sleep(500);
+    _colRESET();
     return true;
 }
 
@@ -77,30 +78,30 @@ bool mostrar_Clientes() {
 
     if (checkear_Vacio(num_clientes)) return true;
 
-    LLC::_colSET(LLC::cGREEN);
+    _colSET(cGREEN);
     cout << "\n   Mostrando clientes registrados...";
-    this_thread::sleep_for(chrono::milliseconds(500));
+    Sleep(500);
 
     cout << endl;
     for (int i = 0; i < num_clientes; i++) {
-        LLC::_colSET(LLC::cCYAN);
+        _colSET(cCYAN);
         cout << endl << "                                Cliente #" << i+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        LLC::_colSET(LLC::cLIGHT_YELLOW);
+        _colSET(cLIGHT_YELLOW);
         cout << "   ID: " << registro_Clientes[i].id << "\n";
         cout << "   Nombre: " << registro_Clientes[i].nombre << "\n";
         cout << "   Dirección: " << registro_Clientes[i].direccion << "\n";
         cout << "   Contacto: " << registro_Clientes[i].contacto << endl;
         cout << "   ";
-        this_thread::sleep_for(chrono::milliseconds(800));
+        Sleep(800);
     }
 
-    LLC::_colSET(LLC::cCYAN);
+    _colSET(cCYAN);
     cout << endl << "   ***********************************************************************\n";
     cout << "   Presione 'Enter' para continuar...";
     cin.ignore();
     cin.get();
-    LLC::_colRESET();
+    _colRESET();
     return true;
 }
 
@@ -120,36 +121,36 @@ bool editar_Cliente() {
     pedir_Cstring("ID del cliente a editar", id, ID);
     indice = buscar_Cliente(id, false);
 
-    LLC::_colSET(LLC::cTEAL);
+    _colSET(cTEAL);
     cout << "\n   Buscando cliente...";
-    this_thread::sleep_for(chrono::milliseconds(800));
-    LLC::_colRESET();
+    Sleep(800);
+    _colRESET();
 
     if (indice == -1) {
-        LLC::_colSET(LLC::cRED);
+        _colSET(cRED);
         cout << "\n   ERROR: ID ingresado no esta registrado...";
-        this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        Sleep(2250);
+        _colRESET();
         return true;
     } else if (indice == -2) return false;
 
     else if (indice >= 0) {
-        LLC::_colSET(LLC::cGREEN);
+        _colSET(cGREEN);
         cout << "\n   Cliente encontrado!";
-        this_thread::sleep_for(chrono::milliseconds(750));
-        LLC::_colSET(LLC::cCYAN);
+        Sleep(500);
+        _colSET(cCYAN);
         cout << endl << "\n                                Cliente #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
         do {
-            LLC::_colSET(LLC::cLIGHT_YELLOW);
+            _colSET(cLIGHT_YELLOW);
             cout << "\n\n   ¿Qué información quiere editar?" << endl;
             cout << "   1. Nombre\n   2. Dirección\n   3. Contacto\n";
-            LLC::_colSET(LLC::cTEAL);
+            _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
 
             cout << endl;
-            LLC::_colRESET();
+            _colRESET();
             switch (info) {
                 case 1:
                     pedir_Cstring("nombre", registro_Clientes[indice].nombre);
@@ -161,25 +162,25 @@ bool editar_Cliente() {
                     pedir_Cstring("contacto", registro_Clientes[indice].contacto);
                     break;
                 default:
-                    LLC::_colSET(LLC::cRED);
+                    _colSET(cRED);
                     cout << "   Opción inválida...";
-                    this_thread::sleep_for(chrono::milliseconds(1000));
-                    LLC::_colRESET();
+                    Sleep(1000);
+                    _colRESET();
                     break;
             }
         } while (info < 1 || info > 3);
 
-        cout << "   "; this_thread::sleep_for(chrono::milliseconds(500));
-        LLC::_colSET(LLC::cGREEN);
+        cout << "   "; Sleep(500);
+        _colSET(cGREEN);
         escribir = escribir_Archivos("registro_Clientes.txt");
         if (escribir) {
-            LLC::_colSET(LLC::cGREEN);
+            _colSET(cGREEN);
             cout << "\n   ***********************************************************************";
             cout << "\n                              Cliente editado...";
         } else return false;
         
-        this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        Sleep(2250);
+        _colRESET();
     }
 
     return true;

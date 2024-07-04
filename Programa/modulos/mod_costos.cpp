@@ -1,5 +1,6 @@
 #include "../headers/funciones_externas.h"
 using namespace std;
+using namespace LLC;
 
 //implementaciones de todas las funciones del modulo de gestion de costos (fijos + variables):
 
@@ -35,19 +36,19 @@ bool registrar_costos_Fijos(int num) {
     if (!leer) return false;
 
     for (int i = 0; i < num; i++) {
-        LLC::_colSET(LLC::cCYAN);
+        _colSET(cCYAN);
         cout << endl << "                              Costo Fijo #" << num_costos_Fijos+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        LLC::_colRESET();
+        _colRESET();
 
         while (true) {
             pedir_Cstring("ID", tempID, ID);
 
             if (buscar_costo_Fijo(tempID) >= 0) {
-                LLC::_colSET(LLC::cRED);
+                _colSET(cRED);
                 cout << "   ERROR: ID ya registrado...";
-                LLC::_colRESET();
-                this_thread::sleep_for(chrono::milliseconds(1500));
+                _colRESET();
+                Sleep(1500);
                 cout << endl;
                 continue;
             } else if (buscar_costo_Fijo(tempID) == -1) {
@@ -65,8 +66,8 @@ bool registrar_costos_Fijos(int num) {
     if (!escribir) return false;
 
     cout << "   ";
-    this_thread::sleep_for(chrono::milliseconds(500));
-    LLC::_colRESET();
+    Sleep(500);
+    _colRESET();
     return true;
 }
 
@@ -80,10 +81,10 @@ bool registrar_costos_Variables(int num) {
     if (!leer) return false;
 
     for (int i = 0; i < num; i++) {
-        LLC::_colSET(LLC::cCYAN);
+        _colSET(cCYAN);
         cout << endl << "                            Costo Variable #" << num_costos_Variables+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        LLC::_colRESET();
+        _colRESET();
 
         while (true) {
             pedir_Cstring("ID", tempID, ID);
@@ -91,10 +92,10 @@ bool registrar_costos_Variables(int num) {
             cout << tempID << endl;
 
             if (buscar_costo_Variable(tempID) >= 0) {
-                LLC::_colSET(LLC::cRED);
+                _colSET(cRED);
                 cout << "   ERROR: ID ya registrado...";
-                LLC::_colRESET();
-                this_thread::sleep_for(chrono::milliseconds(1500));
+                _colRESET();
+                Sleep(1500);
                 cout << endl;
                 continue;
             } else if (buscar_costo_Variable(tempID) == -1) {
@@ -116,8 +117,8 @@ bool registrar_costos_Variables(int num) {
     if (!escribir) return false;
 
     cout << "   ";
-    this_thread::sleep_for(chrono::milliseconds(500));
-    LLC::_colRESET();
+    Sleep(500);
+    _colRESET();
     return true;
 }
 
@@ -130,29 +131,29 @@ bool mostrar_costos_Fijos() {
 
     if (checkear_Vacio(num_costos_Fijos)) return true;
 
-    LLC::_colSET(LLC::cGREEN);
+    _colSET(cGREEN);
     cout << "\n   Mostrando costos fijos registrados...";
-    this_thread::sleep_for(chrono::milliseconds(800));
+    Sleep(800);
 
     cout << endl;
     for (int i = 0; i < num_costos_Fijos; i++) {
-        LLC::_colSET(LLC::cCYAN);
+        _colSET(cCYAN);
         cout << endl << "                              Costo Fijo #" << i+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        LLC::_colSET(LLC::cLIGHT_YELLOW);
+        _colSET(cLIGHT_YELLOW);
         cout << "   ID: " << registro_costos_Fijos[i].id << "\n";
         cout << "   Monto: C$" << registro_costos_Fijos[i].monto << "\n";
         cout << "   Descripción: " << registro_costos_Fijos[i].descripcion << endl;
         cout << "   ";
-        this_thread::sleep_for(chrono::milliseconds(800));
+        Sleep(800);
     }
 
-    LLC::_colSET(LLC::cCYAN);
+    _colSET(cCYAN);
     cout << endl << "   ***********************************************************************\n";
     cout << "   Presione 'Enter' para continuar...";
     cin.ignore();
     cin.get();
-    LLC::_colRESET();
+    _colRESET();
     return true;
 }
 
@@ -163,30 +164,30 @@ bool mostrar_costos_Variables() {
 
     if (checkear_Vacio(num_costos_Variables)) return true;
 
-    LLC::_colSET(LLC::cGREEN);
+    _colSET(cGREEN);
     cout << "\n   Mostrando costos variables registrados...";
-    this_thread::sleep_for(chrono::milliseconds(800));
+    Sleep(800);
 
     cout << endl;
     for (int i = 0; i < num_costos_Variables; i++) {
-        LLC::_colSET(LLC::cCYAN);
+        _colSET(cCYAN);
         cout << endl << "                            Costo Variable #" << i+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        LLC::_colSET(LLC::cLIGHT_YELLOW);
+        _colSET(cLIGHT_YELLOW);
         cout << "   ID: " << registro_costos_Variables[i].id << "\n";
         cout << "   Monto: C$" << registro_costos_Variables[i].monto << "\n";
         cout << "   Descripción: " << registro_costos_Variables[i].descripcion << "\n";
-        cout << "   Mes: "; LLC::_colSET(LLC::cTEAL); cout << registro_costos_Variables[i].mes << endl;
+        cout << "   Mes: "; _colSET(cTEAL); cout << registro_costos_Variables[i].mes << endl;
         cout << "   ";
-        this_thread::sleep_for(chrono::milliseconds(800));
+        Sleep(800);
     }
 
-    LLC::_colSET(LLC::cCYAN);
+    _colSET(cCYAN);
     cout << endl << "   ***********************************************************************\n";
     cout << "   Presione 'Enter' para continuar...";
     cin.ignore();
     cin.get();
-    LLC::_colRESET();
+    _colRESET();
     return true;
 }
 
@@ -206,36 +207,36 @@ bool editar_costo_Fijo() {
     pedir_Cstring("ID del costo fijo a editar", id, ID);
     indice = buscar_costo_Fijo(id);
 
-    LLC::_colSET(LLC::cTEAL);
+    _colSET(cTEAL);
     cout << "\n   Buscando costo fijo...";
-    this_thread::sleep_for(chrono::milliseconds(800));
-    LLC::_colRESET();
+    Sleep(800);
+    _colRESET();
 
     if (indice == -1) {
-        LLC::_colSET(LLC::cRED);
+        _colSET(cRED);
         cout << "\n   ERROR: ID ingresado no esta registrado...";
-        this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        Sleep(2250);
+        _colRESET();
         return true;
     } else if (indice == -2) return false;
 
     else if (indice >= 0) {
-        LLC::_colSET(LLC::cGREEN);
+        _colSET(cGREEN);
         cout << "\n   Costo fijo encontrado!";
-        this_thread::sleep_for(chrono::milliseconds(750));
-        LLC::_colSET(LLC::cCYAN);
+        Sleep(500);
+        _colSET(cCYAN);
         cout << endl << "\n                              Costo Fijo #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
         do {
-            LLC::_colSET(LLC::cLIGHT_YELLOW);
+            _colSET(cLIGHT_YELLOW);
             cout << "\n\n   ¿Qué información quiere editar?" << endl;
             cout << "   1. Monto\n   2. Descripción\n";
-            LLC::_colSET(LLC::cTEAL);
+            _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
 
             cout << endl;
-            LLC::_colRESET();
+            _colRESET();
             switch (info) {
                 case 1:
                     registro_costos_Fijos[indice].monto = pedir_float("monto (en C$)");
@@ -244,24 +245,24 @@ bool editar_costo_Fijo() {
                     pedir_Cstring("descripción", registro_costos_Fijos[indice].descripcion);
                     break;
                 default:
-                    LLC::_colSET(LLC::cRED);
+                    _colSET(cRED);
                     cout << "   Opción inválida...";
-                    this_thread::sleep_for(chrono::milliseconds(1000));
-                    LLC::_colRESET();
+                    Sleep(1000);
+                    _colRESET();
                     break;
             }
         } while (info < 1 || info > 2);
 
-        cout << "   "; this_thread::sleep_for(chrono::milliseconds(500));
+        cout << "   "; Sleep(500);
         escribir = escribir_Archivos("registro_costos_Fijos.txt");
         if (escribir) {
-            LLC::_colSET(LLC::cGREEN);
+            _colSET(cGREEN);
             cout << "\n   ***********************************************************************";
             cout << "\n                          Costo fijo editado...";
         } else return false;
         
-        this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        Sleep(2250);
+        _colRESET();
     }
 
     return true;
@@ -281,36 +282,36 @@ bool editar_costo_Variable() {
     pedir_Cstring("ID del costo variable a editar", id, ID);
     indice = buscar_costo_Variable(id);
 
-    LLC::_colSET(LLC::cTEAL);
+    _colSET(cTEAL);
     cout << "\n   Buscando costo variable...";
-    this_thread::sleep_for(chrono::milliseconds(800));
-    LLC::_colRESET();
+    Sleep(800);
+    _colRESET();
 
     if (indice == -1) {
-        LLC::_colSET(LLC::cRED);
+        _colSET(cRED);
         cout << "\n   ERROR: ID ingresado no esta registrado...";
-        this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        Sleep(2250);
+        _colRESET();
         return true;
     } else if (indice == -2) return false;
 
     else if (indice >= 0) {
-        LLC::_colSET(LLC::cGREEN);
+        _colSET(cGREEN);
         cout << "\n   Costo variable encontrado!";
-        this_thread::sleep_for(chrono::milliseconds(750));
-        LLC::_colSET(LLC::cCYAN);
+        Sleep(500);
+        _colSET(cCYAN);
         cout << endl << "\n                            Costo Variable #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
         do {
-            LLC::_colSET(LLC::cLIGHT_YELLOW);
+            _colSET(cLIGHT_YELLOW);
             cout << "\n\n   ¿Qué información quiere editar?" << endl;
             cout << "   1. Monto\n   2. Descripción\n   3. Mes\n";
-            LLC::_colSET(LLC::cTEAL);
+            _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
 
             cout << endl;
-            LLC::_colRESET();
+            _colRESET();
             switch (info) {
                 case 1:
                     registro_costos_Variables[indice].monto = pedir_float("monto (en C$)");
@@ -323,10 +324,10 @@ bool editar_costo_Variable() {
                         pedir_Cstring("mes", registro_costos_Variables[indice].mes, ID);
 
                         if (!checkear_mes(registro_costos_Variables[indice].mes)) {
-                            LLC::_colSET(LLC::cRED);
+                            _colSET(cRED);
                             cout << "   ERROR: Mes inválido...";
-                            LLC::_colRESET();
-                            this_thread::sleep_for(chrono::milliseconds(1500));
+                            _colRESET();
+                            Sleep(1500);
                             cout << endl;
                             continue;
                         } else break;
@@ -334,24 +335,24 @@ bool editar_costo_Variable() {
 
                     break;
                 default:
-                    LLC::_colSET(LLC::cRED);
+                    _colSET(cRED);
                     cout << "   Opción inválida...";
-                    this_thread::sleep_for(chrono::milliseconds(1000));
-                    LLC::_colRESET();
+                    Sleep(1000);
+                    _colRESET();
                     break;
             }
         } while (info < 1 || info > 3);
 
-        cout << "   "; this_thread::sleep_for(chrono::milliseconds(500));
-        LLC::_colSET(LLC::cGREEN);
+        cout << "   "; Sleep(500);
+        _colSET(cGREEN);
         escribir = escribir_Archivos("registro_costos_Variables.txt");
         if (escribir) {
             cout << "\n   ***********************************************************************";
             cout << "\n                          Costo variable editado...";
         } else return false;
         
-        this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        Sleep(2250);
+        _colRESET();
     }
 
     return true;
