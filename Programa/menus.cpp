@@ -109,6 +109,7 @@ int principal() {
                 this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
+        
     } while (option != 4);
 
     _colRESET();
@@ -219,6 +220,7 @@ int produccion() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
                 
                 _colRESET();
@@ -368,6 +370,7 @@ int clientes() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
 
                 _colRESET();
@@ -526,6 +529,7 @@ int finanzas() {
             case 4: break; //^^
 
             case 5:
+                system("cls || clear");
                 check = calcular_Ingresos();
 
                 if (!check) {
@@ -548,10 +552,12 @@ int finanzas() {
                     cout << "\n\n   Presione 'Enter' para continuar...";
                     cin.get();
                     _colRESET();
+                    limpiar_buffer();
                 }
 
                 break;
             case 6:
+                system("cls || clear");
                 check = calcular_Costos();
 
                 if (!check) {
@@ -572,6 +578,7 @@ int finanzas() {
                     cout << "\n\n   Presione 'Enter' para continuar...";
                     cin.get();
                     _colRESET();
+                    limpiar_buffer();
                 }
 
                 break;
@@ -720,6 +727,7 @@ int ventas() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
 
                 _colRESET();
@@ -861,6 +869,7 @@ int pendientes() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
 
                 _colRESET();
@@ -1018,6 +1027,7 @@ int costos_Fijos() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
 
                 _colRESET();
@@ -1169,6 +1179,7 @@ int costos_Variables() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
 
                 _colRESET();

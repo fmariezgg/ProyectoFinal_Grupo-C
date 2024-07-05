@@ -102,10 +102,47 @@ bool registrar_Ventas() {
             } else if (buscar_Cliente(temp_nombre, true) == -2) return false;
         }
 
-        tm *time = obtener_fecha(); //obtiene la fecha actual para registrar la venta
-        registro_Ventas[num_ventas].fecha.dia = time->tm_mday;
-        strcpy(registro_Ventas[num_ventas].fecha.mes, meses[time->tm_mon]); //usar el numero de mes como indice para retornar el nombre del mes
-        registro_Ventas[num_ventas].fecha.year = time->tm_year + 1900; //sumarle 1900 pq time->tm_year es el numero de años *desde* 1900
+        continuar("\n   ¿Desea ingresar la fecha manualmente? (si/no) ", input);
+
+        if (si_no(input) == 1) {
+            cout << endl;
+
+            while (true) {
+                pedir_Cstring("mes (en minúscula)", registro_Ventas[num_ventas].fecha.mes, ID);
+
+                if (checkear_mes(registro_Ventas[num_ventas].fecha.mes) < 0) {
+                    _colSET(cRED);
+                    cout << "   ERROR: Mes inválido...";
+                    _colRESET();
+                    this_thread::sleep_for(chrono::milliseconds(1500));
+                    cout << endl;
+                    continue;
+                } else break;
+            }
+
+            while (true) {
+                registro_Ventas[num_ventas].fecha.dia = pedir_int("día");
+                int num_mes = checkear_mes(registro_Ventas[num_ventas].fecha.mes);
+                if (registro_Ventas[num_ventas].fecha.dia > dias_meses[num_mes]) {
+                    _colSET(cRED);
+                    cout << "   ERROR: Día inválido para el mes ingresado...";
+                    _colRESET();
+                    this_thread::sleep_for(chrono::milliseconds(1500));
+                    cout << endl;
+                } else break;
+            }
+
+            registro_Ventas[num_ventas].fecha.year = pedir_int("año");
+        } else if (si_no(input) == 0) {
+            _colSET(cTEAL);
+            cout << "   De acuerdo, se usará la fecha actual...";
+            _colRESET();
+            cout << endl << endl;
+            tm *time = obtener_fecha(); //obtiene la fecha actual para registrar la venta
+            registro_Ventas[num_ventas].fecha.dia = time->tm_mday;
+            strcpy(registro_Ventas[num_ventas].fecha.mes, meses[time->tm_mon]); //usar el numero de mes como indice para retornar el nombre del mes
+            registro_Ventas[num_ventas].fecha.year = time->tm_year + 1900; //sumarle 1900 pq time->tm_year es el numero de años *desde* 1900
+        }        
         
         registro_Ventas[num_ventas].cantidad_leche = pedir_float("cantidad de leche (en galones)");
         registro_Ventas[num_ventas].monto = precio_galon * registro_Ventas[num_ventas].cantidad_leche; //calcular monto automaticamente
@@ -121,14 +158,15 @@ bool registrar_Ventas() {
             cout << "   Pago pendiente registrado...";
             this_thread::sleep_for(chrono::milliseconds(500));
             _colRESET();
-            cout << endl;
+            cout << endl << endl;
             num_pendientes++;
         }
 
         num_ventas++;
-        continuar("ventas", input);
+        strcpy(input, "");
+        continuar("   ¿Desea registrar más ventas? (si/no) ", input);
 
-    } while (((strcmp(input, "n") != 0) || (strcmp(input, "N") != 0) || (strcmp(input, "no") != 0) || (strcmp(input, "No") != 0) || (strcmp(input, "nO") != 0) || (strcmp(input, "NO") != 0)));
+    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
     escribir_Ventas = escribir_Archivos("registro_Ventas.txt");
     escribir_Pendientes = escribir_Archivos("registro_Pendientes.txt");
@@ -184,7 +222,6 @@ bool mostrar_Ventas() {
 
 bool mostrar_Pendientes() {
     system("cls || clear");
-    char mes[ID] = ""; //igual que en mostrar_Ventas()
     bool leer = leer_Archivos("registro_Pendientes.txt");
     if (!leer) return false;
 
@@ -201,7 +238,7 @@ bool mostrar_Pendientes() {
         cout << "   ***********************************************************************\n";
         _colSET(cLIGHT_YELLOW);
         cout << "   ID de venta: " << registro_Pendientes[i].id_venta << "\n";
-        cout << "   Fecha: " << registro_Pendientes[i].fecha.dia << " de " << mes << ", " << registro_Pendientes[i].fecha.year << "\n";
+        cout << "   Fecha: " << registro_Pendientes[i].fecha.dia << " de " << registro_Pendientes[i].fecha.mes << ", " << registro_Pendientes[i].fecha.year << "\n";
         cout << "   Nombre de cliente: " << registro_Pendientes[i].nombre_cliente << "\n";
         cout << "   Monto a pagar: C$" << registro_Pendientes[i].monto << endl;
         cout << "   ";
@@ -314,7 +351,7 @@ bool editar_Venta() {
         do {
             _colSET(cLIGHT_YELLOW);
             cout << "\n\n   ¿Qué información quiere editar?" << endl;
-            cout << "   1. Nombre del cliente\n   2. Cantidad de leche comprada\n   3. Monto\n   4. ¿Está pagada?\n";
+            cout << "   1. Fecha\n   2. Nombre del cliente\n   3. Cantidad de leche comprada\n   4. Monto\n   5. ¿Está pagada?\n";
             _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
@@ -328,6 +365,42 @@ bool editar_Venta() {
             _colRESET();
             switch (info) {
                 case 1:
+                    cout << endl;
+                    _colSET(cPINK);
+                    cout << "   Fecha actual: " << registro_Ventas[indice].fecha.dia << " de " << registro_Ventas[indice].fecha.mes << ", " << registro_Ventas[indice].fecha.year << endl;
+
+                    while (true) {
+                        pedir_Cstring("mes (en minúscula)", registro_Ventas[indice].fecha.mes, ID);
+
+                        if (checkear_mes(registro_Ventas[indice].fecha.mes) < 0) {
+                            _colSET(cRED);
+                            cout << "   ERROR: Mes inválido...";
+                            _colRESET();
+                            this_thread::sleep_for(chrono::milliseconds(1500));
+                            cout << endl;
+                            continue;
+                        } else break;
+                    }
+
+                    while (true) {
+                        registro_Ventas[indice].fecha.dia = pedir_int("día");
+                        int num_mes = checkear_mes(registro_Ventas[indice].fecha.mes);
+                        if (registro_Ventas[indice].fecha.dia > dias_meses[num_mes]) {
+                            _colSET(cRED);
+                            cout << "   ERROR: Día inválido para el mes ingresado...";
+                            _colRESET();
+                            this_thread::sleep_for(chrono::milliseconds(1500));
+                            cout << endl;
+                        } else break;
+                    }
+
+                    registro_Ventas[indice].fecha.year = pedir_int("año");
+                    
+                    //si la venta no esta pagada, tambien actualizar la fecha en el registro de pendientes
+                    if (!registro_Ventas[indice].pagada) registro_Pendientes[indice_pendiente].fecha = registro_Ventas[indice].fecha;
+
+                    break;
+                case 2:
                     while (true) {
                         pedir_Cstring("nombre del cliente", temp_nombre);
 
@@ -347,7 +420,7 @@ bool editar_Venta() {
                     if (!registro_Ventas[indice].pagada) strcpy(registro_Pendientes[indice_pendiente].nombre_cliente, registro_Ventas[indice].nombre_cliente);
 
                     break;
-                case 2:
+                case 3:
                     registro_Ventas[indice].cantidad_leche = pedir_float("cantidad de leche (en galones)");
 
                     if (precio_galon == 0.00) { //si el precio es 0, no se puede calcular la cantidad de leche
@@ -363,7 +436,7 @@ bool editar_Venta() {
                     //si no esta pagada, tambien actualizar el monto en el registro de pendientes
                     if (!registro_Ventas[indice].pagada && indice_pendiente >= 0) registro_Pendientes[indice_pendiente].monto = registro_Ventas[indice].monto;
                     break;
-                case 3:
+                case 4:
                     registro_Ventas[indice].monto = pedir_float("monto (en C$)");
 
                     if (precio_galon == 0.00) {
@@ -380,7 +453,7 @@ bool editar_Venta() {
                     if (!registro_Ventas[indice].pagada && indice_pendiente >= 0) registro_Pendientes[indice_pendiente].monto = registro_Ventas[indice].monto;
 
                     break;
-                case 4:
+                case 5:
                     registro_Ventas[indice].pagada = pedir_pagada();
                     
                     //si esta pagada, la quita del registro de pendientes, y si no, la agrega
@@ -401,7 +474,7 @@ bool editar_Venta() {
                     _colRESET();
                     break;
             }
-        } while (info < 1 || info > 4);
+        } while (info < 1 || info > 5);
 
         cout << "   ";
         this_thread::sleep_for(chrono::milliseconds(500));
@@ -462,7 +535,7 @@ bool editar_Pendiente() {
         do {
             _colSET(cLIGHT_YELLOW);
             cout << "\n\n   ¿Qué información quiere editar?" << endl;
-            cout << "   1. Nombre del cliente\n   2. Monto de la compra\n";
+            cout << "   1. Fecha\n   2. Nombre del cliente\n   3. Monto de la compra\n";
             _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
@@ -476,6 +549,42 @@ bool editar_Pendiente() {
             _colRESET();
             switch (info) {
                 case 1:
+                    cout << endl;
+                    _colSET(cPINK);
+                    cout << "   Fecha actual: " << registro_Pendientes[indice].fecha.dia << " de " << registro_Pendientes[indice].fecha.mes << ", " << registro_Pendientes[indice].fecha.year << endl;
+
+                    while (true) {
+                        pedir_Cstring("mes (en minúscula)", registro_Pendientes[indice].fecha.mes, ID);
+
+                        if (checkear_mes(registro_Pendientes[indice].fecha.mes) < 0) {
+                            _colSET(cRED);
+                            cout << "   ERROR: Mes inválido...";
+                            _colRESET();
+                            this_thread::sleep_for(chrono::milliseconds(1500));
+                            cout << endl;
+                            continue;
+                        } else break;
+                    }
+
+                    while (true) {
+                        registro_Pendientes[indice].fecha.dia = pedir_int("día");
+                        int num_mes = checkear_mes(registro_Pendientes[indice].fecha.mes);
+                        if (registro_Pendientes[indice].fecha.dia > dias_meses[num_mes]) {
+                            _colSET(cRED);
+                            cout << "   ERROR: Día inválido para el mes ingresado...";
+                            _colRESET();
+                            this_thread::sleep_for(chrono::milliseconds(1500));
+                            cout << endl;
+                        } else break;
+                    }
+
+                    registro_Pendientes[indice].fecha.year = pedir_int("año");
+                    
+                    //tambien actualizar la fecha en el registro de ventas
+                    registro_Ventas[indice_venta].fecha = registro_Pendientes[indice].fecha;
+
+                    break;
+                case 2:
                     while (true) { 
                         pedir_Cstring("nombre del cliente", temp_nombre);
 
@@ -496,7 +605,7 @@ bool editar_Pendiente() {
                     else if (indice_venta == -2) return false;
 
                     break;
-                case 2:
+                case 3:
                     registro_Pendientes[indice].monto = pedir_float("monto a pagar (en C$)");
 
                     indice_venta = buscar_Venta(id);
@@ -522,7 +631,7 @@ bool editar_Pendiente() {
                     _colRESET();
                     break;
             }
-        } while (info < 1 || info > 4);
+        } while (info < 1 || info > 3);
 
         cout << "   ";
         this_thread::sleep_for(chrono::milliseconds(500));

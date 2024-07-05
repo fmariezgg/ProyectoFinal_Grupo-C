@@ -54,7 +54,7 @@ bool registrar_Vacas() {
         pedir_Cstring("estado de salud", registro_Vacas[num_vacas].estado_salud);
         
         num_vacas++;
-        continuar("vacas", input);
+        continuar("\n   ¿Desea registrar más vacas? (si/no) ", input);
 
     } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 

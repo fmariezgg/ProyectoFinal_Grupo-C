@@ -59,9 +59,9 @@ bool registrar_Clientes() {
         pedir_Cstring("contacto", registro_Clientes[num_clientes].contacto);
         
         num_clientes++;
-        continuar("clientes", input);
+        continuar("\n   ¿Desea registrar más clientes? (si/no) ", input);
 
-    } while (((strcmp(input, "n") != 0) || (strcmp(input, "N") != 0) || (strcmp(input, "no") != 0) || (strcmp(input, "No") != 0) || (strcmp(input, "nO") != 0) || (strcmp(input, "NO") != 0)));
+    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
 
     escribir = escribir_Archivos("registro_Clientes.txt");
