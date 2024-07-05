@@ -1,18 +1,20 @@
-#ifndef FUNCIONES_EXTERNAS_H  //como estoy incluyendo este .h en varios archivos, a la hora de incluir esos otros archivos en prototipos.h
+#ifndef FUNCIONES_EXTERNAS_H  //como se esta incluyendo este .h en varios archivos, a la hora de incluir esos otros archivos en prototipos.h
 #define FUNCIONES_EXTERNAS_H //van a haber redefiniciones de las funciones de este archivo, y esto de ifndef evita que pase eso y solo se incluye una vez
 
 #include <iostream>
 #include <fstream>
 #include <cstring> //funciones de C-strings
 #include <ctime> //para obtener la fecha y hora actuales
-#include <chrono> //esto y <thread> se ocupan para hacer lo mismo que Sleep() sin tener que usar windows.h
-#include <thread>
 #include "titulos.h"
 #include "variables.h"
 using namespace std;
+using namespace LLC;
 
 //hace exactamente lo que dice (se usa en registro_Ventas() para guardar la fecha automaticamente)
 tm* obtener_fecha();
+
+//limpia el input buffer (cin) para evitar errores
+void limpiar_buffer();
 
 /*esta es una funcion generica que se va a usar para pedir todos los strings que se van a ocupar en el sistema.
 -- dato es el nombre de lo que se va a pedir (como nombre, id, etc.)
@@ -26,12 +28,14 @@ int pedir_int(const char dato[MAX_INPUT]);
 float pedir_float(const char dato[MAX_INPUT]);
 
 //esta es para pedir si el cliente ha pagado su compra o no
-//la tengo aqui pq no quiero tener la logica de validar el input en registrar_Ventas()
 bool pedir_pagada();
 
 //en varias funciones se checkea si el registro esta vacio antes de hacer algo,
 //entonces para no estar repitiendo el mismo codigo, lo puse en su propia funcion
 bool checkear_Vacio(int num_registro);
+
+//se ocupa en editar_costo_Variable para checkear si el mes ingresado es valido o no
+bool checkear_mes(const char* mes);
 
 //funciones para abrir/leer/escribir a archivos
 bool leer_Archivos(const char nombre_archivo[MAX_INPUT]);
@@ -49,7 +53,7 @@ tm* obtener_fecha() {
 
 void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_INPUT) {
     while (true) {
-        LLC::_colSET(LLC::cLIGHT_YELLOW);
+        _colSET(LLC::cLIGHT_YELLOW);
         cout << "   Ingresar " << dato << ": ";
         if (cin.peek() == '\n') cin.ignore();
         cin.getline(input, longitud);
@@ -57,29 +61,29 @@ void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_I
         if (cin.fail()) {
             cin.clear();
             while ((cin.get() != '\n') && (!cin.eof())); //limpia el resto de los caracteres que quedaron en el stream
-            LLC::_colSET(LLC::cRED);
-            cout << "\n   ERROR: " << dato << " ingresado es demasiado largo...\n\n";
+            _colSET(LLC::cRED);
+            cout << "\n   ERROR: dato ingresado es demasiado largo...\n\n";
         } else break;
     }
 
-    LLC::_colRESET();
+    _colRESET();
 }
 
 int pedir_int(const char dato[MAX_INPUT]) {
     int num = 0;
-    LLC::_colSET(LLC::cLIGHT_YELLOW);
+    _colSET(LLC::cLIGHT_YELLOW);
     cout << "   Ingresar " << dato << ": ";
     cin >> num;
-    LLC::_colRESET();
+    _colRESET();
     return num;
 }
 
 float pedir_float(const char dato[MAX_INPUT]) {
     float num = 0.00;
-    LLC::_colSET(LLC::cLIGHT_YELLOW);
+    _colSET(LLC::cLIGHT_YELLOW);
     cout << "   Ingresar " << dato << ": ";
     cin >> num;
-    LLC::_colRESET();
+    _colRESET();
     return num;
 }
 
@@ -89,7 +93,7 @@ bool pedir_pagada() {
     char input[3] = "";
 
     while (true) {
-        LLC::_colSET(LLC::cLIGHT_YELLOW);
+        _colSET(LLC::cLIGHT_YELLOW);
         cout << "   ¿Ha pagado el cliente? (si/no) ";
         cin >> input;
 
@@ -98,25 +102,33 @@ bool pedir_pagada() {
         } else if ((strcmp(input, "n") == 0) || (strcmp(input, "N") == 0) || (strcmp(input, "no") == 0) || (strcmp(input, "No") == 0) || (strcmp(input, "nO") == 0) || (strcmp(input, "NO") == 0)) {
             return false;
         } else {
-            LLC::_colSET(LLC::cRED);
+            _colSET(LLC::cRED);
             cout << "\n   ERROR: respuesta inválida...\n\n";
             continue;
         }
     }
 
-    LLC::_colRESET();
+    _colRESET();
 }
 
-bool checkear_Vacio(int nun_registro) {
-    if (nun_registro == 0) {
-        LLC::_colSET(LLC::cRED);
+bool checkear_Vacio(int num_registro) {
+    if (num_registro == 0) {
+        _colSET(LLC::cRED);
         cout << "\n   El registro esta vacío...";
-        this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        Sleep(2250);
+        _colRESET();
         return true;
     }
 
     return false;
+}
+
+bool checkear_mes(const char* mes) {
+    for (int i = 0; i < 12; i++) {
+        if (strcmp(mes, meses[i]) == 0) return true;
+    }
+
+    return false; //si no se ha retornado, el mes no es valido
 }
 
 //***************************************************************************************************
@@ -133,11 +145,11 @@ bool leer_Archivos(const char nombre_archivo[MAX_INPUT]) {
         file.open(nombre_archivo, ios::in); //cerrar el archivo (pq esta en ios::out), y volver a abrirlo en modo de leer
         if (!file) return false; //si todavia da error, ni modo, salir y retornar false
 
-        LLC::_colSET(LLC::cRED);
+        _colSET(LLC::cRED);
         cout << "\n   " << nombre_archivo << " no encontrado...";
-        this_thread::sleep_for(chrono::milliseconds(500)); LLC::_colSET(LLC::cGREEN);
+        Sleep(500); _colSET(LLC::cGREEN);
         cout << "\n   Creando " << nombre_archivo << "...";
-        this_thread::sleep_for(chrono::milliseconds(1000)); LLC::_colRESET();
+        Sleep(1000); _colRESET();
         cout << endl;
     }
 
@@ -346,7 +358,7 @@ bool escribir_Archivos(const char nombre_archivo[MAX_INPUT]) {
         //escribir costos variables
         else if (strcmp(nombre_archivo, "registro_costos_Variables.txt") == 0) {
             for (int i = 0; i < num_costos_Variables; i++) {
-                file << registro_costos_Fijos[i].id << "\n";
+                file << registro_costos_Variables[i].id << "\n";
                 file << registro_costos_Variables[i].monto << "\n";
                 file << registro_costos_Variables[i].descripcion << "\n";
                 file << registro_costos_Variables[i].mes << "\n";

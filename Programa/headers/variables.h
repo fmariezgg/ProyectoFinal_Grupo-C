@@ -55,8 +55,13 @@ COSTO registro_costos_Variables[MAX_REGISTER];
 //para convertir lo que retorna time->tm_mon a un string
 const char* meses[] = { "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre" };
 
-char pausar = '\0'; //se usa para pausar el programa (en vez de system("pause"))
 float precio_galon = 0.00;
+
+//salidas del sistema:
+float ingresos_totales = 0;
+float costos_totales = 0;
+float utilidad = 0;
+float produccion_total = 0;
 
 //contadores de elementos de registros:
 int num_vacas = 0;
@@ -65,7 +70,3 @@ int num_ventas = 0;
 int num_pendientes = 0;
 int num_costos_Fijos = 0;
 int num_costos_Variables = 0;
-float ingresos_totales = 0;
-float costos_totales = 0;
-float utilidad = 0;
-float produccion_total = 0;
