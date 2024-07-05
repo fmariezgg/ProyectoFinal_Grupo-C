@@ -32,7 +32,7 @@ bool registrar_Clientes() {
     leer = leer_Archivos("registro_Clientes.txt");
     if (!leer) return false;
 
-    do{
+    do {
         _colSET(cCYAN);
         cout << endl << "                                Cliente #" << num_clientes+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
@@ -60,7 +60,7 @@ bool registrar_Clientes() {
         num_clientes++;
 
         _colSET(cPINK);
-        cout << "\n   ¿Desea registrar otro cliente? (s/n): ";
+        cout << "\n   ¿Desea registrar otro cliente? (si/no): ";
         cin >> input;
     } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
@@ -69,7 +69,7 @@ bool registrar_Clientes() {
     if (!escribir) return false;
 
     cout << "   ";
-   this_thread::sleep_for(chrono::milliseconds(500));
+    this_thread::sleep_for(chrono::milliseconds(500));
     _colRESET();
     return true;
 }
@@ -85,7 +85,7 @@ bool mostrar_Clientes() {
 
     _colSET(cGREEN);
     cout << "\n   Mostrando clientes registrados...";
-   this_thread::sleep_for(chrono::milliseconds(500));
+    this_thread::sleep_for(chrono::milliseconds(500));
 
     cout << endl;
     for (int i = 0; i < num_clientes; i++) {
@@ -142,7 +142,7 @@ bool editar_Cliente() {
     else if (indice >= 0) {
         _colSET(cGREEN);
         cout << "\n   Cliente encontrado!";
-       this_thread::sleep_for(chrono::milliseconds(500));
+        this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cCYAN);
         cout << endl << "\n                                Cliente #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
@@ -175,7 +175,8 @@ bool editar_Cliente() {
             }
         } while (info < 1 || info > 3);
 
-        cout << "   ";this_thread::sleep_for(chrono::milliseconds(500));
+        cout << "   ";
+        this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cGREEN);
         escribir = escribir_Archivos("registro_Clientes.txt");
         if (escribir) {

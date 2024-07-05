@@ -74,7 +74,7 @@ bool ingresar_Precio() {
     if (!escribir) return false;
 
     cout << "   ";
-   this_thread::sleep_for(chrono::milliseconds(500));
+    this_thread::sleep_for(chrono::milliseconds(500));
     _colSET(cGREEN);
     cout << "Precio actualizado a: C$" << precio_galon << "...";
     this_thread::sleep_for(chrono::milliseconds(1500));

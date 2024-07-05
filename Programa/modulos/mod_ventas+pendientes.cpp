@@ -52,12 +52,12 @@ bool registrar_Ventas() {
         _colSET(cGREEN);
         if (check) cout << "   Precio guardado...";
         else return false;
-       this_thread::sleep_for(chrono::milliseconds(500));
+        this_thread::sleep_for(chrono::milliseconds(500));
         cout << endl;
         _colRESET();
     }
 
-    do{
+    do {
         _colSET(cCYAN);
         cout << endl << "                                  Venta #" << num_ventas+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
@@ -119,7 +119,7 @@ bool registrar_Ventas() {
             registro_Pendientes[num_pendientes].monto = registro_Ventas[num_ventas].monto;
             _colSET(cGREEN);
             cout << "   Pago pendiente registrado...";
-           this_thread::sleep_for(chrono::milliseconds(500));
+            this_thread::sleep_for(chrono::milliseconds(500));
             _colRESET();
             cout << endl;
             num_pendientes++;
@@ -137,7 +137,7 @@ bool registrar_Ventas() {
     if (!escribir_Ventas || !escribir_Pendientes) return false; //lo mismo que las operaciones de lectura
 
     cout << "   ";
-   this_thread::sleep_for(chrono::milliseconds(500));
+    this_thread::sleep_for(chrono::milliseconds(500));
     _colRESET();
     return true;
 }
@@ -309,7 +309,7 @@ bool editar_Venta() {
     else if (indice >= 0) {
         _colSET(cGREEN);
         cout << "\n   Venta encontrada!";
-       this_thread::sleep_for(chrono::milliseconds(500));
+        this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cCYAN);
         cout << endl << "\n                                  Venta #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
@@ -400,7 +400,8 @@ bool editar_Venta() {
             }
         } while (info < 1 || info > 4);
 
-        cout << "   ";this_thread::sleep_for(chrono::milliseconds(500));
+        cout << "   ";
+        this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cGREEN);
         escribir_Venta = escribir_Archivos("registro_Ventas.txt");
         escribir_Pendiente = escribir_Archivos("registro_Pendientes.txt");
@@ -515,7 +516,8 @@ bool editar_Pendiente() {
             }
         } while (info < 1 || info > 4);
 
-        cout << "   ";this_thread::sleep_for(chrono::milliseconds(500));
+        cout << "   ";
+        this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cGREEN);
         escribir_Pendiente = escribir_Archivos("registro_Pendientes.txt");
         escribir_Venta = escribir_Archivos("registro_Ventas.txt");

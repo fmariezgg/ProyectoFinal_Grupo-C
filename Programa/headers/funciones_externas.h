@@ -52,8 +52,10 @@ tm* obtener_fecha() {
 }
 
 void limpiar_buffer() {
-    char clear = '\0';
-    while ((clear = cin.get()) != '\n' && clear != EOF);
+    cin.clear();
+    while ((cin.get() != '\n') && (!cin.eof())) {
+        //limpia el buffer de cin hasta que se encuentre un salto de linea o el final del archivo
+    }
 }
 
 //***************************************************************************************************
@@ -66,8 +68,7 @@ void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_I
         cin.getline(input, longitud);
 
         if (cin.fail()) {
-            cin.clear();
-            while ((cin.get() != '\n') && (!cin.eof())); //limpia el resto de los caracteres que quedaron en el stream
+            limpiar_buffer(); //limpia el resto de los caracteres que quedaron en el stream
             _colSET(LLC::cRED);
             cout << "\n   ERROR: dato ingresado es demasiado largo...\n\n";
         } else break;
@@ -154,9 +155,9 @@ bool leer_Archivos(const char nombre_archivo[MAX_INPUT]) {
 
         _colSET(LLC::cRED);
         cout << "\n   " << nombre_archivo << " no encontrado...";
-       this_thread::sleep_for(chrono::milliseconds(500)); _colSET(LLC::cGREEN);
+        this_thread::sleep_for(chrono::milliseconds(500)); _colSET(LLC::cGREEN);
         cout << "\n   Creando " << nombre_archivo << "...";
-       this_thread::sleep_for(chrono::milliseconds(1000)); _colRESET();
+        this_thread::sleep_for(chrono::milliseconds(1000)); _colRESET();
         cout << endl;
     }
 

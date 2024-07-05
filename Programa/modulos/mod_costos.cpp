@@ -35,7 +35,7 @@ bool registrar_costos_Fijos() {
     leer = leer_Archivos("registro_costos_Fijos.txt");
     if (!leer) return false;
 
-    do{
+    do {
         _colSET(cCYAN);
         cout << endl << "                              Costo Fijo #" << num_costos_Fijos+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
@@ -62,7 +62,7 @@ bool registrar_costos_Fijos() {
         num_costos_Fijos++;
 
         _colSET(cPINK);
-        cout << "\n   ¿Desea registrar otra vaca? (s/n): ";
+        cout << "\n   ¿Desea registrar otra costo? (si/no): ";
         cin >> input;
     } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
@@ -70,7 +70,7 @@ bool registrar_costos_Fijos() {
     if (!escribir) return false;
 
     cout << "   ";
-   this_thread::sleep_for(chrono::milliseconds(500));
+    this_thread::sleep_for(chrono::milliseconds(500));
     _colRESET();
     return true;
 }
@@ -84,7 +84,7 @@ bool registrar_costos_Variables() {
     leer = leer_Archivos("registro_costos_Variables.txt");
     if (!leer) return false;
 
-    do{
+    do {
         _colSET(cCYAN);
         cout << endl << "                            Costo Variable #" << num_costos_Variables+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
@@ -117,7 +117,7 @@ bool registrar_costos_Variables() {
         num_costos_Variables++;
 
         _colSET(cPINK);
-        cout << "\n   ¿Desea registrar otra vaca? (s/n): ";
+        cout << "\n   ¿Desea registrar otra costo? (si/no): ";
         cin >> input;
     } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
@@ -125,7 +125,7 @@ bool registrar_costos_Variables() {
     if (!escribir) return false;
 
     cout << "   ";
-   this_thread::sleep_for(chrono::milliseconds(500));
+    this_thread::sleep_for(chrono::milliseconds(500));
     _colRESET();
     return true;
 }
@@ -231,7 +231,7 @@ bool editar_costo_Fijo() {
     else if (indice >= 0) {
         _colSET(cGREEN);
         cout << "\n   Costo fijo encontrado!";
-       this_thread::sleep_for(chrono::milliseconds(500));
+        this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cCYAN);
         cout << endl << "\n                              Costo Fijo #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
@@ -261,7 +261,8 @@ bool editar_costo_Fijo() {
             }
         } while (info < 1 || info > 2);
 
-        cout << "   ";this_thread::sleep_for(chrono::milliseconds(500));
+        cout << "   ";
+        this_thread::sleep_for(chrono::milliseconds(500));
         escribir = escribir_Archivos("registro_costos_Fijos.txt");
         if (escribir) {
             _colSET(cGREEN);
@@ -306,7 +307,7 @@ bool editar_costo_Variable() {
     else if (indice >= 0) {
         _colSET(cGREEN);
         cout << "\n   Costo variable encontrado!";
-       this_thread::sleep_for(chrono::milliseconds(500));
+        this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cCYAN);
         cout << endl << "\n                            Costo Variable #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
@@ -351,7 +352,8 @@ bool editar_costo_Variable() {
             }
         } while (info < 1 || info > 3);
 
-        cout << "   ";this_thread::sleep_for(chrono::milliseconds(500));
+        cout << "   ";
+        this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cGREEN);
         escribir = escribir_Archivos("registro_costos_Variables.txt");
         if (escribir) {

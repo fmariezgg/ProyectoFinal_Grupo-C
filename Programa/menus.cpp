@@ -50,6 +50,7 @@ int principal() {
         cout << "\n   4. Regresar a pantalla principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
+        limpiar_buffer();
         cin >> option;
         _colRESET();
 
@@ -122,6 +123,7 @@ int produccion() {
         cout << "\n   7. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
+        limpiar_buffer();
         cin >> option;
         _colRESET();
 
@@ -198,7 +200,6 @@ int produccion() {
                     _colSET(cCYAN);
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
-                    limpiar_buffer();
                     cin.get();
                 }
                 
@@ -277,6 +278,7 @@ int clientes() {
         cout << "\n   6. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
+        limpiar_buffer();
         cin >> option;
         _colRESET();
 
@@ -343,7 +345,6 @@ int clientes() {
                     _colSET(cCYAN);
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
-                    limpiar_buffer();
                     cin.get();
                 }
 
@@ -432,6 +433,7 @@ int finanzas() {
         cout << "\n   10. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
+        limpiar_buffer();
         cin >> option;
         _colRESET();
 
@@ -518,7 +520,6 @@ int finanzas() {
                     cout << "C$" << ingresos_totales;
                     _colSET(cGRAY);
                     cout << "\n\n   Presione 'Enter' para continuar...";
-                    cin.ignore();
                     cin.get();
                     _colRESET();
                 }
@@ -543,7 +544,6 @@ int finanzas() {
                     cout << "C$" << costos_totales;
                     _colSET(cGRAY);
                     cout << "\n\n   Presione 'Enter' para continuar...";
-                    cin.ignore();
                     cin.get();
                     _colRESET();
                 }
@@ -773,6 +773,7 @@ int pendientes() {
         cout << "   6. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
+        limpiar_buffer();
         cin >> option;
 
         switch (option) {
@@ -910,6 +911,7 @@ int costos_Fijos() {
         cout << "   8. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
+        limpiar_buffer();
         cin >> option;
         _colRESET();
 
@@ -1055,6 +1057,7 @@ int costos_Variables() {
         cout << "   8. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
+        limpiar_buffer();
         cin >> option;
         _colRESET();
 
