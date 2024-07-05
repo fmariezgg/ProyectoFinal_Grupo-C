@@ -40,7 +40,7 @@ bool registrar_Vacas() {
                 _colSET(cRED);
                 cout << "   ERROR: ID ya registrado...";
                 _colRESET();
-                Sleep(1500);
+                this_thread::sleep_for(chrono::milliseconds(1500));
                 cout << endl;
                 continue; //si se encontro, volver a pedirlo
             } else if (buscar_Vaca(tempID) == -1) {
@@ -63,7 +63,7 @@ bool registrar_Vacas() {
     if (!escribir) return false;
 
     cout << "   ";
-    Sleep(500);
+   this_thread::sleep_for(chrono::milliseconds(500));
     _colRESET();
     return true; //si no se ha retornado, significa que las operaciones de leer y escribir funcionaron bien y se guardaron los datos
 }
@@ -79,7 +79,7 @@ bool mostrar_Vacas() {
 
     _colSET(cGREEN);
     cout << "\n   Mostrando vacas registradas...";
-    Sleep(800);
+    this_thread::sleep_for(chrono::milliseconds(800));
 
     cout << endl;
     for (int i = 0; i < num_vacas; i++) {
@@ -92,7 +92,7 @@ bool mostrar_Vacas() {
         cout << "   Producción diaria: " << registro_Vacas[i].prod_diaria << " galón(es)\n";
         cout << "   Estado de salud: " << registro_Vacas[i].estado_salud << endl;
         cout << "   "; //todos los espacios y endl's asi raros son por estetica
-        Sleep(800);
+        this_thread::sleep_for(chrono::milliseconds(800));
     }
 
     _colSET(cCYAN);
@@ -124,13 +124,13 @@ bool editar_Vaca() {
 
     _colSET(cTEAL);
     cout << "\n   Buscando vaca...";
-    Sleep(800);
+    this_thread::sleep_for(chrono::milliseconds(800));
     _colRESET();
 
     if (indice == -1) { //por si no se encontro el id
         _colSET(cRED);
         cout << "\n   ERROR: ID ingresado no esta registrado...";
-        Sleep(2250);
+        this_thread::sleep_for(chrono::milliseconds(2250));
         _colRESET();
         return true;
     } else if (indice == -2) return false;
@@ -138,7 +138,7 @@ bool editar_Vaca() {
     else if (indice >= 0) {
         _colSET(cGREEN);
         cout << "\n   Vaca encontrada!";
-        Sleep(500);
+       this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cCYAN);
         cout << endl << "\n                                  Vaca #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
@@ -165,13 +165,13 @@ bool editar_Vaca() {
                 default:
                     _colSET(cRED);
                     cout << "   Opción inválida...";
-                    Sleep(1000);
+                    this_thread::sleep_for(chrono::milliseconds(1000));
                     _colRESET();
                     break;
             }
         } while (info < 1 || info > 3); //repetir mientras que la opcion que se haya ingresado no sea valida
 
-        cout << "   "; Sleep(500);
+        cout << "   ";this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cGREEN);
         escribir = escribir_Archivos("registro_Vacas.txt");
         if (escribir) {
@@ -180,7 +180,7 @@ bool editar_Vaca() {
             cout << "\n                              Vaca editada...";
         } else return false;
         
-        Sleep(2250);
+        this_thread::sleep_for(chrono::milliseconds(2250));
         _colRESET();
     }
 

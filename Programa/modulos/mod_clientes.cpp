@@ -45,7 +45,7 @@ bool registrar_Clientes() {
                 _colSET(cRED);
                 cout << "   ERROR: ID ya registrado...";
                 _colRESET();
-                Sleep(1500);
+                this_thread::sleep_for(chrono::milliseconds(1500));
                 cout << endl;
                 continue;
             } else if (buscar_Cliente(tempID, false) == -1) {
@@ -69,7 +69,7 @@ bool registrar_Clientes() {
     if (!escribir) return false;
 
     cout << "   ";
-    Sleep(500);
+   this_thread::sleep_for(chrono::milliseconds(500));
     _colRESET();
     return true;
 }
@@ -85,7 +85,7 @@ bool mostrar_Clientes() {
 
     _colSET(cGREEN);
     cout << "\n   Mostrando clientes registrados...";
-    Sleep(500);
+   this_thread::sleep_for(chrono::milliseconds(500));
 
     cout << endl;
     for (int i = 0; i < num_clientes; i++) {
@@ -98,7 +98,7 @@ bool mostrar_Clientes() {
         cout << "   Dirección: " << registro_Clientes[i].direccion << "\n";
         cout << "   Contacto: " << registro_Clientes[i].contacto << endl;
         cout << "   ";
-        Sleep(800);
+        this_thread::sleep_for(chrono::milliseconds(800));
     }
 
     _colSET(cCYAN);
@@ -128,13 +128,13 @@ bool editar_Cliente() {
 
     _colSET(cTEAL);
     cout << "\n   Buscando cliente...";
-    Sleep(800);
+    this_thread::sleep_for(chrono::milliseconds(800));
     _colRESET();
 
     if (indice == -1) {
         _colSET(cRED);
         cout << "\n   ERROR: ID ingresado no esta registrado...";
-        Sleep(2250);
+        this_thread::sleep_for(chrono::milliseconds(2250));
         _colRESET();
         return true;
     } else if (indice == -2) return false;
@@ -142,7 +142,7 @@ bool editar_Cliente() {
     else if (indice >= 0) {
         _colSET(cGREEN);
         cout << "\n   Cliente encontrado!";
-        Sleep(500);
+       this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cCYAN);
         cout << endl << "\n                                Cliente #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
@@ -169,13 +169,13 @@ bool editar_Cliente() {
                 default:
                     _colSET(cRED);
                     cout << "   Opción inválida...";
-                    Sleep(1000);
+                    this_thread::sleep_for(chrono::milliseconds(1000));
                     _colRESET();
                     break;
             }
         } while (info < 1 || info > 3);
 
-        cout << "   "; Sleep(500);
+        cout << "   ";this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cGREEN);
         escribir = escribir_Archivos("registro_Clientes.txt");
         if (escribir) {
@@ -184,7 +184,7 @@ bool editar_Cliente() {
             cout << "\n                              Cliente editado...";
         } else return false;
         
-        Sleep(2250);
+        this_thread::sleep_for(chrono::milliseconds(2250));
         _colRESET();
     }
 

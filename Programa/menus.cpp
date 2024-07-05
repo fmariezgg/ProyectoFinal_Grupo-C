@@ -58,7 +58,7 @@ int principal() {
                 _colSET(cLIGHT_YELLOW);
                 cout << "      Accediendo a Gestión de Producción...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
 
                 submenu = produccion(); //llamar al submenu
                 if (submenu == 7) continue; //si el submenu retorna la opcion de regresar al menu principal, ir a la proxima iteracion
@@ -67,7 +67,7 @@ int principal() {
                 _colSET(cLIGHT_YELLOW);
                 cout << "      Accediendo a Gestión de Clientes...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
 
                 submenu = clientes(); //^^
                 if (submenu == 6) continue;
@@ -76,7 +76,7 @@ int principal() {
                 _colSET(cLIGHT_YELLOW);
                 cout << "      Accediendo a Gestión de Finanzas...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
 
                 submenu = finanzas(); //^^
                 if (submenu == 9) continue;
@@ -85,13 +85,13 @@ int principal() {
                 _colSET(cCYAN);
                 cout << "      Regresando a pantalla principal...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
             default:
                 _colSET(cRED);
                 cout << "      Opción inválida...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
     } while (option != 4);
@@ -132,7 +132,7 @@ int produccion() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Vacas.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                   this_thread::sleep_for(chrono::milliseconds(2250));
                 }
                 
                 break;
@@ -149,7 +149,7 @@ int produccion() {
                 }
 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 3:
                 check = mostrar_Vacas();
@@ -157,7 +157,7 @@ int produccion() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Vacas.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
 
                 break;
@@ -172,20 +172,20 @@ int produccion() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando vaca...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
                     cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice == -2) {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Vacas.txt'...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice >= 0) {
                     _colSET(cGREEN);
                     cout << "\n   Vaca encontrada!";
-                    Sleep(800);
+                    this_thread::sleep_for(chrono::milliseconds(800));
 
                     _colSET(cCYAN);
                     cout << endl << "\n                                  Vaca #" << indice+1 << ":" << endl;
@@ -198,6 +198,7 @@ int produccion() {
                     _colSET(cCYAN);
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
+                    limpiar_buffer();
                     cin.get();
                 }
                 
@@ -208,7 +209,7 @@ int produccion() {
                 if (!check) {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Vacas.txt'...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
 
                 break;
@@ -221,7 +222,7 @@ int produccion() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando vaca...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
@@ -235,19 +236,19 @@ int produccion() {
                 }
                 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 7:
                 _colSET(cCYAN);
                 cout << "      Regresando a menú principal...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
             default:
                 _colSET(cRED);
                 cout << "      Opción inválida...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
     } while (option != 7);
@@ -293,7 +294,7 @@ int clientes() {
                 }
 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 2:
                 check = mostrar_Clientes();
@@ -301,7 +302,7 @@ int clientes() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Clientes.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
                 
                 break;
@@ -316,20 +317,20 @@ int clientes() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando cliente...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
                     cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice == -2) {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Clientes.txt'...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice >= 0) {
                     _colSET(cGREEN);
                     cout << "\n   Cliente encontrado!";
-                    Sleep(800);
+                    this_thread::sleep_for(chrono::milliseconds(800));
 
                     _colSET(cCYAN);
                     cout << endl << "\n                                  Cliente #" << indice+1 << ":" << endl;
@@ -342,6 +343,7 @@ int clientes() {
                     _colSET(cCYAN);
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
+                    limpiar_buffer();
                     cin.get();
                 }
 
@@ -353,7 +355,7 @@ int clientes() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Clientes.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
 
                 break;
@@ -366,7 +368,7 @@ int clientes() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando cliente...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
@@ -380,19 +382,19 @@ int clientes() {
                 }
                 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 6:
                 _colSET(cCYAN);
                 cout << "      Regresando a menú principal...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
             default:
                 _colSET(cRED);
                 cout << "      Opción inválida...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
     } while (option != 6);
@@ -440,7 +442,7 @@ int finanzas() {
                 _colSET(cLIGHT_YELLOW);
                 cout << "      Accediendo a submenú de costos fijos...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
 
                 submenu = costos_Fijos();
                 if (submenu == 6) option = 4; //ir al menu de costos variables
@@ -448,7 +450,7 @@ int finanzas() {
                 _colSET(cLIGHT_YELLOW);
                 cout << "      Accediendo a submenú de costos variables...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
 
                 submenu = costos_Variables();
                 if (submenu == 6) option = 3; //ir al menu de costos fijos
@@ -459,7 +461,7 @@ int finanzas() {
                 _colSET(cCYAN);
                 cout << "      Regresando a menú de finanzas...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
             }
 
@@ -475,7 +477,7 @@ int finanzas() {
                 _colSET(cLIGHT_YELLOW);
                 cout << "      Accediendo a menú de ventas...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
 
                 submenu = ventas();
                 if (submenu == 6) continue; //si el submenu retorna la opcion de regresar al menu de finanzas, ir a la proxima iteracion
@@ -485,7 +487,7 @@ int finanzas() {
                 _colSET(cLIGHT_YELLOW);
                 cout << "      Accediendo a menú de pagos pendientes...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
 
                 submenu = pendientes();
                 if (submenu == 5) continue; //^^
@@ -509,7 +511,7 @@ int finanzas() {
                 if (ingresos_totales != 0.00) {
                     _colSET(cTEAL);
                     cout << "\n   Calculando...";
-                    Sleep(1000);
+                    this_thread::sleep_for(chrono::milliseconds(1000));
                     _colSET(cLIGHT_YELLOW);
                     cout << "\n   Ingresos totales mensuales: ";
                     _colSET(cGREEN);
@@ -534,7 +536,7 @@ int finanzas() {
                 if (costos_totales != 0.00) { //lo mismo que con los ingresos
                     _colSET(cTEAL);
                     cout << "\n   Calculando...";
-                    Sleep(1000);
+                    this_thread::sleep_for(chrono::milliseconds(1000));
                     _colSET(cLIGHT_YELLOW);
                     cout << "\n   Costos totales mensuales: ";
                     _colSET(cRED);
@@ -559,13 +561,13 @@ int finanzas() {
             case 8:
                 check = mostrar_Precio();
                 if (!check) {
-                    Sleep(500);
+                   this_thread::sleep_for(chrono::milliseconds(500));
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'precio_galon.txt'...";
                     _colRESET();
                 }
 
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 9:
                 check = ingresar_Precio();
@@ -575,19 +577,19 @@ int finanzas() {
                     _colRESET();
                 }
                 
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 10:
                 _colSET(cCYAN);
                 cout << "      Regresando a menú principal...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
             default:
                 _colSET(cRED);
                 cout << "      Opción inválida...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
     } while (option != 10);
@@ -634,7 +636,7 @@ int ventas() {
                 }
 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 2:
                 check = mostrar_Ventas();
@@ -642,7 +644,7 @@ int ventas() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Ventas.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
                 
                 break;
@@ -657,21 +659,21 @@ int ventas() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando venta...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
                     cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice == -2) {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Ventas.txt'...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice >= 0) {
                     strcpy(pagada, (registro_Ventas[indice].pagada ? "Sí" : "No")); //convertir el bool a un string usando una operacion ternaria para que se imprima bien
                     _colSET(cGREEN);
                     cout << "\n   Venta encontrada!";
-                    Sleep(800);
+                    this_thread::sleep_for(chrono::milliseconds(800));
 
                     _colSET(cCYAN);
                     cout << endl << "\n                                  Venta #" << indice+1 << ":" << endl;
@@ -697,7 +699,7 @@ int ventas() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo abrir, leer y/o escribir a uno o más de los siguientes archivos: 'registro_Ventas.txt', 'registro_Pendientes.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
                 
                 break;
@@ -710,7 +712,7 @@ int ventas() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando venta...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
@@ -724,25 +726,25 @@ int ventas() {
                 }
 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 6:
                 _colSET(cCYAN);
                 cout << "      Regresando a menú de finanzas...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
             case 7:
                 _colSET(cCYAN);
                 cout << "      Regresando a menú principal...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
             default:
                 _colSET(cRED);
                 cout << "      Opción inválida...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
     } while ((option != 6) && (option != 7)); //mientras no se quiera regresar a otro menu, permanecer en el do while
@@ -780,7 +782,7 @@ int pendientes() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Pendientes.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
                 
                 break;
@@ -795,20 +797,20 @@ int pendientes() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando pago pendiente...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
                     cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice == -2) {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_Pendientes.txt'...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice >= 0) {
                     _colSET(cGREEN);
                     cout << "\n   Pago pendiente encontrado!";
-                    Sleep(800);
+                    this_thread::sleep_for(chrono::milliseconds(800));
 
                     _colSET(cCYAN);
                     cout << endl << "\n                                  Pago pendiente #" << indice+1 << ":" << endl;
@@ -832,7 +834,7 @@ int pendientes() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer uno o más de los siguientes archivos: 'registro_Pendientes.txt', 'registro_Ventas.txt...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
                 
                 break;
@@ -845,7 +847,7 @@ int pendientes() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando pago pendiente...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
@@ -859,25 +861,25 @@ int pendientes() {
                 }
 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 5:
                 _colSET(cCYAN);
                 cout << "      Regresando a menú de finanzas...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
             case 6:
                 _colSET(cCYAN);
                 cout << "      Regresando a menú principal...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
             default:
                 _colSET(cRED);
                 cout << "      Opción inválida...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
     } while ((option != 5) && (option != 6));
@@ -925,7 +927,7 @@ int costos_Fijos() {
                 }
 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 2:
                 check = mostrar_costos_Fijos();
@@ -933,7 +935,7 @@ int costos_Fijos() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Fijos.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
 
                 break;
@@ -948,20 +950,20 @@ int costos_Fijos() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando costo fijo...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
                     cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice == -2) {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Fijos.txt'...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice >= 0) {
                     _colSET(cGREEN);
                     cout << "\n   Costo fijo encontrado!";
-                    Sleep(800);
+                    this_thread::sleep_for(chrono::milliseconds(800));
 
                     _colSET(cCYAN);
                     cout << endl << "\n                                  Costo Fijo #" << indice+1 << ":" << endl;
@@ -984,7 +986,7 @@ int costos_Fijos() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Fijos.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
 
                 break;
@@ -997,7 +999,7 @@ int costos_Fijos() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando costo fijo...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
@@ -1011,7 +1013,7 @@ int costos_Fijos() {
                 }
 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
 
             case 6: break; //el mensaje y el sleep se llaman en finanzas()
@@ -1022,7 +1024,7 @@ int costos_Fijos() {
                 _colSET(cRED);
                 cout << "      Opción inválida...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
     } while ((option < 6) || (option > 8)); //mientras no se quiera salir del submenu, quedarse en el do while
@@ -1070,7 +1072,7 @@ int costos_Variables() {
                 }
 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
             case 2:
                 check = mostrar_costos_Variables();
@@ -1078,7 +1080,7 @@ int costos_Variables() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Variables.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
                 
                 break;
@@ -1093,20 +1095,20 @@ int costos_Variables() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando costo variable...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
                     cout << "\n   ERROR: el ID '" << input_id << "' no se encontró en el registro...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice == -2) {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Variables.txt'...";
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 } else if (indice >= 0) {
                     _colSET(cGREEN);
                     cout << "\n   Costo variable encontrado!";
-                    Sleep(800);
+                    this_thread::sleep_for(chrono::milliseconds(800));
 
                     _colSET(cCYAN);
                     cout << endl << "\n                               Costo Variable #" << indice+1 << ":" << endl;
@@ -1130,7 +1132,7 @@ int costos_Variables() {
                     _colSET(cRED);
                     cout << "\n   ERROR DE ARCHIVO: no se pudo leer el archivo 'registro_costos_Variables.txt'...";
                     _colRESET();
-                    Sleep(2250);
+                    this_thread::sleep_for(chrono::milliseconds(2250));
                 }
                 
                 break;
@@ -1143,7 +1145,7 @@ int costos_Variables() {
                 _colSET(cTEAL);
                 cout << "\n   Buscando costo variable...";
                 _colRESET();
-                Sleep(800);
+                this_thread::sleep_for(chrono::milliseconds(800));
 
                 if (indice == -1) {
                     _colSET(cRED);
@@ -1157,7 +1159,7 @@ int costos_Variables() {
                 }
 
                 _colRESET();
-                Sleep(2250);
+                this_thread::sleep_for(chrono::milliseconds(2250));
                 break;
 
             case 6: break; //el mensaje y el sleep se llaman en finanzas()
@@ -1168,7 +1170,7 @@ int costos_Variables() {
                 _colSET(cRED);
                 cout << "      Opción inválida...";
                 _colRESET();
-                Sleep(1000);
+                this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
     } while ((option < 6) || (option > 8));
