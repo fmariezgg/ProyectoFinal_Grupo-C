@@ -24,15 +24,15 @@ int buscar_Cliente(const char input[MAX_INPUT], bool buscar_nombre) {
 
 //***************************************************************************************************
 
-bool registrar_Clientes(int num) {
+bool registrar_Clientes() {
     system("cls || clear");
-    char tempID[ID] = "";
+    char tempID[ID] = "", input[3] = "";
     bool leer = false, escribir = false;
 
     leer = leer_Archivos("registro_Clientes.txt");
     if (!leer) return false;
 
-    for (int i = 0; i < num; i++) {
+    do{
         _colSET(cCYAN);
         cout << endl << "                                Cliente #" << num_clientes+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
@@ -58,7 +58,12 @@ bool registrar_Clientes(int num) {
         pedir_Cstring("dirección", registro_Clientes[num_clientes].direccion);
         pedir_Cstring("contacto", registro_Clientes[num_clientes].contacto);
         num_clientes++;
-    }
+
+        _colSET(cPINK);
+        cout << "\n   ¿Desea registrar otro cliente? (s/n): ";
+        cin >> input;
+    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
+
 
     escribir = escribir_Archivos("registro_Clientes.txt");
     if (!escribir) return false;

@@ -30,9 +30,9 @@ int buscar_Pendiente(const char id[ID]) {
 
 //***************************************************************************************************
 
-bool registrar_Ventas(int num) {
+bool registrar_Ventas() {
     system("cls || clear");
-    char tempID[ID] = "", temp_nombre[MAX_INPUT] = "";
+    char tempID[ID] = "", temp_nombre[MAX_INPUT] = "", input[3] = "";
     bool leer_Ventas = false, leer_Precio = false, leer_Pendientes = false, leer_Clientes = false;
     bool escribir_Ventas = false, escribir_Pendientes = false;
 
@@ -57,7 +57,7 @@ bool registrar_Ventas(int num) {
         _colRESET();
     }
 
-    for (int i = 0; i < num; i++) {
+    do{
         _colSET(cCYAN);
         cout << endl << "                                  Venta #" << num_ventas+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
@@ -126,7 +126,11 @@ bool registrar_Ventas(int num) {
         }
 
         num_ventas++;
-    }
+
+        _colSET(cPINK);
+        cout << "\n   ¿Desea registrar otra vaca? (s/n): ";
+        cin >> input;
+    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
     escribir_Ventas = escribir_Archivos("registro_Ventas.txt");
     escribir_Pendientes = escribir_Archivos("registro_Pendientes.txt");

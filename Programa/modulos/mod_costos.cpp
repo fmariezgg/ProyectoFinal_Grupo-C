@@ -27,15 +27,15 @@ int buscar_costo_Variable(const char id[ID]) {
 
 //***************************************************************************************************
 
-bool registrar_costos_Fijos(int num) {
+bool registrar_costos_Fijos() {
     system("cls || clear");
-    char tempID[ID] = "";
+    char tempID[ID] = "", input[3] = "";
     bool leer = false, escribir = false;
 
     leer = leer_Archivos("registro_costos_Fijos.txt");
     if (!leer) return false;
 
-    for (int i = 0; i < num; i++) {
+    do{
         _colSET(cCYAN);
         cout << endl << "                              Costo Fijo #" << num_costos_Fijos+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
@@ -60,7 +60,11 @@ bool registrar_costos_Fijos(int num) {
         registro_costos_Fijos[num_costos_Fijos].monto = pedir_float("monto (en C$)");
         pedir_Cstring("descripción", registro_costos_Fijos[num_costos_Fijos].descripcion);
         num_costos_Fijos++;
-    }
+
+        _colSET(cPINK);
+        cout << "\n   ¿Desea registrar otra vaca? (s/n): ";
+        cin >> input;
+    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
     escribir = escribir_Archivos("registro_costos_Fijos.txt");
     if (!escribir) return false;
@@ -71,16 +75,16 @@ bool registrar_costos_Fijos(int num) {
     return true;
 }
 
-bool registrar_costos_Variables(int num) {
+bool registrar_costos_Variables() {
     system("cls || clear");
-    char tempID[ID] = "";
+    char tempID[ID] = "", input[3] = "";
     bool leer = false, escribir = false;
     tm* time = obtener_fecha();
 
     leer = leer_Archivos("registro_costos_Variables.txt");
     if (!leer) return false;
 
-    for (int i = 0; i < num; i++) {
+    do{
         _colSET(cCYAN);
         cout << endl << "                            Costo Variable #" << num_costos_Variables+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
@@ -111,7 +115,11 @@ bool registrar_costos_Variables(int num) {
         pedir_Cstring("descripción", registro_costos_Variables[num_costos_Variables].descripcion);
         strcpy(registro_costos_Variables[num_costos_Variables].mes, meses[time->tm_mon]);
         num_costos_Variables++;
-    }
+
+        _colSET(cPINK);
+        cout << "\n   ¿Desea registrar otra vaca? (s/n): ";
+        cin >> input;
+    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
     escribir = escribir_Archivos("registro_costos_Variables.txt");
     if (!escribir) return false;

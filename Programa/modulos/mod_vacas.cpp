@@ -26,11 +26,11 @@ bool registrar_Vacas() {
 
     leer = leer_Archivos("registro_Vacas.txt");
     if (!leer) return false;
-
+ cout << endl << "                                  Vaca #" << num_vacas+1 << ":" << endl;
+        
     do {
         _colSET(cCYAN);
-        cout << endl << "                                  Vaca #" << num_vacas+1 << ":" << endl;
-        cout << "   ***********************************************************************\n";
+        << "   ***********************************************************************\n";
         _colRESET();
         
         while (true) { //checkear que el ID no este registrado

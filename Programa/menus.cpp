@@ -258,7 +258,7 @@ int produccion() {
 }
 
 int clientes() {
-    int option = 0, num = 0, indice = 0; //igual que el menu de produccion
+    int option = 0, indice = 0; //igual que el menu de produccion
     char input_id[ID] = "";
     bool check = false;
 
@@ -282,11 +282,7 @@ int clientes() {
 
         switch (option) {
             case 1:
-                _colSET(cLIGHT_YELLOW);
-                cout << "     ¿Cuántos clientes desea registrar? ";
-                cin >> num;
-                _colRESET();
-                check = registrar_Clientes(num);
+                check = registrar_Clientes();
 
                 if (!check) {
                     _colSET(cRED);
@@ -603,7 +599,7 @@ int finanzas() {
 }
 
 int ventas() {
-    int option = 0, num = 0, indice = 0; //igual que los menus anteriores
+    int option = 0, indice = 0; //igual que los menus anteriores
     char input_id[ID] = "", pagada[3] = "";
     bool check = false;
 
@@ -628,11 +624,7 @@ int ventas() {
         
         switch (option) {
             case 1:
-                _colSET(cLIGHT_YELLOW);
-                cout << "     ¿Cuántas ventas desea registrar? ";
-                cin >> num;
-                _colRESET();
-                check = registrar_Ventas(num);
+                check = registrar_Ventas();
 
                 if (!check) {
                     _colSET(cRED);
@@ -897,7 +889,7 @@ int pendientes() {
 }
 
 int costos_Fijos() {
-    int option = 0, num = 0, indice = 0; //lo mismo que el resto de los menus basicamente
+    int option = 0, indice = 0; //lo mismo que el resto de los menus basicamente
     char input_id[ID] = "";
     bool check = false;
 
@@ -923,11 +915,7 @@ int costos_Fijos() {
 
         switch (option) {
             case 1:
-                _colSET(cLIGHT_YELLOW);
-                cout << "     ¿Cuántos costos fijos desea registrar? ";
-                cin >> num;
-                _colRESET();
-                check = registrar_costos_Fijos(num);
+                check = registrar_costos_Fijos();
 
                 if (!check) {
                     _colSET(cRED);
@@ -1046,7 +1034,7 @@ int costos_Fijos() {
 }
 
 int costos_Variables() {
-    int option = 0, num = 0, indice = 0;
+    int option = 0, indice = 0;
     char input_id[ID] = "";
     bool check = false;
 
@@ -1072,11 +1060,7 @@ int costos_Variables() {
 
         switch (option) {
             case 1:
-                _colSET(cLIGHT_YELLOW);
-                cout << "     ¿Cuántos costos variables desea registrar? ";
-                cin >> num;
-                _colRESET();
-                check = registrar_costos_Variables(num);
+                check = registrar_costos_Variables();
 
                 if (!check) {
                     _colSET(cRED);
