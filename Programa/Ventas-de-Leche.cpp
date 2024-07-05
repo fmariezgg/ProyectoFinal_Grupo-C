@@ -18,7 +18,7 @@ int main() {
             _colSET(cLIGHT_YELLOW);
             cout << "      Abriendo menú...";
             _colRESET();
-            Sleep(1000);
+            this_thread::sleep_for(chrono::milliseconds(1000));
 
             while (acceder != 4) acceder = principal(); //mientras no se quiera regresar a la pantalla principal
 
@@ -31,12 +31,12 @@ int main() {
             _colSET(cRED);
             cout << "      Opción inválida...";
             _colRESET();
-            Sleep(1000);
+            this_thread::sleep_for(chrono::milliseconds(1000));
             continue;
         }
 
     } while (start != 2); //mientras no se quiera cerrar el programa
 
-    Sleep(2250);
+    this_thread::sleep_for(chrono::milliseconds(2250));
     return 0;
 }

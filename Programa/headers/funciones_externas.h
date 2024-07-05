@@ -5,6 +5,8 @@
 #include <fstream>
 #include <cstring> //funciones de C-strings
 #include <ctime> //para obtener la fecha y hora actuales
+#include <chrono> //esto y <thread> se usan para no tener que ocupar Sleep()
+#include <thread>
 #include "titulos.h"
 #include "variables.h"
 using namespace std;
@@ -47,6 +49,11 @@ tm* obtener_fecha() {
     time_t now = time(0); //retorna la cantidad de segundos desde 1970
     tm* time = localtime(&now); //convierte la cantidad de segundos a una fecha y hora legible
     return time;
+}
+
+void limpiar_buffer() {
+    char clear = '\0';
+    while ((clear = cin.get()) != '\n' && clear != EOF);
 }
 
 //***************************************************************************************************
@@ -115,7 +122,7 @@ bool checkear_Vacio(int num_registro) {
     if (num_registro == 0) {
         _colSET(LLC::cRED);
         cout << "\n   El registro esta vacío...";
-        Sleep(2250);
+        this_thread::sleep_for(chrono::milliseconds(2250));
         _colRESET();
         return true;
     }
@@ -147,9 +154,9 @@ bool leer_Archivos(const char nombre_archivo[MAX_INPUT]) {
 
         _colSET(LLC::cRED);
         cout << "\n   " << nombre_archivo << " no encontrado...";
-        Sleep(500); _colSET(LLC::cGREEN);
+       this_thread::sleep_for(chrono::milliseconds(500)); _colSET(LLC::cGREEN);
         cout << "\n   Creando " << nombre_archivo << "...";
-        Sleep(1000); _colRESET();
+       this_thread::sleep_for(chrono::milliseconds(1000)); _colRESET();
         cout << endl;
     }
 

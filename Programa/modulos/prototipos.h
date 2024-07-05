@@ -17,7 +17,7 @@ using namespace LLC;
 
 //todas estas retornan bool para que se pueda checkear si se pudo abrir/leer/escribir al archivo
 bool ingresar_Precio();
-bool registrar_Vacas(int num); //num es la cantidad de cosas que se van a registrar (para que el usuario no tenga que estar ingresando 1 por 1)
+bool registrar_Vacas(); //num es la cantidad de cosas que se van a registrar (para que el usuario no tenga que estar ingresando 1 por 1)
 bool registrar_Clientes(int num); 
 bool registrar_Ventas(int num); //aqui se registran los pagos pendientes tambien, dependiendo de lo que ingresa el usuario
 bool registrar_costos_Fijos(int num);
@@ -74,10 +74,10 @@ bool ingresar_Precio() {
     if (!escribir) return false;
 
     cout << "   ";
-    Sleep(500);
+   this_thread::sleep_for(chrono::milliseconds(500));
     _colSET(cGREEN);
     cout << "Precio actualizado a: C$" << precio_galon << "...";
-    Sleep(1500);
+    this_thread::sleep_for(chrono::milliseconds(1500));
     _colRESET();
     return true;
 }
@@ -91,7 +91,7 @@ bool mostrar_Precio() {
 
     _colSET(cGREEN);
     cout << "\n   Precio por galón: C$" << precio_galon;
-    Sleep(2250);
+    this_thread::sleep_for(chrono::milliseconds(2250));
     _colRESET();
     return true;
 }
@@ -108,7 +108,7 @@ bool calcular_Produccion() {
 
     _colSET(cTEAL);
     cout << "\n   Calculando...";
-    Sleep(1000);
+    this_thread::sleep_for(chrono::milliseconds(1000));
 
     for (int i = 0; i < num_vacas; i++) {
         produccion_total += registro_Vacas[i].prod_diaria;
@@ -203,7 +203,7 @@ bool calcular_Utilidad() {
 
     _colSET(cTEAL);
     cout << "\n   Calculando...";
-    Sleep(1000);
+    this_thread::sleep_for(chrono::milliseconds(1000));
 
     if (calcular_Ingresos() && calcular_Costos()) utilidad = ingresos_totales - costos_totales;
     else return false;
