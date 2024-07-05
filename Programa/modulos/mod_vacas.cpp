@@ -1,5 +1,6 @@
 #include "../headers/funciones_externas.h"
 using namespace std;
+using namespace LLC;
 
 //implementaciones de todas las funciones del modulo de gestion de vacas:
 //***************************************************************************************************
@@ -18,27 +19,27 @@ int buscar_Vaca(const char id[ID]) {
 
 //***************************************************************************************************
 
-bool registrar_Vacas(int num) {
+bool registrar_Vacas() {
     system("cls || clear");
     bool leer = false, escribir = false;
-    char tempID[ID] = "";
+    char tempID[ID] = "", input[3] = "";
 
     leer = leer_Archivos("registro_Vacas.txt");
     if (!leer) return false;
-
-    for (int i = 0; i < num; i++) {
-        LLC::_colSET(LLC::cCYAN);
+        
+    do {
+        _colSET(cCYAN);
         cout << endl << "                                  Vaca #" << num_vacas+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        LLC::_colRESET();
+        _colRESET();
         
         while (true) { //checkear que el ID no este registrado
             pedir_Cstring("ID", tempID, ID);
 
             if (buscar_Vaca(tempID) >= 0) {
-                LLC::_colSET(LLC::cRED);
+                _colSET(cRED);
                 cout << "   ERROR: ID ya registrado...";
-                LLC::_colRESET();
+                _colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
                 cout << endl;
                 continue; //si se encontro, volver a pedirlo
@@ -52,14 +53,18 @@ bool registrar_Vacas(int num) {
         registro_Vacas[num_vacas].prod_diaria = pedir_int("producción diaria (en galones)");
         pedir_Cstring("estado de salud", registro_Vacas[num_vacas].estado_salud);
         num_vacas++;
-    }
+
+        _colSET(cPINK);
+        cout << "\n   ¿Desea registrar otra vaca? (s/n): ";
+        cin >> input;
+    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
     escribir = escribir_Archivos("registro_Vacas.txt");
     if (!escribir) return false;
 
     cout << "   ";
     this_thread::sleep_for(chrono::milliseconds(500));
-    LLC::_colRESET();
+    _colRESET();
     return true; //si no se ha retornado, significa que las operaciones de leer y escribir funcionaron bien y se guardaron los datos
 }
 
@@ -72,16 +77,16 @@ bool mostrar_Vacas() {
 
     if (checkear_Vacio(num_vacas)) return true; //checkea si esta vacio el registro
 
-    LLC::_colSET(LLC::cGREEN);
+    _colSET(cGREEN);
     cout << "\n   Mostrando vacas registradas...";
     this_thread::sleep_for(chrono::milliseconds(800));
 
     cout << endl;
     for (int i = 0; i < num_vacas; i++) {
-        LLC::_colSET(LLC::cCYAN);
+        _colSET(cCYAN);
         cout << endl << "                                  Vaca #" << i+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        LLC::_colSET(LLC::cLIGHT_YELLOW);
+        _colSET(cLIGHT_YELLOW);
         cout << "   ID: " << registro_Vacas[i].id << "\n";
         cout << "   Edad: " << registro_Vacas[i].edad << " año(s)\n";
         cout << "   Producción diaria: " << registro_Vacas[i].prod_diaria << " galón(es)\n";
@@ -90,14 +95,14 @@ bool mostrar_Vacas() {
         this_thread::sleep_for(chrono::milliseconds(800));
     }
 
-    LLC::_colSET(LLC::cCYAN);
+    _colSET(cCYAN);
     cout << endl << "   ***********************************************************************\n";
     cout << "   Presione 'Enter' para continuar...";
 
     //para no usar system("pause"), primero se limpia el ultimo caracter en el buffer y se espera a que el usuario presione una tecla
     cin.ignore();
     cin.get();
-    LLC::_colRESET();
+    _colRESET();
     return true;
 }
 
@@ -117,36 +122,36 @@ bool editar_Vaca() {
     pedir_Cstring("ID de la vaca a editar", id, ID);
     indice = buscar_Vaca(id);
 
-    LLC::_colSET(LLC::cTEAL);
+    _colSET(cTEAL);
     cout << "\n   Buscando vaca...";
     this_thread::sleep_for(chrono::milliseconds(800));
-    LLC::_colRESET();
+    _colRESET();
 
     if (indice == -1) { //por si no se encontro el id
-        LLC::_colSET(LLC::cRED);
+        _colSET(cRED);
         cout << "\n   ERROR: ID ingresado no esta registrado...";
         this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        _colRESET();
         return true;
     } else if (indice == -2) return false;
 
     else if (indice >= 0) {
-        LLC::_colSET(LLC::cGREEN);
+        _colSET(cGREEN);
         cout << "\n   Vaca encontrada!";
-        this_thread::sleep_for(chrono::milliseconds(750));
-        LLC::_colSET(LLC::cCYAN);
+        this_thread::sleep_for(chrono::milliseconds(500));
+        _colSET(cCYAN);
         cout << endl << "\n                                  Vaca #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
         do {
-            LLC::_colSET(LLC::cLIGHT_YELLOW);
+            _colSET(cLIGHT_YELLOW);
             cout << "\n\n   ¿Qué información quiere editar?" << endl;
             cout << "   1. Edad\n   2. Producción diaria\n   3. Estado de salud\n";
-            LLC::_colSET(LLC::cTEAL);
+            _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
 
             cout << endl;
-            LLC::_colRESET();
+            _colRESET();
             switch (info) {
                 case 1:
                     registro_Vacas[indice].edad = pedir_int("edad (en años)");
@@ -158,25 +163,26 @@ bool editar_Vaca() {
                     pedir_Cstring("estado de salud", registro_Vacas[indice].estado_salud);
                     break;
                 default:
-                    LLC::_colSET(LLC::cRED);
+                    _colSET(cRED);
                     cout << "   Opción inválida...";
                     this_thread::sleep_for(chrono::milliseconds(1000));
-                    LLC::_colRESET();
+                    _colRESET();
                     break;
             }
         } while (info < 1 || info > 3); //repetir mientras que la opcion que se haya ingresado no sea valida
 
-        cout << "   "; this_thread::sleep_for(chrono::milliseconds(500));
-        LLC::_colSET(LLC::cGREEN);
+        cout << "   ";
+        this_thread::sleep_for(chrono::milliseconds(500));
+        _colSET(cGREEN);
         escribir = escribir_Archivos("registro_Vacas.txt");
         if (escribir) {
-            LLC::_colSET(LLC::cGREEN);
+            _colSET(cGREEN);
             cout << "\n   ***********************************************************************";
             cout << "\n                              Vaca editada...";
         } else return false;
         
         this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        _colRESET();
     }
 
     return true;

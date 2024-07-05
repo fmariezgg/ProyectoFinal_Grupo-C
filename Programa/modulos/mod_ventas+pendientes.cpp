@@ -6,6 +6,7 @@
 #endif
 
 using namespace std;
+using namespace LLC;
 
 //implementaciones de todas las funciones del modulo de gestion de ventas y de pagos pendientes:
 //como no hay prototipos, el orden esta medio raro para que no hayan errores de undefined reference
@@ -29,9 +30,9 @@ int buscar_Pendiente(const char id[ID]) {
 
 //***************************************************************************************************
 
-bool registrar_Ventas(int num) {
+bool registrar_Ventas() {
     system("cls || clear");
-    char tempID[ID] = "", temp_nombre[MAX_INPUT] = "";
+    char tempID[ID] = "", temp_nombre[MAX_INPUT] = "", input[3] = "";
     bool leer_Ventas = false, leer_Precio = false, leer_Pendientes = false, leer_Clientes = false;
     bool escribir_Ventas = false, escribir_Pendientes = false;
 
@@ -43,33 +44,33 @@ bool registrar_Ventas(int num) {
 
     //si el archivo precio_galon.txt no existe, se va a crear, pero va a estar vacio, entonces hay que pedir un precio para poder calcular el monto de las ventas
     if (precio_galon == 0.00) {
-        LLC::_colSET(LLC::cRED);
-        cout << endl << "   Archivo 'precio.galon.txt' vacío...\n";
+        _colSET(cRED);
+        cout << endl << "   Archivo 'precio_galon.txt' vacío...\n";
         precio_galon = pedir_float("precio");
 
         bool check = escribir_Archivos("precio_galon.txt");
-        LLC::_colSET(LLC::cGREEN);
+        _colSET(cGREEN);
         if (check) cout << "   Precio guardado...";
         else return false;
         this_thread::sleep_for(chrono::milliseconds(500));
         cout << endl;
-        LLC::_colRESET();
+        _colRESET();
     }
 
-    for (int i = 0; i < num; i++) {
-        LLC::_colSET(LLC::cCYAN);
+    do {
+        _colSET(cCYAN);
         cout << endl << "                                  Venta #" << num_ventas+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
         cin.ignore();
-        LLC::_colRESET();
+        _colRESET();
         
         while (true) {
             pedir_Cstring("ID", tempID, ID);
 
             if (buscar_Venta(tempID) >= 0) {
-                LLC::_colSET(LLC::cRED);
+                _colSET(cRED);
                 cout << "   ERROR: ID ya registrado...";
-                LLC::_colRESET();
+                _colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
                 cout << endl;
                 continue; //si se encontro el id ingresado, volver a pedirlo
@@ -83,9 +84,9 @@ bool registrar_Ventas(int num) {
             pedir_Cstring("nombre del cliente", temp_nombre);
 
             if (buscar_Cliente(temp_nombre, true) == -1) {
-                LLC::_colSET(LLC::cRED);
+                _colSET(cRED);
                 cout << "   ERROR: Cliente debe estar registrado antes de registrar la venta...";
-                LLC::_colRESET();
+                _colRESET();
                 this_thread::sleep_for(chrono::milliseconds(1500));
                 cout << endl;
 
@@ -116,16 +117,20 @@ bool registrar_Ventas(int num) {
             registro_Pendientes[num_pendientes].fecha = registro_Ventas[num_ventas].fecha;
             strcpy(registro_Pendientes[num_pendientes].nombre_cliente, registro_Ventas[num_ventas].nombre_cliente);
             registro_Pendientes[num_pendientes].monto = registro_Ventas[num_ventas].monto;
-            LLC::_colSET(LLC::cGREEN);
+            _colSET(cGREEN);
             cout << "   Pago pendiente registrado...";
-            this_thread::sleep_for(chrono::milliseconds(750));
-            LLC::_colRESET();
+            this_thread::sleep_for(chrono::milliseconds(500));
+            _colRESET();
             cout << endl;
             num_pendientes++;
         }
 
         num_ventas++;
-    }
+
+        _colSET(cPINK);
+        cout << "\n   ¿Desea registrar otra vaca? (s/n): ";
+        cin >> input;
+    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
     escribir_Ventas = escribir_Archivos("registro_Ventas.txt");
     escribir_Pendientes = escribir_Archivos("registro_Pendientes.txt");
@@ -133,7 +138,7 @@ bool registrar_Ventas(int num) {
 
     cout << "   ";
     this_thread::sleep_for(chrono::milliseconds(500));
-    LLC::_colRESET();
+    _colRESET();
     return true;
 }
 
@@ -147,7 +152,7 @@ bool mostrar_Ventas() {
 
     if (checkear_Vacio(num_ventas)) return true;
 
-    LLC::_colSET(LLC::cGREEN);
+    _colSET(cGREEN);
     cout << "\n   Mostrando ventas registradas...";
     this_thread::sleep_for(chrono::milliseconds(800));
 
@@ -156,26 +161,26 @@ bool mostrar_Ventas() {
         //para que 'pagada' no se imprima como 0 o 1, se le asigna un C-string dependiendo del valor de registro_Ventas[i].pagada usando una operacion ternaria
         strcpy(pagada, registro_Ventas[i].pagada ? "Si" : "No");
 
-        LLC::_colSET(LLC::cCYAN);
+        _colSET(cCYAN);
         cout << endl << "                                  Venta #" << i+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        LLC::_colSET(LLC::cLIGHT_YELLOW);
+        _colSET(cLIGHT_YELLOW);
         cout << "   ID: " << registro_Ventas[i].id << "\n";
         cout << "   Fecha: " << registro_Ventas[i].fecha.dia << " de " << registro_Ventas[i].fecha.mes << ", " << registro_Ventas[i].fecha.year << "\n";
         cout << "   Nombre de cliente: " << registro_Ventas[i].nombre_cliente << "\n";
         cout << "   Cantidad de leche: " << registro_Ventas[i].cantidad_leche << " galón(es)\n";
         cout << "   Monto: C$" << registro_Ventas[i].monto << "\n";
-        cout << "   ¿Está pagada? "; LLC::_colSET(LLC::cTEAL); cout << pagada << endl;
+        cout << "   ¿Está pagada? "; _colSET(cTEAL); cout << pagada << endl;
         cout << "   ";
         this_thread::sleep_for(chrono::milliseconds(800));
     }
 
-    LLC::_colSET(LLC::cCYAN);
+    _colSET(cCYAN);
     cout << endl << "   ***********************************************************************\n";
     cout << "   Presione 'Enter' para continuar...";
     cin.ignore();
     cin.get();
-    LLC::_colRESET();
+    _colRESET();
     return true;
 }
 
@@ -187,16 +192,16 @@ bool mostrar_Pendientes() {
 
     if (checkear_Vacio(num_pendientes)) return true;
 
-    LLC::_colSET(LLC::cGREEN);
+    _colSET(cGREEN);
     cout << "\n   Mostrando pagos pendientes...";
     this_thread::sleep_for(chrono::milliseconds(800));
 
     cout << endl;
     for (int i = 0; i < num_pendientes; i++) {
-        LLC::_colSET(LLC::cCYAN);
+        _colSET(cCYAN);
         cout << endl << "                              Pago Pendiente #" << i+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
-        LLC::_colSET(LLC::cLIGHT_YELLOW);
+        _colSET(cLIGHT_YELLOW);
         cout << "   ID de venta: " << registro_Pendientes[i].id_venta << "\n";
         cout << "   Fecha: " << registro_Pendientes[i].fecha.dia << " de " << mes << ", " << registro_Pendientes[i].fecha.year << "\n";
         cout << "   Nombre de cliente: " << registro_Pendientes[i].nombre_cliente << "\n";
@@ -205,12 +210,12 @@ bool mostrar_Pendientes() {
         this_thread::sleep_for(chrono::milliseconds(800));
     }
 
-    LLC::_colSET(LLC::cCYAN);
+    _colSET(cCYAN);
     cout << endl << "   ***********************************************************************\n";
     cout << "   Presione 'Enter' para continuar...";
     cin.ignore();
     cin.get();
-    LLC::_colRESET();
+    _colRESET();
     return true;
 }
 
@@ -288,45 +293,45 @@ bool editar_Venta() {
     indice = buscar_Venta(id);
     indice_pendiente = buscar_Pendiente(id);
 
-    LLC::_colSET(LLC::cTEAL);
+    _colSET(cTEAL);
     cout << "\n   Buscando venta...";
     this_thread::sleep_for(chrono::milliseconds(800));
-    LLC::_colRESET();
+    _colRESET();
 
     if (indice == -1) {
-        LLC::_colSET(LLC::cRED);
+        _colSET(cRED);
         cout << "\n   ERROR: ID ingresado no esta registrado...";
         this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        _colRESET();
         return true;
     } else if (indice == -2) return false;
 
     else if (indice >= 0) {
-        LLC::_colSET(LLC::cGREEN);
+        _colSET(cGREEN);
         cout << "\n   Venta encontrada!";
-        this_thread::sleep_for(chrono::milliseconds(750));
-        LLC::_colSET(LLC::cCYAN);
+        this_thread::sleep_for(chrono::milliseconds(500));
+        _colSET(cCYAN);
         cout << endl << "\n                                  Venta #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
         do {
-            LLC::_colSET(LLC::cLIGHT_YELLOW);
+            _colSET(cLIGHT_YELLOW);
             cout << "\n\n   ¿Qué información quiere editar?" << endl;
             cout << "   1. Nombre del cliente\n   2. Cantidad de leche comprada\n   3. Monto\n   4. ¿Está pagada?\n";
-            LLC::_colSET(LLC::cTEAL);
+            _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
 
             cout << endl;
-            LLC::_colRESET();
+            _colRESET();
             switch (info) {
                 case 1:
                     while (true) {
                         pedir_Cstring("nombre del cliente", temp_nombre);
 
                         if (buscar_Cliente(temp_nombre, true) >= 0) {
-                            LLC::_colSET(LLC::cRED);
+                            _colSET(cRED);
                             cout << "   ERROR: Cliente debe estar registrado para editar la venta...";
-                            LLC::_colRESET();
+                            _colRESET();
                             this_thread::sleep_for(chrono::milliseconds(1500));
                             return true;
                         } else if (buscar_Cliente(temp_nombre, true) == -1) {
@@ -343,10 +348,10 @@ bool editar_Venta() {
                     registro_Ventas[indice].cantidad_leche = pedir_float("cantidad de leche (en galones)");
 
                     if (precio_galon == 0.00) { //si el precio es 0, no se puede calcular la cantidad de leche
-                        LLC::_colSET(LLC::cRED);
+                        _colSET(cRED);
                         cout << "   ERROR: Precio por galón no registrado...";
                         this_thread::sleep_for(chrono::milliseconds(2250));
-                        LLC::_colRESET();
+                        _colRESET();
                         return true;
                     }
 
@@ -359,10 +364,10 @@ bool editar_Venta() {
                     registro_Ventas[indice].monto = pedir_float("monto (en C$)");
 
                     if (precio_galon == 0.00) {
-                        LLC::_colSET(LLC::cRED);
+                        _colSET(cRED);
                         cout << "   ERROR: Precio por galón no registrado...";
                         this_thread::sleep_for(chrono::milliseconds(2250));
-                        LLC::_colRESET();
+                        _colRESET();
                         return true;
                     }
 
@@ -387,26 +392,27 @@ bool editar_Venta() {
                     
                     break;
                 default:
-                    LLC::_colSET(LLC::cRED);
+                    _colSET(cRED);
                     cout << "   Opción inválida...";
                     this_thread::sleep_for(chrono::milliseconds(1000));
-                    LLC::_colRESET();
+                    _colRESET();
                     break;
             }
         } while (info < 1 || info > 4);
 
-        cout << "   "; this_thread::sleep_for(chrono::milliseconds(500));
-        LLC::_colSET(LLC::cGREEN);
+        cout << "   ";
+        this_thread::sleep_for(chrono::milliseconds(500));
+        _colSET(cGREEN);
         escribir_Venta = escribir_Archivos("registro_Ventas.txt");
         escribir_Pendiente = escribir_Archivos("registro_Pendientes.txt");
         if (escribir_Venta && escribir_Pendiente) {
-            LLC::_colSET(LLC::cGREEN);
+            _colSET(cGREEN);
             cout << "\n   ***********************************************************************";
             cout << "\n                              Venta editada...";
         } else return false;
         
         this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        _colRESET();
     }
 
     return true;
@@ -430,45 +436,45 @@ bool editar_Pendiente() {
     indice = buscar_Pendiente(id);
     indice_venta = buscar_Venta(id);
 
-    LLC::_colSET(LLC::cTEAL);
+    _colSET(cTEAL);
     cout << "\n   Buscando pago pendiente...";
     this_thread::sleep_for(chrono::milliseconds(800));
-    LLC::_colRESET();
+    _colRESET();
 
     if (indice == -1) {
-        LLC::_colSET(LLC::cRED);
+        _colSET(cRED);
         cout << "\n   ERROR: ID ingresado no esta registrado...";
         this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        _colRESET();
         return true;
     } else if (indice == -2) return false;
 
     else if (indice >= 0) {
-        LLC::_colSET(LLC::cGREEN);
+        _colSET(cGREEN);
         cout << "\n   Pago pendiente encontrado!";
-        this_thread::sleep_for(chrono::milliseconds(750));
-        LLC::_colSET(LLC::cCYAN);
+       this_thread::sleep_for(chrono::milliseconds(500));
+        _colSET(cCYAN);
         cout << endl << "\n                              Pago Pendiente #" << indice+1 << ":" << endl;
         cout << "   ***********************************************************************";
         do {
-            LLC::_colSET(LLC::cLIGHT_YELLOW);
+            _colSET(cLIGHT_YELLOW);
             cout << "\n\n   ¿Qué información quiere editar?" << endl;
             cout << "   1. Nombre del cliente\n   2. Monto de la compra\n";
-            LLC::_colSET(LLC::cTEAL);
+            _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
 
             cout << endl;
-            LLC::_colRESET();
+            _colRESET();
             switch (info) {
                 case 1:
                     while (true) { 
                         pedir_Cstring("nombre del cliente", temp_nombre);
 
                         if (buscar_Cliente(temp_nombre, true) >= 0) {
-                            LLC::_colSET(LLC::cRED);
+                            _colSET(cRED);
                             cout << "   ERROR: Cliente debe estar registrado para editar el pago pendiente...";
-                            LLC::_colRESET();
+                            _colRESET();
                             this_thread::sleep_for(chrono::milliseconds(1500));
                             return true;
                         } else if (buscar_Cliente(temp_nombre, true) == -1) {
@@ -490,10 +496,10 @@ bool editar_Pendiente() {
                         registro_Ventas[indice_venta].monto = registro_Pendientes[indice].monto;
 
                         if (precio_galon == 0.00) {
-                            LLC::_colSET(LLC::cRED);
+                            _colSET(cRED);
                             cout << "   ERROR: Precio por galón no registrado...";
                             this_thread::sleep_for(chrono::milliseconds(2250));
-                            LLC::_colRESET();
+                            _colRESET();
                             return true;
                         }
 
@@ -502,26 +508,27 @@ bool editar_Pendiente() {
 
                     break;
                 default:
-                    LLC::_colSET(LLC::cRED);
+                    _colSET(cRED);
                     cout << "   Opción inválida...";
                     this_thread::sleep_for(chrono::milliseconds(1000));
-                    LLC::_colRESET();
+                    _colRESET();
                     break;
             }
         } while (info < 1 || info > 4);
 
-        cout << "   "; this_thread::sleep_for(chrono::milliseconds(500));
-        LLC::_colSET(LLC::cGREEN);
+        cout << "   ";
+        this_thread::sleep_for(chrono::milliseconds(500));
+        _colSET(cGREEN);
         escribir_Pendiente = escribir_Archivos("registro_Pendientes.txt");
         escribir_Venta = escribir_Archivos("registro_Ventas.txt");
         if (escribir_Pendiente && escribir_Venta) {
-            LLC::_colSET(LLC::cGREEN);
+            _colSET(cGREEN);
             cout << "\n   ***********************************************************************";
             cout << "\n                          Pago pendiente editado...";
         } else return false;
         
         this_thread::sleep_for(chrono::milliseconds(2250));
-        LLC::_colRESET();
+        _colRESET();
     }
 
     return true;

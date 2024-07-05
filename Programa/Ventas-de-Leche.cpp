@@ -1,11 +1,11 @@
 #include "menus.cpp"
 using namespace std;
+using namespace LLC;
 
 int main() {
     #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8); //si se esta ejecutando en windows, se cambia el output a UTF-8 para que se impriman los tildes
     #endif
-
     int start = 0;
 
     do {
@@ -14,22 +14,22 @@ int main() {
 
         if (start == 1) {
             int acceder = 0;
-            LLC::_colSET(LLC::cLIGHT_YELLOW);
+            _colSET(cLIGHT_YELLOW);
             cout << "      Abriendo menú...";
-            LLC::_colRESET();
+            _colRESET();
             this_thread::sleep_for(chrono::milliseconds(1000));
 
             while (acceder != 4) acceder = principal(); //mientras no se quiera regresar a la pantalla principal
 
         } else if (start == 2) {
-            LLC::_colSET(LLC::cRED);
+            _colSET(cRED);
             cout << "      Cerrando programa...";
-            LLC::_colRESET();
+            _colRESET();
             break;
         } else {
-            LLC::_colSET(LLC::cRED);
+            _colSET(cRED);
             cout << "      Opción inválida...";
-            LLC::_colRESET();
+            _colRESET();
             this_thread::sleep_for(chrono::milliseconds(1000));
             continue;
         }
