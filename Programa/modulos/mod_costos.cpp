@@ -59,11 +59,10 @@ bool registrar_costos_Fijos() {
 
         registro_costos_Fijos[num_costos_Fijos].monto = pedir_float("monto (en C$)");
         pedir_Cstring("descripción", registro_costos_Fijos[num_costos_Fijos].descripcion);
+        
         num_costos_Fijos++;
+        continuar("\n   ¿Desea registrar más costos? (si/no) ", input);
 
-        _colSET(cPINK);
-        cout << "\n   ¿Desea registrar otra costo? (si/no): ";
-        cin >> input;
     } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
     escribir = escribir_Archivos("registro_costos_Fijos.txt");
@@ -93,8 +92,6 @@ bool registrar_costos_Variables() {
         while (true) {
             pedir_Cstring("ID", tempID, ID);
 
-            cout << tempID << endl;
-
             if (buscar_costo_Variable(tempID) >= 0) {
                 _colSET(cRED);
                 cout << "   ERROR: ID ya registrado...";
@@ -103,22 +100,45 @@ bool registrar_costos_Variables() {
                 cout << endl;
                 continue;
             } else if (buscar_costo_Variable(tempID) == -1) {
-                cout << tempID << endl;
                 strcpy(registro_costos_Variables[num_costos_Variables].id, tempID);
                 break;
             } else if (buscar_costo_Variable(tempID) == -2) return false;
         }
 
-        cout << registro_costos_Variables[num_costos_Variables].id << endl;
-
         registro_costos_Variables[num_costos_Variables].monto = pedir_float("monto (en C$)");
-        pedir_Cstring("descripción", registro_costos_Variables[num_costos_Variables].descripcion);
-        strcpy(registro_costos_Variables[num_costos_Variables].mes, meses[time->tm_mon]);
-        num_costos_Variables++;
 
-        _colSET(cPINK);
-        cout << "\n   ¿Desea registrar otra costo? (si/no): ";
-        cin >> input;
+        limpiar_buffer();
+        continuar("\n   ¿Desea ingresar el mes manualmente? (si/no) ", input);
+
+        if (si_no(input) == 1) {
+            cout << endl;
+            while (true) {
+                pedir_Cstring("mes (en minúscula)", registro_costos_Variables[num_costos_Variables].mes, ID);
+
+                if (checkear_mes(registro_costos_Variables[num_costos_Variables].mes) < 0) {
+                    _colSET(cRED);
+                    cout << "   ERROR: Mes inválido...";
+                    _colRESET();
+                    this_thread::sleep_for(chrono::milliseconds(1500));
+                    cout << endl;
+                    continue;
+                } else break;
+            }
+
+        } else if (si_no(input) == 0) {
+            _colSET(cTEAL);
+            cout << "   De acuerdo, se usará el mes actual...";
+            _colRESET();
+            cout << endl << endl;
+            strcpy(registro_costos_Variables[num_costos_Variables].mes, meses[time->tm_mon]);
+        }
+
+        pedir_Cstring("descripción", registro_costos_Variables[num_costos_Variables].descripcion);
+        
+
+        num_costos_Variables++;
+        continuar("\n   ¿Desea registrar más costos? (si/no) ", input);
+
     } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
     escribir = escribir_Archivos("registro_costos_Variables.txt");
@@ -243,6 +263,11 @@ bool editar_costo_Fijo() {
             cout << "   Ingrese su opción: ";
             cin >> info;
 
+            if (cin.fail()) {
+                error_opcion();
+                continue;
+            }
+
             cout << endl;
             _colRESET();
             switch (info) {
@@ -290,7 +315,7 @@ bool editar_costo_Variable() {
     cout << endl;
     pedir_Cstring("ID del costo variable a editar", id, ID);
     indice = buscar_costo_Variable(id);
-
+    
     _colSET(cTEAL);
     cout << "\n   Buscando costo variable...";
     this_thread::sleep_for(chrono::milliseconds(800));
@@ -319,6 +344,11 @@ bool editar_costo_Variable() {
             cout << "   Ingrese su opción: ";
             cin >> info;
 
+            if (cin.fail()) {
+                error_opcion();
+                continue;
+            }
+
             cout << endl;
             _colRESET();
             switch (info) {
@@ -329,10 +359,11 @@ bool editar_costo_Variable() {
                     pedir_Cstring("descripción", registro_costos_Variables[indice].descripcion);
                     break;
                 case 3:
+                    cout << endl;
                     while (true) { //mientras no se ingrese mes valido, seguir pidiendolo
-                        pedir_Cstring("mes", registro_costos_Variables[indice].mes, ID);
+                        pedir_Cstring("mes (en minúscula)", registro_costos_Variables[indice].mes, ID);
 
-                        if (!checkear_mes(registro_costos_Variables[indice].mes)) {
+                        if (checkear_mes(registro_costos_Variables[indice].mes) < 0) {
                             _colSET(cRED);
                             cout << "   ERROR: Mes inválido...";
                             _colRESET();

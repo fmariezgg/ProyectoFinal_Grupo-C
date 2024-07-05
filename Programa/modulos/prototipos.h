@@ -67,8 +67,14 @@ bool calcular_Utilidad();
 bool ingresar_Precio() {
     system("cls || clear");
     _colSET(cLIGHT_YELLOW);
-    cout << "\n   Ingrese el precio por galón (en C$): ";
-    cin >> precio_galon;
+
+    while (true) {
+        cout << "\n   Ingrese el precio por galón (en C$): ";
+        cin >> precio_galon;
+
+        if (cin.fail()) error_opcion();
+        else break;
+    }
 
     bool escribir = escribir_Archivos("precio_galon.txt");
     if (!escribir) return false;
@@ -137,7 +143,6 @@ bool calcular_Produccion() {
 }
 
 bool calcular_Ingresos() {
-    system("cls || clear");
     bool leer = leer_Archivos("registro_Ventas.txt");
     if (!leer) return false;
 
@@ -155,7 +160,6 @@ bool calcular_Ingresos() {
 }
 
 bool calcular_Costos() {
-    system("cls || clear");
     bool leer_Fijos = false, leer_Variables = false;
 
     leer_Fijos = leer_Archivos("registro_costos_Fijos.txt");

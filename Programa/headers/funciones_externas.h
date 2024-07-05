@@ -18,6 +18,17 @@ tm* obtener_fecha();
 //limpia el input buffer (cin) para evitar errores
 void limpiar_buffer();
 
+//literalmente solo es la logica para checkear si el usuario ingreso si o no
+//se ocupa en un monton de lugares entonces que tenga su propia funcion por legibilidad
+int si_no(char input[]);
+
+//se usa en los menus si el usuario ingresa algo que no es (como caracteres). para que no explote, se limpia el buffer y imprime un mensaje
+//no quiero tener que estar repitiendo el mensaje y todas las llamadas de color, entonces lo puse en su propia funcion
+void error_opcion();
+
+//parecido a cin_error() pero se usa en las funciones de registrar cuando se le pregunta al usuario si quiere seguir registrando mas cosas
+void continuar(const char* registro, char* input);
+
 /*esta es una funcion generica que se va a usar para pedir todos los strings que se van a ocupar en el sistema.
 -- dato es el nombre de lo que se va a pedir (como nombre, id, etc.)
 -- input es un puntero al arreglo adonde se va a guardar el string (como los nombres de los arreglos
@@ -37,7 +48,7 @@ bool pedir_pagada();
 bool checkear_Vacio(int num_registro);
 
 //se ocupa en editar_costo_Variable para checkear si el mes ingresado es valido o no
-bool checkear_mes(const char* mes);
+int checkear_mes(const char* mes);
 
 //funciones para abrir/leer/escribir a archivos
 bool leer_Archivos(const char nombre_archivo[MAX_INPUT]);
@@ -54,8 +65,50 @@ tm* obtener_fecha() {
 void limpiar_buffer() {
     cin.clear();
     while ((cin.get() != '\n') && (!cin.eof())) {
-        //limpia el buffer de cin hasta que se encuentre un salto de linea o el final del archivo
+        //limpia el buffer de cin hasta que se encuentre un salto de linea o el final del stream
     }
+}
+
+int si_no(char input[]) {
+    if ((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)) {
+            return 1;
+    } else if ((strcmp(input, "n") == 0) || (strcmp(input, "N") == 0) || (strcmp(input, "no") == 0) || (strcmp(input, "No") == 0) || (strcmp(input, "nO") == 0) || (strcmp(input, "NO") == 0)) {
+        return 0;
+    } else {
+        _colSET(LLC::cRED);
+        cout << "\n   ERROR: respuesta inválida...\n\n";
+        _colRESET();
+        return -1;
+    }
+}
+
+void continuar(const char* mensaje, char* input) {
+    while (true) {
+        _colSET(cPINK);
+        cout << mensaje;
+        cin.getline(input, sizeof(input));
+        _colRESET();
+
+        if (cin.fail()) {
+            limpiar_buffer();
+            _colSET(LLC::cRED);
+            cout << "   ERROR: tipo de dato inespereado y/o dato ingresado es demasiado largo...";
+            _colRESET();
+            this_thread::sleep_for(chrono::milliseconds(1250));
+            continue;
+        }
+
+        if (si_no(input) >= 0) break;
+        else continue;
+    }
+}
+
+void error_opcion() {
+    limpiar_buffer();
+    _colSET(LLC::cRED);
+    cout << "\n   ERROR: se esperaba un entero...";
+    _colRESET();
+    this_thread::sleep_for(chrono::milliseconds(2250));
 }
 
 //***************************************************************************************************
@@ -68,9 +121,9 @@ void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_I
         cin.getline(input, longitud);
 
         if (cin.fail()) {
-            limpiar_buffer(); //limpia el resto de los caracteres que quedaron en el stream
+            limpiar_buffer();
             _colSET(LLC::cRED);
-            cout << "\n   ERROR: dato ingresado es demasiado largo...\n\n";
+            cout << "\n   ERROR: tipo de dato inespereado y/o dato ingresado es demasiado largo...\n\n";
         } else break;
     }
 
@@ -79,19 +132,53 @@ void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_I
 
 int pedir_int(const char dato[MAX_INPUT]) {
     int num = 0;
-    _colSET(LLC::cLIGHT_YELLOW);
-    cout << "   Ingresar " << dato << ": ";
-    cin >> num;
-    _colRESET();
+
+    while (true) {
+        _colSET(LLC::cLIGHT_YELLOW);
+        cout << "   Ingresar " << dato << ": ";
+        cin >> num;
+        _colRESET();
+
+        if (num < 0) {
+            _colSET(LLC::cRED);
+            cout << "\n   ERROR: no se puede ingresar números negativos...\n\n";
+            continue;
+        }
+
+        if (cin.fail()) {
+            limpiar_buffer();
+            _colSET(LLC::cRED);
+            cout << "\n   ERROR: tipo de dato inespereado y/o dato ingresado es demasiado largo...\n\n";
+            continue;
+        } else break;
+    }
+
     return num;
 }
 
 float pedir_float(const char dato[MAX_INPUT]) {
     float num = 0.00;
-    _colSET(LLC::cLIGHT_YELLOW);
-    cout << "   Ingresar " << dato << ": ";
-    cin >> num;
-    _colRESET();
+
+    while (true) {
+        _colSET(LLC::cLIGHT_YELLOW);
+        cout << "   Ingresar " << dato << ": ";
+        cin >> num;
+        _colRESET();
+
+        if (num < 0) {
+            _colSET(LLC::cRED);
+            cout << "\n   ERROR: no se puede ingresar números negativos...\n\n";
+            continue;
+        }
+
+        if (cin.fail()) {
+            limpiar_buffer();
+            _colSET(LLC::cRED);
+            cout << "\n   ERROR: tipo de dato inespereado y/o dato ingresado es demasiado largo...\n\n";
+            continue;
+        } else break;
+    }
+
     return num;
 }
 
@@ -105,9 +192,9 @@ bool pedir_pagada() {
         cout << "   ¿Ha pagado el cliente? (si/no) ";
         cin >> input;
 
-        if ((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)) {
+        if (si_no(input) == 1) {
             return true;
-        } else if ((strcmp(input, "n") == 0) || (strcmp(input, "N") == 0) || (strcmp(input, "no") == 0) || (strcmp(input, "No") == 0) || (strcmp(input, "nO") == 0) || (strcmp(input, "NO") == 0)) {
+        } else if (si_no(input) == 0) {
             return false;
         } else {
             _colSET(LLC::cRED);
@@ -131,12 +218,12 @@ bool checkear_Vacio(int num_registro) {
     return false;
 }
 
-bool checkear_mes(const char* mes) {
+int checkear_mes(const char* mes) {
     for (int i = 0; i < 12; i++) {
-        if (strcmp(mes, meses[i]) == 0) return true;
+        if (strcmp(mes, meses[i]) == 0) return i;
     }
 
-    return false; //si no se ha retornado, el mes no es valido
+    return -1; //si no se ha retornado, el mes no es valido
 }
 
 //***************************************************************************************************

@@ -1,4 +1,4 @@
-#define ID 10 //tambien se ocupa como la longitud del C-string 'mes'
+#define ID 11 //tambien se ocupa como la longitud del C-string 'mes'
 #define MAX_INPUT 100
 #define MAX_REGISTER 1000
 
@@ -54,6 +54,7 @@ COSTO registro_costos_Variables[MAX_REGISTER];
 
 //para convertir lo que retorna time->tm_mon a un string
 const char* meses[] = { "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre" };
+int dias_meses[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 float precio_galon = 0.00;
 

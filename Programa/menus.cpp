@@ -19,17 +19,27 @@ int costos_Variables();
 
 int start_screen() {
     int option = 0;
-    title_splash();
 
-    _colSET(cLIGHT_YELLOW);
-    cout << endl;
-    cout << "   1. Acceder a menú principal\n";
-    _colSET(cRED);
-    cout << "   2. Cerrar programa\n";
-    _colSET(cTEAL);
-    cout << "\n   => Ingrese su opción: ";
-    cin >> option;
-    _colRESET();
+    do {
+        system("cls || clear");
+        title_splash();
+
+        _colSET(cLIGHT_YELLOW);
+        cout << endl;
+        cout << "   1. Acceder a menú principal\n";
+        _colSET(cRED);
+        cout << "   2. Cerrar programa\n";
+        _colSET(cTEAL);
+        cout << "\n   => Ingrese su opción: ";
+        cin >> option;
+        _colRESET();
+
+        if (cin.fail()) {
+            error_opcion();
+            continue;
+        } else break;
+        
+    } while (true);
 
     return option;
 }
@@ -50,9 +60,13 @@ int principal() {
         cout << "\n   4. Regresar a pantalla principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
-        limpiar_buffer();
         cin >> option;
         _colRESET();
+
+        if (cin.fail()) {
+            error_opcion();
+            continue;
+        }
 
         switch (option) {
             case 1:
@@ -95,6 +109,7 @@ int principal() {
                 this_thread::sleep_for(chrono::milliseconds(1000));
                 break;
         }
+        
     } while (option != 4);
 
     _colRESET();
@@ -123,9 +138,13 @@ int produccion() {
         cout << "\n   7. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
-        limpiar_buffer();
         cin >> option;
         _colRESET();
+
+        if (cin.fail()) {
+            error_opcion();
+            continue;
+        }
 
         switch (option) {
             case 1:
@@ -201,6 +220,7 @@ int produccion() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
                 
                 _colRESET();
@@ -237,7 +257,7 @@ int produccion() {
                 }
                 
                 _colRESET();
-                this_thread::sleep_for(chrono::milliseconds(2250));
+                this_thread::sleep_for(chrono::milliseconds(1500));
                 break;
             case 7:
                 _colSET(cCYAN);
@@ -278,9 +298,13 @@ int clientes() {
         cout << "\n   6. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
-        limpiar_buffer();
         cin >> option;
         _colRESET();
+
+        if (cin.fail()) {
+            error_opcion();
+            continue;
+        }
 
         switch (option) {
             case 1:
@@ -346,6 +370,7 @@ int clientes() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
 
                 _colRESET();
@@ -383,7 +408,7 @@ int clientes() {
                 }
                 
                 _colRESET();
-                this_thread::sleep_for(chrono::milliseconds(2250));
+                this_thread::sleep_for(chrono::milliseconds(1500));
                 break;
             case 6:
                 _colSET(cCYAN);
@@ -433,9 +458,13 @@ int finanzas() {
         cout << "\n   10. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
-        limpiar_buffer();
         cin >> option;
         _colRESET();
+
+        if (cin.fail()) {
+            error_opcion();
+            continue;
+        }
 
         /*esto es por si se escogio entrar a los menus de costos fijos/variables y se quiere mover
         directamente entre los dos sin tener que regresar al menu de finanzas*/
@@ -500,6 +529,7 @@ int finanzas() {
             case 4: break; //^^
 
             case 5:
+                system("cls || clear");
                 check = calcular_Ingresos();
 
                 if (!check) {
@@ -522,10 +552,12 @@ int finanzas() {
                     cout << "\n\n   Presione 'Enter' para continuar...";
                     cin.get();
                     _colRESET();
+                    limpiar_buffer();
                 }
 
                 break;
             case 6:
+                system("cls || clear");
                 check = calcular_Costos();
 
                 if (!check) {
@@ -546,6 +578,7 @@ int finanzas() {
                     cout << "\n\n   Presione 'Enter' para continuar...";
                     cin.get();
                     _colRESET();
+                    limpiar_buffer();
                 }
 
                 break;
@@ -621,6 +654,11 @@ int ventas() {
         cout << "\n   => Ingrese su opción: ";
         cin >> option;
         _colRESET();
+
+        if (cin.fail()) {
+            error_opcion();
+            continue;
+        }
         
         switch (option) {
             case 1:
@@ -689,6 +727,7 @@ int ventas() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
 
                 _colRESET();
@@ -726,7 +765,7 @@ int ventas() {
                 }
 
                 _colRESET();
-                this_thread::sleep_for(chrono::milliseconds(2250));
+                this_thread::sleep_for(chrono::milliseconds(1500));
                 break;
             case 6:
                 _colSET(cCYAN);
@@ -773,8 +812,13 @@ int pendientes() {
         cout << "   6. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
-        limpiar_buffer();
         cin >> option;
+        _colRESET();
+
+        if (cin.fail()) {
+            error_opcion();
+            continue;
+        }
 
         switch (option) {
             case 1:
@@ -825,6 +869,7 @@ int pendientes() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
 
                 _colRESET();
@@ -862,7 +907,7 @@ int pendientes() {
                 }
 
                 _colRESET();
-                this_thread::sleep_for(chrono::milliseconds(2250));
+                this_thread::sleep_for(chrono::milliseconds(1500));
                 break;
             case 5:
                 _colSET(cCYAN);
@@ -911,9 +956,13 @@ int costos_Fijos() {
         cout << "   8. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
-        limpiar_buffer();
         cin >> option;
         _colRESET();
+
+        if (cin.fail()) {
+            error_opcion();
+            continue;
+        }
 
         switch (option) {
             case 1:
@@ -978,6 +1027,7 @@ int costos_Fijos() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
 
                 _colRESET();
@@ -1015,7 +1065,7 @@ int costos_Fijos() {
                 }
 
                 _colRESET();
-                this_thread::sleep_for(chrono::milliseconds(2250));
+                this_thread::sleep_for(chrono::milliseconds(1500));
                 break;
 
             case 6: break; //el mensaje y el sleep se llaman en finanzas()
@@ -1057,9 +1107,13 @@ int costos_Variables() {
         cout << "   8. Regresar a menú principal\n";
         _colSET(cTEAL);
         cout << "\n   => Ingrese su opción: ";
-        limpiar_buffer();
         cin >> option;
         _colRESET();
+
+        if (cin.fail()) {
+            error_opcion();
+            continue;
+        }
 
         switch (option) {
             case 1:
@@ -1125,6 +1179,7 @@ int costos_Variables() {
                     cout << endl << "   ***********************************************************************\n";
                     cout << "   Presione 'Enter' para continuar...";
                     cin.get();
+                    limpiar_buffer();
                 }
 
                 _colRESET();
@@ -1162,7 +1217,7 @@ int costos_Variables() {
                 }
 
                 _colRESET();
-                this_thread::sleep_for(chrono::milliseconds(2250));
+                this_thread::sleep_for(chrono::milliseconds(1500));
                 break;
 
             case 6: break; //el mensaje y el sleep se llaman en finanzas()
