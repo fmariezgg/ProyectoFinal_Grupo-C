@@ -13,6 +13,9 @@ using namespace LLC;
 //hace exactamente lo que dice (se usa en registro_Ventas() para guardar la fecha automaticamente)
 tm* obtener_fecha();
 
+//limpia el input buffer (cin) para evitar errores
+void limpiar_buffer();
+
 /*esta es una funcion generica que se va a usar para pedir todos los strings que se van a ocupar en el sistema.
 -- dato es el nombre de lo que se va a pedir (como nombre, id, etc.)
 -- input es un puntero al arreglo adonde se va a guardar el string (como los nombres de los arreglos

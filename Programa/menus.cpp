@@ -103,7 +103,7 @@ int principal() {
 //***************************************************************************************************
 
 int produccion() {
-    int option = 0, num = 0, indice = 0; //num: numero de registros a ingresar; indice: la posicion de un id en el registro
+    int option = 0, indice = 0; //indice: la posicion de un id en el registro
     char input_id[ID] = ""; //esta es para guardar el id que se va a buscar
     bool check = false; //para checkear si se pudo abrir/leer/escribir a un archivo
 
@@ -137,11 +137,7 @@ int produccion() {
                 
                 break;
             case 2:
-                _colSET(cLIGHT_YELLOW);
-                cout << "     ¿Cuántas vacas desea registrar? ";
-                cin >> num;
-                _colRESET();
-                check = registrar_Vacas(num);
+                check = registrar_Vacas();
 
                 if (!check) {
                     _colSET(cRED);

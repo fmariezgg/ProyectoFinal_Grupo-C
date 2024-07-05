@@ -19,15 +19,15 @@ int buscar_Vaca(const char id[ID]) {
 
 //***************************************************************************************************
 
-bool registrar_Vacas(int num) {
+bool registrar_Vacas() {
     system("cls || clear");
     bool leer = false, escribir = false;
-    char tempID[ID] = "";
+    char tempID[ID] = "", input[3] = "";
 
     leer = leer_Archivos("registro_Vacas.txt");
     if (!leer) return false;
 
-    for (int i = 0; i < num; i++) {
+    do {
         _colSET(cCYAN);
         cout << endl << "                                  Vaca #" << num_vacas+1 << ":" << endl;
         cout << "   ***********************************************************************\n";
@@ -53,7 +53,11 @@ bool registrar_Vacas(int num) {
         registro_Vacas[num_vacas].prod_diaria = pedir_int("producción diaria (en galones)");
         pedir_Cstring("estado de salud", registro_Vacas[num_vacas].estado_salud);
         num_vacas++;
-    }
+
+        _colSET(cPINK);
+        cout << "\n   ¿Desea registrar otra vaca? (s/n): ";
+        cin >> input;
+    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
     escribir = escribir_Archivos("registro_Vacas.txt");
     if (!escribir) return false;
