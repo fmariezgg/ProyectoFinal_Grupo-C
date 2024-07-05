@@ -52,11 +52,10 @@ bool registrar_Vacas() {
         registro_Vacas[num_vacas].edad = pedir_int("edad (en años)");
         registro_Vacas[num_vacas].prod_diaria = pedir_int("producción diaria (en galones)");
         pedir_Cstring("estado de salud", registro_Vacas[num_vacas].estado_salud);
+        
         num_vacas++;
+        continuar("vacas", input);
 
-        _colSET(cPINK);
-        cout << "\n   ¿Desea registrar otra vaca? (s/n): ";
-        cin >> input;
     } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
 
     escribir = escribir_Archivos("registro_Vacas.txt");
@@ -100,7 +99,7 @@ bool mostrar_Vacas() {
     cout << "   Presione 'Enter' para continuar...";
 
     //para no usar system("pause"), primero se limpia el ultimo caracter en el buffer y se espera a que el usuario presione una tecla
-    cin.ignore();
+    cin.ignore(); //este ignore es para el \n que quedo en el stream cuando el usuario ingreso su opcion en el menu
     cin.get();
     _colRESET();
     return true;
@@ -150,6 +149,11 @@ bool editar_Vaca() {
             cout << "   Ingrese su opción: ";
             cin >> info;
 
+            if (cin.fail()) {
+                error_opcion();
+                continue;
+            }
+
             cout << endl;
             _colRESET();
             switch (info) {
@@ -157,7 +161,7 @@ bool editar_Vaca() {
                     registro_Vacas[indice].edad = pedir_int("edad (en años)");
                     break;
                 case 2:
-                    registro_Vacas[indice].edad = pedir_int("producción diaria (en galones)");
+                    registro_Vacas[indice].prod_diaria = pedir_int("producción diaria (en galones)");
                     break;
                 case 3:
                     pedir_Cstring("estado de salud", registro_Vacas[indice].estado_salud);
@@ -200,6 +204,7 @@ int eliminar_Vaca(const char id[ID]) {
 
     indice = buscar_Vaca(id);
     if (indice < 0) return indice; //si no se encontro/ocurrio un error, retornar el error para mostrar el mensaje correspondiente en el menu
+
     //como estas funciones de eliminar se ocupan adentro de otras funciones, sale mejor retornar los errores y lidiar con ellos en el menu,
     //para que no salgan mensajes raros mientras otra funcion se esta ejecutando
 

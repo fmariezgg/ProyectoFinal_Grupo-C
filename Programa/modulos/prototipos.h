@@ -67,8 +67,14 @@ bool calcular_Utilidad();
 bool ingresar_Precio() {
     system("cls || clear");
     _colSET(cLIGHT_YELLOW);
-    cout << "\n   Ingrese el precio por galón (en C$): ";
-    cin >> precio_galon;
+
+    while (true) {
+        cout << "\n   Ingrese el precio por galón (en C$): ";
+        cin >> precio_galon;
+
+        if (cin.fail()) error_opcion();
+        else break;
+    }
 
     bool escribir = escribir_Archivos("precio_galon.txt");
     if (!escribir) return false;

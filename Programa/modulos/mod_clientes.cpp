@@ -57,12 +57,11 @@ bool registrar_Clientes() {
         pedir_Cstring("nombre", registro_Clientes[num_clientes].nombre);
         pedir_Cstring("dirección", registro_Clientes[num_clientes].direccion);
         pedir_Cstring("contacto", registro_Clientes[num_clientes].contacto);
+        
         num_clientes++;
+        continuar("clientes", input);
 
-        _colSET(cPINK);
-        cout << "\n   ¿Desea registrar otro cliente? (si/no): ";
-        cin >> input;
-    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
+    } while (((strcmp(input, "n") != 0) || (strcmp(input, "N") != 0) || (strcmp(input, "no") != 0) || (strcmp(input, "No") != 0) || (strcmp(input, "nO") != 0) || (strcmp(input, "NO") != 0)));
 
 
     escribir = escribir_Archivos("registro_Clientes.txt");
@@ -153,6 +152,11 @@ bool editar_Cliente() {
             _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
+
+            if (cin.fail()) {
+                error_opcion();
+                continue;
+            }
 
             cout << endl;
             _colRESET();

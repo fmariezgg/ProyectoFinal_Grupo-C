@@ -38,8 +38,8 @@ bool registrar_Ventas() {
 
     leer_Ventas = leer_Archivos("registro_Ventas.txt");
     leer_Pendientes = leer_Archivos("registro_Pendientes.txt");
-    leer_Precio = leer_Archivos("precio_galon.txt"); //se lee el precio para poder calcular el monto de la venta
     leer_Clientes = leer_Archivos("registro_Clientes.txt"); //se lee los clientes para poder ver si el cliente ingresado esta registrado o no
+    leer_Precio = leer_Archivos("precio_galon.txt"); //se lee el precio para poder calcular el monto de la venta
     if (!leer_Ventas || !leer_Pendientes || !leer_Precio || !leer_Clientes) return false; //si cualquiera de las lecturas falla, retornar false
 
     //si el archivo precio_galon.txt no existe, se va a crear, pero va a estar vacio, entonces hay que pedir un precio para poder calcular el monto de las ventas
@@ -126,11 +126,9 @@ bool registrar_Ventas() {
         }
 
         num_ventas++;
+        continuar("ventas", input);
 
-        _colSET(cPINK);
-        cout << "\n   ¿Desea registrar otra vaca? (s/n): ";
-        cin >> input;
-    } while (((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)));
+    } while (((strcmp(input, "n") != 0) || (strcmp(input, "N") != 0) || (strcmp(input, "no") != 0) || (strcmp(input, "No") != 0) || (strcmp(input, "nO") != 0) || (strcmp(input, "NO") != 0)));
 
     escribir_Ventas = escribir_Archivos("registro_Ventas.txt");
     escribir_Pendientes = escribir_Archivos("registro_Pendientes.txt");
@@ -277,15 +275,15 @@ int eliminar_Venta(const char id[ID]) {
 
 bool editar_Venta() {
     system("cls || clear");
-    bool leer_Venta = false, escribir_Venta = false, leer_Pendiente = false, escribir_Pendiente = false, leer_Precio = false, leer_Clientes = false;
-    int indice = 0, indice_pendiente = -1, info = 0;
+    bool leer_Ventas = false, escribir_Ventas = false, leer_Pendientes = false, escribir_Pendientes = false, leer_Clientes = false, leer_Precio = false;
+    int indice = 0, indice_pendiente = 0, info = 0;
     char id[ID] = "", temp_nombre[MAX_INPUT] = "";
 
-    leer_Venta = leer_Archivos("registro_Ventas.txt");
-    leer_Pendiente = leer_Archivos("registro_Pendientes.txt");
-    leer_Precio = leer_Archivos("precio_galon.txt");
+    leer_Pendientes = leer_Archivos("registro_Pendientes.txt");
+    leer_Ventas = leer_Archivos("registro_Ventas.txt");
     leer_Clientes = leer_Archivos("registro_Clientes.txt");
-    if (!leer_Venta || !leer_Pendiente || !leer_Precio || !leer_Clientes) return false;
+    leer_Precio = leer_Archivos("precio_galon.txt");
+    if (!leer_Pendientes || !leer_Ventas || !leer_Precio || !leer_Clientes) return false;
     if (checkear_Vacio(num_ventas)) return true;
 
     cout << endl;
@@ -320,6 +318,11 @@ bool editar_Venta() {
             _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
+
+            if (cin.fail()) {
+                error_opcion();
+                continue;
+            }
 
             cout << endl;
             _colRESET();
@@ -403,9 +406,9 @@ bool editar_Venta() {
         cout << "   ";
         this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cGREEN);
-        escribir_Venta = escribir_Archivos("registro_Ventas.txt");
-        escribir_Pendiente = escribir_Archivos("registro_Pendientes.txt");
-        if (escribir_Venta && escribir_Pendiente) {
+        escribir_Ventas = escribir_Archivos("registro_Ventas.txt");
+        escribir_Pendientes = escribir_Archivos("registro_Pendientes.txt");
+        if (escribir_Ventas && escribir_Pendientes) {
             _colSET(cGREEN);
             cout << "\n   ***********************************************************************";
             cout << "\n                              Venta editada...";
@@ -420,15 +423,15 @@ bool editar_Venta() {
 
 bool editar_Pendiente() {
     system("cls || clear");
-    bool leer_Venta = false, escribir_Venta = false, leer_Pendiente = false, escribir_Pendiente = false, leer_Precio = false, leer_Cliente = false;
+    bool leer_Ventas = false, escribir_Ventas = false, leer_Pendientes = false, escribir_Pendientes = false, leer_Clientes = false, leer_Precio = false;
     int indice = 0, indice_venta = 0, info = 0;
     char id[ID] = "", temp_nombre[MAX_INPUT] = "";
 
-    leer_Pendiente = leer_Archivos("registro_Pendientes.txt");
-    leer_Venta = leer_Archivos("registro_Ventas.txt");
+    leer_Pendientes = leer_Archivos("registro_Pendientes.txt");
+    leer_Ventas = leer_Archivos("registro_Ventas.txt");
+    leer_Clientes = leer_Archivos("registro_Clientes.txt");
     leer_Precio = leer_Archivos("precio_galon.txt");
-    leer_Cliente = leer_Archivos("registro_Clientes.txt");
-    if (!leer_Pendiente || !leer_Venta || !leer_Precio || !leer_Cliente) return false;
+    if (!leer_Pendientes || !leer_Ventas || !leer_Precio || !leer_Clientes) return false;
     if (checkear_Vacio(num_pendientes)) return true;
 
     cout << endl;
@@ -463,6 +466,11 @@ bool editar_Pendiente() {
             _colSET(cTEAL);
             cout << "   Ingrese su opción: ";
             cin >> info;
+
+            if (cin.fail()) {
+                error_opcion();
+                continue;
+            }
 
             cout << endl;
             _colRESET();
@@ -519,9 +527,9 @@ bool editar_Pendiente() {
         cout << "   ";
         this_thread::sleep_for(chrono::milliseconds(500));
         _colSET(cGREEN);
-        escribir_Pendiente = escribir_Archivos("registro_Pendientes.txt");
-        escribir_Venta = escribir_Archivos("registro_Ventas.txt");
-        if (escribir_Pendiente && escribir_Venta) {
+        escribir_Pendientes = escribir_Archivos("registro_Pendientes.txt");
+        escribir_Ventas = escribir_Archivos("registro_Ventas.txt");
+        if (escribir_Pendientes && escribir_Ventas) {
             _colSET(cGREEN);
             cout << "\n   ***********************************************************************";
             cout << "\n                          Pago pendiente editado...";

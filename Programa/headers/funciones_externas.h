@@ -18,6 +18,13 @@ tm* obtener_fecha();
 //limpia el input buffer (cin) para evitar errores
 void limpiar_buffer();
 
+//se usa en los menus si el usuario ingresa algo que no es. para que no explote, se limpia el buffer y imprime un mensaje
+//no quiero tener que estar repitiendo el mensaje y todas las llamadas de color, entonces lo puse en su propia funcion
+void error_opcion();
+
+//parecido a cin_error() pero se usa en las funciones de registrar cuando se le pregunta al usuario si quiere seguir registrando mas cosas
+void continuar(const char* registro, char* input);
+
 /*esta es una funcion generica que se va a usar para pedir todos los strings que se van a ocupar en el sistema.
 -- dato es el nombre de lo que se va a pedir (como nombre, id, etc.)
 -- input es un puntero al arreglo adonde se va a guardar el string (como los nombres de los arreglos
@@ -54,7 +61,42 @@ tm* obtener_fecha() {
 void limpiar_buffer() {
     cin.clear();
     while ((cin.get() != '\n') && (!cin.eof())) {
-        //limpia el buffer de cin hasta que se encuentre un salto de linea o el final del archivo
+        //limpia el buffer de cin hasta que se encuentre un salto de linea o el final del stream
+    }
+}
+
+void error_opcion() {
+    limpiar_buffer();
+    _colSET(LLC::cRED);
+    cout << "\n   ERROR: se esperaba un entero...";
+    _colRESET();
+    this_thread::sleep_for(chrono::milliseconds(2250));
+}
+
+void continuar(const char* registro, char* input) {
+    while (true) {
+        _colSET(cPINK);
+        cout << "\n   ¿Desea registrar más " << registro << "? (si/no): ";
+        cin.getline(input, sizeof(input));
+        _colRESET();
+
+        if (cin.fail()) {
+            limpiar_buffer();
+            _colSET(LLC::cRED);
+            cout << "   ERROR: tipo de dato inespereado y/o dato ingresado es demasiado largo...";
+            _colRESET();
+            this_thread::sleep_for(chrono::milliseconds(1250));
+            continue;
+        }
+
+        if ((strcmp(input, "s") == 0) || (strcmp(input, "S") == 0) || (strcmp(input, "si") == 0) || (strcmp(input, "Si") == 0) || (strcmp(input, "sI") == 0) || (strcmp(input, "SI") == 0)) break;
+        else if ((strcmp(input, "n") == 0) || (strcmp(input, "N") == 0) || (strcmp(input, "no") == 0) || (strcmp(input, "No") == 0) || (strcmp(input, "nO") == 0) || (strcmp(input, "NO") == 0)) break;
+        else {
+            _colSET(cRED);
+            cout << "   Opción inválida...";
+            _colRESET();
+            this_thread::sleep_for(chrono::milliseconds(1000));
+        }
     }
 }
 
@@ -68,9 +110,9 @@ void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_I
         cin.getline(input, longitud);
 
         if (cin.fail()) {
-            limpiar_buffer(); //limpia el resto de los caracteres que quedaron en el stream
+            limpiar_buffer();
             _colSET(LLC::cRED);
-            cout << "\n   ERROR: dato ingresado es demasiado largo...\n\n";
+            cout << "\n   ERROR: tipo de dato inespereado y/o dato ingresado es demasiado largo...\n\n";
         } else break;
     }
 
@@ -79,19 +121,41 @@ void pedir_Cstring(const char dato[MAX_INPUT], char* input, int longitud = MAX_I
 
 int pedir_int(const char dato[MAX_INPUT]) {
     int num = 0;
-    _colSET(LLC::cLIGHT_YELLOW);
-    cout << "   Ingresar " << dato << ": ";
-    cin >> num;
-    _colRESET();
+
+    while (true) {
+        _colSET(LLC::cLIGHT_YELLOW);
+        cout << "   Ingresar " << dato << ": ";
+        cin >> num;
+        _colRESET();
+
+        if (cin.fail()) {
+            limpiar_buffer();
+            _colSET(LLC::cRED);
+            cout << "\n   ERROR: tipo de dato inespereado y/o dato ingresado es demasiado largo...\n\n";
+            continue;
+        } else break;
+    }
+
     return num;
 }
 
 float pedir_float(const char dato[MAX_INPUT]) {
     float num = 0.00;
-    _colSET(LLC::cLIGHT_YELLOW);
-    cout << "   Ingresar " << dato << ": ";
-    cin >> num;
-    _colRESET();
+
+    while (true) {
+        _colSET(LLC::cLIGHT_YELLOW);
+        cout << "   Ingresar " << dato << ": ";
+        cin >> num;
+        _colRESET();
+
+        if (cin.fail()) {
+            limpiar_buffer();
+            _colSET(LLC::cRED);
+            cout << "\n   ERROR: tipo de dato inespereado y/o dato ingresado es demasiado largo...\n\n";
+            continue;
+        } else break;
+    }
+
     return num;
 }
 
