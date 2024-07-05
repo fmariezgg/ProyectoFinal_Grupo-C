@@ -17,11 +17,11 @@ using namespace LLC;
 
 //todas estas retornan bool para que se pueda checkear si se pudo abrir/leer/escribir al archivo
 bool ingresar_Precio();
-bool registrar_Vacas(int num); //num es la cantidad de cosas que se van a registrar (para que el usuario no tenga que estar ingresando 1 por 1)
-bool registrar_Clientes(int num); 
-bool registrar_Ventas(int num); //aqui se registran los pagos pendientes tambien, dependiendo de lo que ingresa el usuario
-bool registrar_costos_Fijos(int num);
-bool registrar_costos_Variables(int num);
+bool registrar_Vacas(); //num es la cantidad de cosas que se van a registrar (para que el usuario no tenga que estar ingresando 1 por 1)
+bool registrar_Clientes(); 
+bool registrar_Ventas(); //aqui se registran los pagos pendientes tambien, dependiendo de lo que ingresa el usuario
+bool registrar_costos_Fijos();
+bool registrar_costos_Variables();
 
 //^^ estas igual:
 bool mostrar_Precio();
